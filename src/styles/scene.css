@@ -1,0 +1,65 @@
+/* Hero illustration (components/art/OrbitArt.jsx). One scene, two palettes. */
+:root{
+  --scn-bg:#E4E3F8;--scn-city:#D2D1F0;--scn-frame:#DAD9F2;--scn-s1:#5B54C4;--scn-s2:#7B6AD8;
+  --scn-bot:#A9A7F7;--scn-face:#4B45A8;--scn-eye:#F4F3FF;--scn-orb:#CFE6FF;--scn-accent:#5B54C4;
+  --scn-card:#FFFFFF;--scn-line:#CFCDEA;--scn-hood:#8DB6F7;--scn-hood-d:#6F9BE8;--scn-pants:#A3A1B5;
+  --scn-skin:#F2C7A3;--scn-hair:#1F1D45;--scn-shadow:rgba(91,84,196,.14)
+}
+:root[data-theme="dark"]{
+  --scn-bg:#1F1C3C;--scn-city:#2A2650;--scn-frame:#37336A;--scn-s1:#3A3597;--scn-s2:#6140B0;
+  --scn-bot:#9390F2;--scn-face:#2E2A7A;--scn-eye:#EDEBFF;--scn-orb:#8FD3FF;--scn-accent:#A19DF4;
+  --scn-card:#26234A;--scn-line:#3D3970;--scn-hood:#5E80DA;--scn-hood-d:#4767BE;--scn-pants:#4B4970;
+  --scn-skin:#E8B995;--scn-hair:#0E0D24;--scn-shadow:rgba(0,0,0,.35)
+}
+.scene{display:flex;flex-direction:column;align-items:center;gap:14px;min-width:0}
+.scn{position:relative;width:100%;max-width:640px;aspect-ratio:760/420}
+.scn svg{display:block;width:100%;height:100%;overflow:visible}
+.scn-ic{position:absolute;left:19%;top:21%;width:7.5%;aspect-ratio:1;display:grid;place-items:center;border-radius:22%;background:rgba(255,255,255,.18);color:#fff;backdrop-filter:blur(3px)}
+.scn-ic svg{width:60%;height:60%}
+.scn-metric{position:absolute;left:3%;top:4%;display:inline-flex;gap:5px;align-items:center;padding:5px 11px;border-radius:999px;background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;font:700 12px var(--body);box-shadow:0 8px 20px color-mix(in srgb,var(--g2) 40%,transparent)}
+.scn-metric svg{width:13px;height:13px}
+.scn-chip{position:absolute;display:inline-flex;gap:6px;align-items:center;white-space:nowrap;padding:5px 11px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--ink);font:600 12px var(--body);box-shadow:0 8px 22px color-mix(in srgb,var(--ink) 12%,transparent)}
+.scn-chip svg{width:14px;height:14px;color:var(--accent)}
+.scene .cap{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:center;margin:0}
+@media (prefers-reduced-motion:no-preference){
+  .scn-chip{animation:scnfloat 5s ease-in-out infinite;animation-delay:calc(var(--i)*-1.1s)}
+  .scn-float{animation:scnfloat 6s ease-in-out infinite}.scn-float.b{animation-duration:7s;animation-delay:-2s}.scn-float.c{animation-duration:5s;animation-delay:-1s}
+  .scn-bot{animation:scnbob 4s ease-in-out infinite}
+  .scn-eyes{transform-box:fill-box;transform-origin:center;animation:scnblink 5s infinite}
+  .scn-orb{animation:scnpulse 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  .scn-code rect{animation:scncode 3.2s ease-in-out infinite;transform-box:fill-box;transform-origin:left}
+  .scn-cloud{animation:scndrift 18s ease-in-out infinite alternate}
+  .scn-person{animation:scnbob 5s ease-in-out infinite reverse}
+  @keyframes scnfloat{50%{transform:translateY(-8px)}}
+  @keyframes scnbob{50%{transform:translateY(-4px)}}
+  @keyframes scnblink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+  @keyframes scnpulse{50%{transform:scale(1.18)}}
+  @keyframes scncode{0%,100%{opacity:.28;transform:scaleX(1)}50%{opacity:.6;transform:scaleX(.82)}}
+  @keyframes scndrift{to{transform:translateX(26px)}}
+}
+@media (max-width:860px){.scn{max-width:440px}.scn-chip{font-size:11px;padding:4px 9px}.scn-metric{font-size:11px}}
+@media (max-width:480px){.scn-chip:nth-of-type(n+4){display:none}}
+
+/* the picture replaces the old floating hero icons */
+.flo{display:none}
+@media (prefers-reduced-motion:no-preference){
+  .scn-bar{transform-box:fill-box;transform-origin:bottom;animation:scngrow 3.6s ease-in-out infinite}
+  .scn-ring{animation:scndash 4s ease-in-out infinite}
+  .scn-check{stroke-dasharray:80;animation:scncheck 3.4s ease-in-out infinite}
+  .scn-code-line{transform-box:fill-box;transform-origin:left;animation:scncode 3.2s ease-in-out infinite}
+  @keyframes scngrow{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.72)}}
+  @keyframes scndash{50%{stroke-dasharray:70 204}}
+  @keyframes scncheck{0%{stroke-dashoffset:80}35%,85%{stroke-dashoffset:0}100%{stroke-dashoffset:80}}
+}
+
+/* real picture (recoloured per theme) */
+.hpic{width:100%;max-width:640px;display:block}
+.hpic img{width:100%;height:auto;display:block}
+.hpic .hp-dark{display:none}
+.phero.solo .scene{display:none}
+/* hero pictures added by hand: white background blends into the page, same size as the Home hero */
+.hpic-img{max-width:500px;background:transparent;display:flex;justify-content:center}
+.hpic-img img{mix-blend-mode:multiply;width:auto;max-width:100%;max-height:330px;object-fit:contain}
+@media (max-width:1280px){.hpic-img{max-width:440px}.hpic-img img{max-height:290px}}
+@media (max-width:860px){.hpic-img{max-width:400px}.hpic-img img{max-height:260px}}
+:root[data-theme="dark"] .hpic-img{background:#e9e9fb;border-radius:32px;overflow:hidden;padding:10px}

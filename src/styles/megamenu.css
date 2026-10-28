@@ -1,0 +1,36 @@
+/* Digital Services mega menu */
+/* services mega menu */
+.menu-list>li.mega-li{position:static}
+.has-dd:hover .dd.mega,.has-dd.open .dd.mega{display:grid;grid-template-columns:1fr 1.7fr 1fr;width:min(1120px,calc(100vw - 32px));min-width:0;gap:14px;padding:14px;top:calc(100% - 2px)}
+.ddcol{display:flex;flex-direction:column;gap:4px;border-radius:16px;padding:6px;background:color-mix(in srgb,var(--sunk) 55%,transparent);border:1px solid var(--line);
+  opacity:0;transform:translateY(8px);animation:ddcol .35s ease forwards;animation-delay:calc(var(--k)*.06s)}
+@keyframes ddcol{to{opacity:1;transform:none}}
+a.ddh{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;align-items:center;text-decoration:none;padding:12px;border-radius:12px;margin:0 0 4px;border:0;
+  background:linear-gradient(135deg,var(--g1),var(--g2));color:#FFFFFF;position:relative;overflow:hidden;text-transform:none;letter-spacing:0;font-family:inherit}
+a.ddh::before{content:"";position:absolute;right:-30px;top:-30px;width:110px;height:110px;border-radius:50%;border:16px solid rgba(255,255,255,.10)}
+a.ddh::after{content:none}
+a.ddh:hover{background:linear-gradient(135deg,var(--g2),var(--g1))}
+.ddh .gi{width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.18);display:grid;place-items:center}
+.ddh .gi svg{width:22px;height:22px;color:#FFFFFF}
+.ddh b{font-size:13.8px;font-weight:700;line-height:1.2}
+.ddh small{grid-column:1 / -1;font-size:11.7px;line-height:1.35;color:rgba(255,255,255,.85)}
+.ddh .go{grid-column:1 / -1;justify-self:start;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.2);padding:5px 9px;border-radius:999px;white-space:nowrap;transition:transform .2s}
+a.ddh:hover .go{transform:translateX(3px)}
+.ddl{display:grid;gap:2px}
+.ddl.two{grid-template-columns:1fr 1fr}
+a.dl{display:grid;grid-template-columns:auto 1fr;gap:1px 10px;align-items:center;text-decoration:none;padding:8px;border-radius:11px;color:var(--ink);transition:background .2s,transform .2s}
+.dl .si{grid-row:span 2;width:34px;height:34px;border-radius:10px;background:var(--surface);border:1px solid var(--line);color:var(--accent);display:grid;place-items:center;transition:background .2s,color .2s}
+.dl .si svg{width:17px;height:17px}
+.dl b{font-size:12.6px;font-weight:650;line-height:1.25}
+.dl small{font-size:11.2px;color:var(--muted);line-height:1.3}
+a.dl:hover{background:var(--surface);transform:translateX(2px)}
+a.dl:hover .si{background:linear-gradient(135deg,var(--g1),var(--g2));color:#FFFFFF;border-color:transparent}
+a.dl:hover b{color:var(--accent)}
+.ddfoot{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 14px;border-radius:14px;background:var(--accent-soft)}
+.ddfoot p{margin:0;font-size:12.2px;color:var(--ink)}.ddfoot p b{color:var(--accent)}
+.ddfoot .stats{display:flex;gap:18px;font-size:11.7px;color:var(--muted)}.ddfoot .stats b{color:var(--ink);font-size:12.6px;margin-right:4px}
+.ddfoot .btn{padding:8px 14px;font-size:11.7px}
+@media (prefers-reduced-motion:reduce){.ddcol{animation:none;opacity:1;transform:none}}
+@media (max-width:1320px){.menu-list>li.mega-li{position:relative}.has-dd.open .dd.mega{grid-template-columns:1fr;width:auto;gap:10px;padding:4px 0 8px}
+  .ddl.two{grid-template-columns:1fr}.ddfoot{flex-direction:column;align-items:flex-start}.ddfoot .stats{display:none}.dl small{display:none}.ddh small,.ddh .go{display:none}.dl .si{grid-row:auto}}
+@media (max-width:1320px){.has-dd.open .dd.mega{grid-template-columns:1fr;min-width:0}}

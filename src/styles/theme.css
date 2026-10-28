@@ -1,0 +1,14 @@
+/* Design tokens. Light is the default; dark applies when <html data-theme="dark"> (see hooks/useTheme.js). */
+:root{
+  --bg:#FAFAFD; --surface:#FFFFFF; --sunk:#F3F2FA; --ink:#15132A; --muted:#5D5B78; --line:#E4E2F0;
+  --accent:#5B54C4; --accent-soft:#EDECFA; --accent-ink:#FFFFFF; --g1:#6B6ED6; --g2:#6D5BAB;
+  --v:#6D28D9;--live:#15A36E; --b:#5B54C4; --s:#7C3AED;
+  --gut:max(clamp(16px,2.6vw,36px),env(safe-area-inset-left,0px)); --gutr:max(clamp(16px,2.6vw,36px),env(safe-area-inset-right,0px));
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Figtree","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+:root[data-theme="dark"]{
+  --bg:#110F1F; --surface:#1A1830; --sunk:#151328; --ink:#F1F0FA; --muted:#A6A3C4; --line:#2C2A47;
+  --accent:#A19DF4; --accent-soft:#25233F; --accent-ink:#13112A;
+  --v:#B794F6;--live:#3CC9A8; --b:#A19DF4; --s:#C4B5FD; color-scheme:dark}

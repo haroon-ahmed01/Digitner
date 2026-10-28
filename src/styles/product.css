@@ -1,0 +1,32 @@
+/* Product modules, journey, roles and carousel */
+/* product modules, path, roles, apps */
+.mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.mod{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 16px 16px 58px;transition:border-color .2s,transform .2s;min-width:0}
+.mod:hover{border-color:var(--accent);transform:translateY(-3px)}
+.mod span{position:absolute;left:16px;top:16px;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-family:var(--mono);font-size:12px;background:linear-gradient(135deg,var(--g1),var(--g2));color:#FFFFFF}
+.mod h3{font-size:14.2px}
+.mod p{color:var(--muted);font-size:11.7px;margin-top:4px}
+.path{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px;counter-reset:pp}
+.path li{counter-increment:pp;display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 14px 8px 8px;font-weight:600;font-size:12.2px;position:relative}
+.path li::before{content:counter(pp,decimal-leading-zero);width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-family:var(--mono);font-size:11.5px}
+.path li:not(:last-child)::after{content:"→";color:var(--muted);margin-left:4px}
+.roles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.role{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;border-top:3px solid var(--accent)}
+.role h3{font-size:17.6px;margin-top:4px}
+@media (max-width:980px){.roles{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.roles{grid-template-columns:1fr}}
+.appcards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+.appcard{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px}
+.appcard h3{font-size:18.4px;margin-top:4px}
+@media (max-width:700px){.appcards{grid-template-columns:1fr}}
+.slogos{display:flex;flex-wrap:wrap;gap:16px}
+/* product carousel */
+.pcar{position:relative}
+.pscroll{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(290px,1fr);gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 13px;scrollbar-width:none}
+.pscroll::-webkit-scrollbar,.vzb::-webkit-scrollbar{display:none}.vzb{scrollbar-width:none}
+.pscroll>*{scroll-snap-align:start}
+@media (min-width:1100px){.pscroll{grid-auto-columns:calc((100% - 48px)/4)}}
+.parr{display:flex;gap:8px}
+.parr button{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;display:grid;place-items:center}
+.parr button:hover{border-color:var(--accent);color:var(--accent)}
+.parr svg{width:18px;height:18px}

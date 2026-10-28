@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://digitner.com/</loc><priority>1.0</priority></url>
+  <url><loc>https://digitner.com/about</loc><priority>0.8</priority></url>
+  <url><loc>https://digitner.com/services</loc><priority>0.9</priority></url>
+  <url><loc>https://digitner.com/services/consulting</loc><priority>0.7</priority></url>
+  <url><loc>https://digitner.com/services/apps</loc><priority>0.7</priority></url>
+  <url><loc>https://digitner.com/services/sales</loc><priority>0.7</priority></url>
+  <url><loc>https://digitner.com/products</loc><priority>0.9</priority></url>
+  <url><loc>https://digitner.com/products/dentexa</loc><priority>0.7</priority></url>
+  <url><loc>https://digitner.com/products/interiorexa</loc><priority>0.7</priority></url>
+  <url><loc>https://digitner.com/products/insurexa</loc><priority>0.7</priority></url>
+  <url><loc>https://digitner.com/products/payexa</loc><priority>0.7</priority></url>
+  <url><loc>https://digitner.com/products/leadexa</loc><priority>0.7</priority></url>
+  <url><loc>https://digitner.com/products/eventexa</loc><priority>0.7</priority></url>
+  <url><loc>https://digitner.com/products/itravel</loc><priority>0.7</priority></url>
+  <url><loc>https://digitner.com/products/rewardexa</loc><priority>0.7</priority></url>
+  <url><loc>https://digitner.com/ai-solutions</loc><priority>0.9</priority></url>
+  <url><loc>https://digitner.com/ai-solutions/veloque</loc><priority>0.7</priority></url>
+  <url><loc>https://digitner.com/ai-solutions/buysei</loc><priority>0.7</priority></url>
+  <url><loc>https://digitner.com/ai-solutions/smileview</loc><priority>0.7</priority></url>
+  <url><loc>https://digitner.com/ai-marketplace</loc><priority>0.6</priority></url>
+  <url><loc>https://digitner.com/contact</loc><priority>0.8</priority></url>
+  <url><loc>https://digitner.com/terms</loc><priority>0.3</priority></url>
+</urlset>

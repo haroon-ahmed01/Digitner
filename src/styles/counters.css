@@ -1,0 +1,51 @@
+/* Running-number bands and typewriter */
+/* running numbers band */
+.counters{position:relative;overflow:hidden;margin-inline:calc(-1*var(--gut)) calc(-1*var(--gutr));background:#15132A;color:#FFFFFF}
+.counters::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.14) 1.2px,transparent 1.3px);background-size:24px 24px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 40%);mask-image:linear-gradient(90deg,transparent,#000 40%)}
+.counters::after{content:"";position:absolute;width:520px;height:520px;left:-120px;top:-260px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--g1) 55%,transparent),transparent 65%)}
+.counters>.wrap{position:relative;z-index:1;display:grid;grid-template-columns:repeat(4,1fr);padding:36px var(--gutr) 36px var(--gut)}
+.ctr{padding:6px 22px;border-left:1px solid rgba(255,255,255,.12);min-width:0}
+.ctr:first-child{border-left:0;padding-left:0}
+.ctr .ci{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.08);color:#C9C6FF;margin-bottom:12px;overflow:hidden}
+.ctr .ci svg{width:20px;height:20px}
+.odo{font-family:var(--display);font-weight:800;font-size:clamp(28px,3.6vw,44px);line-height:1;letter-spacing:-.03em;color:#FFFFFF;font-variant-numeric:tabular-nums;white-space:nowrap}
+.odo .fx{color:#C9C6FF}
+.odo.long{font-size:clamp(24px,3vw,36px)}
+.odo{display:flex;align-items:flex-end;height:clamp(34px,4.2vw,52px)}
+.odo .col{display:flex;flex-direction:column;transition:transform 2s cubic-bezier(.15,.85,.2,1)}
+.odo .col span{height:1em;display:block}
+.odo .fx{display:block}
+.ctr p{margin-top:12px;color:#B9B7D3;font-size:12.6px}
+.ctr .bar{height:3px;border-radius:2px;background:rgba(255,255,255,.12);margin-top:14px;overflow:hidden}
+.ctr .bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--g1),#C9C6FF);transform-origin:left;transition:transform 2s cubic-bezier(.15,.85,.2,1)}
+.counters.pre .bar i{transform:scaleX(0)}
+@media (max-width:760px){.counters>.wrap{grid-template-columns:1fr 1fr;row-gap:24px}.ctr:nth-child(3){border-left:0;padding-left:0}.ctr{padding:6px 14px}.ctr .ci.pic{width:52px;height:52px}.odo{font-size:28px;height:34px}.ctr p{font-size:12px}}
+/* typewriter */
+.typer{margin-top:18px;font-family:var(--mono);font-size:clamp(12.6px,1.6vw,15.9px);color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.typer b{color:var(--accent);font-weight:500;min-height:1.4em}
+.typer .caret{width:2px;height:1.2em;background:var(--accent)}
+@media (prefers-reduced-motion:no-preference){.typer .caret{animation:blink 1s steps(1) infinite}@keyframes blink{50%{opacity:0}}}
+/* picture cards: image fills the whole cell, number + label bottom right */
+.counters>.wrap:has(.has-img){gap:clamp(18px,2.4vw,34px);padding-block:clamp(26px,3vw,42px)}
+.ctr.has-img{position:relative;overflow:hidden;border:1px solid rgba(201,198,255,.35);outline:1px solid rgba(201,198,255,.12);outline-offset:5px;border-radius:20px;min-height:clamp(190px,20vw,260px);padding:18px 20px;
+  display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-end;text-align:right;isolation:isolate}
+.ctr.has-img:first-child{padding-left:20px}
+.ctr.has-img .cbg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.ctr.has-img:hover .cbg{transform:scale(1.08)}
+.ctr.has-img::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(14,12,32,0) 30%,rgba(14,12,32,.55) 65%,rgba(14,12,32,.88))}
+.ctr.has-img .odo{justify-content:flex-end;font-size:clamp(22px,2.4vw,30px);height:auto;text-shadow:0 2px 14px rgba(0,0,0,.5)}
+.ctr.has-img p{margin-top:8px;color:#EDEBFF;font-weight:600;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.ctr.has-img .bar{width:100%;margin-top:12px}
+@media (max-width:760px){
+  .counters>.wrap:has(.has-img){gap:18px 16px}
+  .ctr.has-img{min-height:170px;padding:14px;border-left:1px solid rgba(201,198,255,.35)}
+  .ctr.has-img .odo{font-size:22px}
+}
+/* full-width bands: the colour runs edge to edge, the content stays aligned with the page */
+html,body{overflow-x:clip}
+.counters,.phero,.hero,.mhero{width:100vw;margin-inline:calc(50% - 50vw)}
+.counters>.wrap,.phero>.wrap,.hero>.wrap,.mhero>.wrap{max-width:calc(1440px + var(--gut) + var(--gutr))}
+
+/* taller purple band when the stats are picture cards */
+.counters>.wrap:has(.has-img){padding-block:clamp(48px,5.5vw,84px)}

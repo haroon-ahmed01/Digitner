@@ -1,0 +1,33 @@
+/* Contact page */
+/* contact */
+.contact{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;background:var(--ink);color:var(--bg);border-radius:26px;padding:40px;margin-top:40px}
+.contact>div{min-width:0}
+.contact h2{font-size:clamp(25.1px,4.4vw,41.9px);font-weight:700}
+.contact .sub{color:color-mix(in srgb,var(--bg) 72%,var(--ink));margin-top:12px;font-size:14.2px}
+form{display:grid;gap:12px;margin-top:22px}
+label{font-size:11.7px;font-weight:600;color:color-mix(in srgb,var(--bg) 78%,var(--ink))}
+.inp{width:100%;margin-top:6px;padding:12px 13px;border-radius:12px;border:1px solid color-mix(in srgb,var(--bg) 22%,var(--ink));background:color-mix(in srgb,var(--bg) 8%,var(--ink));color:var(--bg);font:inherit;font-size:12.6px}
+.inp:focus{outline:2px solid var(--accent);outline-offset:1px}
+.ok{background:color-mix(in srgb,var(--accent) 22%,var(--ink));border-radius:12px;padding:13px;font-size:12.6px;margin-top:22px}
+.offices{display:grid;gap:14px;font-size:12.6px}
+.offices div{border-top:1px solid color-mix(in srgb,var(--bg) 25%,var(--ink));padding-top:12px}
+.offices .eyebrow{color:color-mix(in srgb,var(--bg) 60%,var(--ink));display:flex;gap:6px;align-items:center}
+.offices .eyebrow svg{width:14px;height:14px}
+.mail{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.mail code{font-family:var(--mono);font-size:13.4px;user-select:all}
+.copy{background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:7px 13px;font-weight:600;cursor:pointer}
+@media (max-width:820px){.contact{grid-template-columns:1fr;padding:25px 18px}}
+
+.band{position:relative;overflow:hidden;background:linear-gradient(120deg,var(--g1),var(--g2));color:#FFFFFF;border-radius:26px;padding:40px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.band::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.18) 1.2px,transparent 1.3px);background-size:24px 24px}
+.band>*{position:relative}
+.band h2{font-size:clamp(23.4px,3.8vw,36.8px)}
+.band .btn{background:#FFFFFF;color:#4A44A8}
+@media (max-width:600px){.band{padding:25px 20px}}
+
+/* form helpers added in the React port */
+.ferr{display:block;color:#C0392B;font-size:11.7px;margin-top:6px}
+:root[data-theme="dark"] .ferr{color:#FF8C7E}
+.hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0}
+.inp[aria-invalid="true"]{border-color:#C0392B}
+.btn[disabled]{opacity:.6;cursor:progress}

@@ -1,0 +1,26 @@
+/* Card + footer motion */
+@media (prefers-reduced-motion:no-preference){
+  /* staggered entrance inside grids */
+  .cards>.rv:nth-child(3n+2),.feats>.rv:nth-child(3n+2),.flow>.rv:nth-child(3n+2),.csgrid>.rv:nth-child(2n){animation-delay:.09s}
+  .cards>.rv:nth-child(3n),.feats>.rv:nth-child(3n),.flow>.rv:nth-child(3n){animation-delay:.18s}
+  .steps>.rv:nth-child(2),.vals>.rv:nth-child(2),.partners>.rv:nth-child(2){animation-delay:.1s}
+  .steps>.rv:nth-child(3),.vals>.rv:nth-child(3){animation-delay:.2s}
+  .steps>.rv:nth-child(4),.vals>.rv:nth-child(4){animation-delay:.3s}
+  /* icons pop in when their card appears */
+  .rv.in .ico,.rv.in .coi,.rv.in .dli{animation:iconpop .6s cubic-bezier(.3,1.5,.5,1) both .15s}
+  @keyframes iconpop{from{transform:scale(.4) rotate(-20deg);opacity:0}to{transform:none;opacity:1}}
+  /* light sweep over a card on hover */
+  .card,.feat,.fl,.step,.val,.co,.dlt,.cs,.partner,.agc{position:relative;overflow:hidden;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s,border-color .25s}
+  .card::after,.feat::after,.fl::after,.step::after,.co::after,.dlt::after,.partner::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(115deg,transparent 35%,color-mix(in srgb,var(--accent) 14%,transparent) 50%,transparent 65%);transform:translateX(-120%);transition:transform .7s ease}
+  .card:hover::after,.feat:hover::after,.fl:hover::after,.step:hover::after,.co:hover::after,.dlt:hover::after,.partner:hover::after{transform:translateX(120%)}
+  .feat:hover,.fl:hover,.step:hover,.val:hover,.co:hover,.dlt:hover,.partner:hover{transform:translateY(-5px);border-color:var(--accent);box-shadow:0 16px 36px color-mix(in srgb,var(--accent) 14%,transparent)}
+  .card .go{transition:gap .25s}.card:hover .go{gap:11px}
+  /* footer */
+  .fcol a{transition:transform .25s,color .2s}.fcol a:hover{transform:translateX(5px)}
+  .fcol a::before{content:"";display:inline-block;width:0;height:1px;background:currentColor;vertical-align:middle;margin-right:0;transition:width .25s,margin .25s}
+  .fcol a:hover::before{width:10px;margin-right:6px}
+  .foot .ft{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1);transition-delay:var(--d,0s)}
+  .foot .ft.in{opacity:1;transform:none}
+  .gp b{transition:transform .25s}.gp:hover b{transform:scale(1.08)}
+}

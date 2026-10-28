@@ -1,0 +1,43 @@
+/* Type scale per screen size. Loaded last, so it wins over the base sizes. */
+@media (max-width:1280px){
+  body{font-size:14.5px}
+  .hero h1{font-size:clamp(34px,5vw,56px)}
+  .phero h1{font-size:clamp(28px,3.8vw,42px)}
+  .head h2,.sechead h2{font-size:clamp(22px,3.2vw,32px)}
+  .card h3{font-size:18px}
+  .hero .lede,.phero .lede{font-size:15.5px}
+  .ml{font-size:13.5px}
+}
+@media (max-width:860px){
+  .hero h1{font-size:clamp(32px,8vw,44px)}
+  .phero h1{font-size:clamp(27px,6.6vw,36px)}
+  .head h2,.sechead h2{font-size:clamp(21px,5.4vw,27px)}
+  .hero .lede,.phero .lede{font-size:14.5px}
+  .head p,.sechead p{font-size:14px}
+}
+@media (max-width:560px){
+  body{font-size:14px}
+  .hero h1{font-size:clamp(29px,8.4vw,36px)}
+  .phero h1{font-size:clamp(25px,7vw,31px)}
+  .head h2,.sechead h2{font-size:21px}
+  .card h3,.feat h3,.fl h3{font-size:16.5px}
+  .card p,.feat p,.fl p{font-size:13px}
+  .hero .lede,.phero .lede{font-size:14px}
+  .btn{font-size:13.5px;padding:10px 17px}
+  .ml{font-size:14px}
+  .counters .odo{font-size:34px}
+  .fcol a{font-size:13px}
+}
+
+/* laptop / desktop only: each block appears when it scrolls into view */
+@media (min-width:1100px) and (prefers-reduced-motion:no-preference){
+  .view.enter>section,.view.enter>.counters,.view.enter>.band,.view.enter>.reel{animation:none}
+  .sec-hide{opacity:0;transform:translateY(46px)}
+  .sec-hide.sec-in{opacity:1;transform:none;transition:opacity .8s ease,transform .9s cubic-bezier(.2,.8,.2,1)}
+}
+
+/* marketplace hero: full width like the other bands, with space before the stats band */
+.view>.mhero{width:100vw;max-width:none;margin-inline:calc(50% - 50vw);margin-bottom:clamp(24px,3vw,44px)}
+.mhero>.wrap{max-width:calc(1440px + var(--gut) + var(--gutr));margin-inline:auto}
+/* space between a section and the stats band that follows it */
+.view>section+.counters{margin-top:clamp(40px,5vw,72px)}

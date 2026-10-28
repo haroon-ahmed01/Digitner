@@ -1,0 +1,10 @@
+{
+  "name": "Digitner",
+  "short_name": "Digitner",
+  "description": "Digital transformation and AI solutions.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAFAFD",
+  "theme_color": "#5B54C4",
+  "icons": [{ "src": "/favicon.png", "sizes": "any", "type": "image/png" }]
+}
