@@ -3,6 +3,7 @@ import Seo from '@/components/seo/Seo'
 import Icon from '@/components/ui/Icon'
 import CounterBand from '@/components/motion/CounterBand'
 import Reveal from '@/components/motion/Reveal'
+import SwapDeck from '@/components/motion/SwapDeck'
 import { PageHero, RouteOrbit, View } from '@/components/blocks'
 import { image, logo } from '@/utils/media'
 import { SITE } from '@/data/site'
@@ -93,29 +94,35 @@ export default function About() {
             </ul>
           </Reveal>
         </div>
-        <div className="vals">
-          {VALUES.map(([ic, b, s]) => (
-            <Reveal className="val" key={b}>
+        <SwapDeck
+          className="vals"
+          cardHeight={190}
+          items={VALUES}
+          render={([ic, b, s], i, Wrap) => (
+            <Wrap className="val" key={b}>
               <span><Icon name={ic} /></span>
               <b>{b}</b>
               <small>{s}</small>
-            </Reveal>
-          ))}
-        </div>
+            </Wrap>
+          )}
+        />
       </section>
 
       <section style={{ paddingTop: 8 }}>
         <div className="head"><h2><AText>How we work</AText></h2><p><AText sub>Four steps. You see progress at every one.</AText></p></div>
-        <div className="steps">
-          {STEPS.map(([ic, t, d], i) => (
-            <Reveal className="step" key={t}>
+        <SwapDeck
+          className="steps"
+          cardHeight={230}
+          items={STEPS}
+          render={([ic, t, d], i, Wrap) => (
+            <Wrap className="step" key={t}>
               <div className="ico"><Icon name={ic} /></div>
               <span className="num">Step {i + 1}</span>
               <h3>{t}</h3>
               <p>{d}</p>
-            </Reveal>
-          ))}
-        </div>
+            </Wrap>
+          )}
+        />
       </section>
 
       <section style={{ paddingTop: 8 }}>

@@ -31,6 +31,11 @@ a.dl:hover b{color:var(--accent)}
 .ddfoot .stats{display:flex;gap:18px;font-size:11.7px;color:var(--muted)}.ddfoot .stats b{color:var(--ink);font-size:12.6px;margin-right:4px}
 .ddfoot .btn{padding:8px 14px;font-size:11.7px}
 @media (prefers-reduced-motion:reduce){.ddcol{animation:none;opacity:1;transform:none}}
-@media (max-width:1320px){.menu-list>li.mega-li{position:relative}.has-dd.open .dd.mega{grid-template-columns:1fr;width:auto;gap:10px;padding:4px 0 8px}
-  .ddl.two{grid-template-columns:1fr}.ddfoot{flex-direction:column;align-items:flex-start}.ddfoot .stats{display:none}.dl small{display:none}.ddh small,.ddh .go{display:none}.dl .si{grid-row:auto}}
-@media (max-width:1320px){.has-dd.open .dd.mega{grid-template-columns:1fr;min-width:0}}
+/* tablet + mobile: sections stack one under another (hover on touch must not bring the 3-column desktop grid back) */
+@media (max-width:1320px){
+  .menu-list>li.mega-li{position:relative}
+  .menu-list .has-dd:hover .dd.mega,.menu-list .has-dd.open .dd.mega{grid-template-columns:minmax(0,1fr)!important;width:auto!important;max-width:100%;min-width:0;gap:10px;padding:4px 0 8px}
+  .menu-list .has-dd:not(.open):hover .dd.mega{display:none}
+  .menu-list .dd.mega>*{min-width:0}
+  .ddl.two{grid-template-columns:1fr}.ddfoot{flex-direction:column;align-items:flex-start}.ddfoot .stats{display:none}.dl small{display:none}.ddh small,.ddh .go{display:none}.dl .si{grid-row:auto}
+}

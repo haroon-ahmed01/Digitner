@@ -1,0 +1,5 @@
+/* client logos on two orbits */
+.logo-orbits{display:flex;flex-direction:column;gap:clamp(0px,1vw,10px);max-width:1400px;margin-inline:auto}
+.logo-orbit .orbit-item-inner{background:#fff;border:1px solid var(--line);box-shadow:0 10px 26px -10px rgba(60,40,160,.35)}
+.logo-orbit .orbit-image{object-fit:contain;padding:14%;box-sizing:border-box}
+@media (max-width:640px){.logo-orbit .orbit-image{padding:10%}}

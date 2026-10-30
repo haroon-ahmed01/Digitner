@@ -1,18 +1,21 @@
-import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import Seo from '@/components/seo/Seo'
 import Icon from '@/components/ui/Icon'
 import HeroDots from '@/components/motion/HeroDots'
 import CounterBand from '@/components/motion/CounterBand'
+import ScrollStory from '@/components/motion/ScrollStory'
 import Reveal from '@/components/motion/Reveal'
 import { useTyper } from '@/components/motion/Typer'
 import HeroPicture from '@/components/art/HeroPicture'
-import { Band, Clip, Head, LogoRow, ProductCardSmall, View } from '@/components/blocks'
+import { Band, Clip, Head, ProductStack, View } from '@/components/blocks'
 import { PATHS } from '@/constant/routes'
 import { PRODUCTS } from '@/data/products'
 import { LOGO_ROW_1, LOGO_ROW_2 } from '@/data/home'
-import { prefersReducedMotion } from '@/hooks/useReducedMotion'
 import AText from '@/components/motion/AText'
+import { useEffect, useRef } from 'react'
+import OfferCards from '@/components/blocks/OfferCards'
+import LogoOrbit from '@/components/blocks/LogoOrbit'
+import SlideIn from '@/components/motion/SlideIn'
 
 const WORDS = ['websites', 'mobile apps', 'CRMs', 'WhatsApp automation', 'AI agents']
 const STATS = [['50+', 'Customers served'], ['8', 'Industry products'], ['3', 'AI products'], ['4', 'Locations']]
@@ -24,10 +27,16 @@ const OFFER = [
 ]
 
 export default function Home() {
+    const heroRef = useRef(null)
+  useEffect(() => {
+    const el = heroRef.current
+    if (!el || !('IntersectionObserver' in window)) return
+    const io = new IntersectionObserver(([e]) => el.classList.toggle('go', e.isIntersecting), { threshold: 0.25 })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
   const typed = useTyper(WORDS, { add: 70, del: 35, hold: 1500, gap: 250, delay: 1200 })
-  const car = useRef(null)
-  const scroll = (dir) =>
-    car.current?.scrollBy({ left: dir * car.current.clientWidth * 0.8, behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
 
   return (
     <View>
@@ -36,7 +45,7 @@ export default function Home() {
         path="/"
       />
 
-      <div className="hero">
+      <div className="hero go" ref={heroRef}>
         <HeroDots />
         <div className="wrap">
           <div>
@@ -60,11 +69,13 @@ export default function Home() {
             </div>
           </div>
 
-          <HeroPicture name="home" alt="A person presenting an AI assistant on a monitor" caption={<>Ideas at the <b>core</b>. Technology built around them.</>} />
+          <HeroPicture name="home" videoName="hero-home.mp4" alt="A person presenting an AI assistant on a monitor" caption={<>Ideas at the <b>core</b>. Technology built around them.</>} />
         </div>
       </div>
 
-      <CounterBand stats={STATS} icons={STAT_ICONS} images={['CustomerServed.jpeg', 'IndustryProduct.jpeg', 'AIProduct.jpeg', 'Location.jpeg']} />
+      <ScrollStory />
+
+      <CounterBand stats={STATS} icons={STAT_ICONS} images={['stat-customers.webp', 'stat-industry.webp', 'stat-ai.webp', 'stat-locations.webp']} />
 
       <section style={{ paddingBottom: 0 }}>
         <Reveal className="reel">
@@ -82,44 +93,24 @@ export default function Home() {
         <Head title="Trusted by 50+ businesses" style={{ marginBottom: 24 }}>
           Clinics, interior studios, insurers, logistics and retail teams run on platforms we built.
         </Head>
-        <div className="marquee" aria-label="Customer logos">
-          <div className="track"><LogoRow rows={LOGO_ROW_1} /></div>
-        </div>
-        <div className="marquee" aria-hidden="true" style={{ marginTop: 14 }}>
-          <div className="track rev"><LogoRow rows={LOGO_ROW_2} /></div>
-        </div>
+        <LogoOrbit row1={LOGO_ROW_1} row2={LOGO_ROW_2} />
       </section>
 
       <section>
-        <Head title="One partner, from first idea to AI">Pick what you need today. Add more as you grow.</Head>
-        <div className="cards">
-          {OFFER.map((o) => (
-            <Reveal as={Link} className="card" to={o.to} key={o.title}>
-              <div className="ico solid"><Icon name={o.icon} /></div>
-              <h3>{o.title}</h3>
-              <p>{o.text}</p>
-              <span className="go">{o.go} <Icon name="arrow" /></span>
-            </Reveal>
-          ))}
-        </div>
+        <SlideIn from="right">
+          <Head title="One partner, from first idea to AI">Pick what you need today. Add more as you grow.</Head>
+          <OfferCards items={OFFER} />
+        </SlideIn>
       </section>
 
       <section style={{ paddingTop: 0 }}>
-        <div className="head" style={{ marginBottom: 22 }}>
-          <h2><AText>Our products</AText></h2>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', gap: 16, flexWrap: 'wrap' }}>
+        <SlideIn from="left" at={0.25}>
+          <div className="head" style={{ marginBottom: 22 }}>
+            <h2><AText>Our products</AText></h2>
             <p>Ready Digitner platforms, each running real businesses.</p>
-            <div className="parr">
-              <button type="button" aria-label="Previous products" onClick={() => scroll(-1)}><Icon name="arrowl" /></button>
-              <button type="button" aria-label="Next products" onClick={() => scroll(1)}><Icon name="arrow" /></button>
-            </div>
           </div>
-        </div>
-        <div className="pscroll" ref={car}>
-          {PRODUCTS.map((p) => (
-            <ProductCardSmall key={p.id} p={p} />
-          ))}
-        </div>
+          <ProductStack products={PRODUCTS} />
+        </SlideIn>
       </section>
 
       <Band title="Have an idea? See it working first." text="Tell us the problem. We'll come back with a clickable prototype." to={PATHS.contact} label="Book a demo" />

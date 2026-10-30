@@ -21,6 +21,8 @@ export function useContactForm() {
     if (values.website) return // honeypot: real users never fill this hidden field
 
     const found = validateContact(values)
+    const digits = values.phone.replace(/\D/g, '')
+    if (digits.length < 7 || digits.length > 15) found.phone = 'Enter a valid phone number'
     if (Object.keys(found).length) {
       setErrors(found)
       return

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import Icon from '@/components/ui/Icon'
 import HeroPic from './HeroPic'
@@ -18,7 +19,8 @@ const SPOTS = [[2, 62], [36, 2], [57, 76], [72, 4]]
  */
 export default function OrbitArt({ icon = 'spark', chips = [], caption, metric = 'AI', max = 4, variant }) {
   const { pathname } = useLocation()
-  if (image(heroPicFor(pathname))) return <HeroPic caption={caption} />
+  const [bad, setBad] = useState('')
+  if (bad !== pathname && image(heroPicFor(pathname))) return <HeroPic caption={caption} onError={() => setBad(pathname)} />
   const list = chips.slice(0, Math.min(max, SPOTS.length))
   return (
     <div className="scene">

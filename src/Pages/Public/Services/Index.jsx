@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { floatsFor } from '@/utils/floats'
 import Seo from '@/components/seo/Seo'
 import Icon from '@/components/ui/Icon'
-import Reveal from '@/components/motion/Reveal'
+import SwapDeck from '@/components/motion/SwapDeck'
 import { Band, PageHero, RouteOrbit, Showcase, VideoPanel, View } from '@/components/blocks'
 import { PATHS } from '@/constant/routes'
 import { SERVICE_GROUPS, SERVICES } from '@/data/services'
@@ -36,16 +36,19 @@ export default function Services() {
             </h2>
             <p>{g.d}</p>
           </div>
-          <div className="cards">
-            {SERVICES.filter((s) => s.g === g.id).map((s) => (
-              <Reveal as={Link} className="card" to={PATHS.service(s.id)} key={s.id}>
+          <SwapDeck
+            className="cards"
+            cardHeight={290}
+            items={SERVICES.filter((s) => s.g === g.id)}
+            render={(s, i, Wrap) => (
+              <Wrap as={Link} className="card" to={PATHS.service(s.id)} key={s.id}>
                 <div className="ico"><Icon name={s.ic} /></div>
                 <h3>{s.n}</h3>
                 <p>{s.lede}</p>
                 <span className="go">Explore <Icon name="arrow" /></span>
-              </Reveal>
-            ))}
-          </div>
+              </Wrap>
+            )}
+          />
         </section>
       ))}
 

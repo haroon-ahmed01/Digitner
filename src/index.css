@@ -23,4 +23,6 @@
 @import "./styles/footer.css";
 @import "./styles/scene.css";
 @import "./styles/motion.css";
+@import "./styles/story.css";
+@import "./styles/scrollstack.css";
 @import "./styles/type.css";

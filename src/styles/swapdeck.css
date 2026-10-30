@@ -1,0 +1,15 @@
+/* tablet + phone: a few card grids become a swapping stack (CardSwap) */
+.swd{margin-top:4px}
+.swd-in{height:100%;box-sizing:border-box;display:flex}
+.swd-in>*{flex:1;min-width:0;margin:0;transform:none!important;box-shadow:none!important}
+/* inside the stack the card tile itself is the card, so strip the grid-card chrome */
+.swd .card,.swd .val{background:transparent;border:0;border-radius:0;padding:22px;height:100%}
+.swd .step{padding:20px 22px;border-top:0;height:100%}
+.swd .step::before{display:none}
+.swd .card::after,.swd .step::after{display:none}
+.swd .card h3{font-size:20px}
+.swd .card p,.swd .step p{font-size:13.4px}
+.swd .val{align-content:start;gap:6px}
+.swd .val b{font-size:16px}
+.swd .val small{font-size:13px}
+.card-swap-slot:not([data-front]) .swd-in a{pointer-events:none}

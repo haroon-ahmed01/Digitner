@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react'
 import Icon from '@/components/ui/Icon'
-import { prefersReducedMotion } from '@/hooks/useReducedMotion'
+import TiltedCard from './TiltedCard'
 import { image } from '@/utils/media'
+import { prefersReducedMotion } from '@/hooks/useReducedMotion'
 
 const parse = (v) => {
   const m = v.match(/^([^\d]*)([\d,]+)(.*)$/)
@@ -34,6 +35,12 @@ function countTo(el, value) {
  * stats: [[value, label]]   icons: icon names in the same order
  */
 export default function CounterBand({ stats, icons = ['grid', 'users', 'phone', 'layers'], images }) {
+  const imgOf = (i) => {
+    const v = images && images[i]
+    const u = v && typeof v === 'object' ? v.src || v.default || v.url : v
+    return typeof u === 'string' && !/^(\/|https?:|data:|blob:)/.test(u) ? image(u) || u : u
+  }
+  const withImg = Boolean(images && images.length)
   const ref = useRef(null)
 
   useEffect(() => {
@@ -64,18 +71,51 @@ export default function CounterBand({ stats, icons = ['grid', 'users', 'phone', 
     }
   }, [stats])
 
+  if (withImg)
+    return (
+      <div className="counters cards" ref={ref}>
+        <div className="wrap">
+          {stats.map(([value, label], i) => (
+            <div className="ctr tcw" key={label} style={{ '--i': i }}>
+              <TiltedCard
+                imageSrc={imgOf(i)}
+                altText={label}
+                containerWidth="100%"
+                containerHeight="var(--tc-h)"
+                imageWidth="100%"
+                imageHeight="var(--tc-h)"
+                rotateAmplitude={12}
+                scaleOnHover={1.05}
+                glare={0.5}
+                shadow={0.5}
+                radius={22}
+                perspective={900}
+                showTooltip={false}
+                gyroscope={false}
+                intro={false}
+              >
+              </TiltedCard>
+              <div className="tc-text">
+                <div className="odo" data-odo={value} />
+                <p>{label}</p>
+                <div className="bar">
+                  <i />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+
   return (
     <div className="counters" ref={ref}>
       <div className="wrap">
         {stats.map(([value, label], i) => (
-          <div className={`ctr${images?.[i] ? ' has-img' : ''}`} key={label}>
-            {images?.[i] ? (
-              <img className="cbg" src={image(images[i])} alt="" loading="lazy" />
-            ) : (
-              <div className="ci">
-                <Icon name={icons[i] || 'grid'} />
-              </div>
-            )}
+          <div className="ctr" key={label}>
+            <div className="ci">
+              <Icon name={icons[i] || 'grid'} />
+            </div>
             <div className="odo" data-odo={value} />
             <p>{label}</p>
             <div className="bar">

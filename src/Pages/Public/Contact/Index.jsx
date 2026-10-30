@@ -55,6 +55,11 @@ export default function Contact() {
                 {errors.email && <small className="ferr">{errors.email}</small>}
               </div>
               <div>
+                <label htmlFor="cPhone">Phone / WhatsApp</label>
+                <input className="inp" id="cPhone" name="phone" type="tel" value={values.phone} onChange={onChange} placeholder="+91 98765 43210" autoComplete="tel" aria-invalid={!!errors.phone} />
+                {errors.phone && <small className="ferr">{errors.phone}</small>}
+              </div>
+              <div>
                 <label htmlFor="cCo">Company</label>
                 <input className="inp" id="cCo" name="company" value={values.company} onChange={onChange} placeholder="Company name" autoComplete="organization" />
               </div>

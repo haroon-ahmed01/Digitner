@@ -1,0 +1,30 @@
+/* Vision & Mission bento (MagicBento) - follows the site tokens, so light and dark both work */
+.vmb .magic-bento__content{padding:0;gap:0}
+.vb{position:relative;display:flex;flex-direction:column;height:100%;padding:clamp(18px,2.2vw,27px);box-sizing:border-box}
+.vb h3{font-size:clamp(16.7px,1.7vw,20.9px);line-height:1.3;margin:6px 0 12px;color:var(--ink)}
+.vb-p{margin:0;line-height:1.6;color:var(--muted)}
+.vb-ico{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);margin-bottom:16px;flex:none}
+.vb-ico svg{width:24px;height:24px}
+.vb-ico.sm{width:36px;height:36px;border-radius:10px;margin-bottom:10px}.vb-ico.sm svg{width:18px;height:18px}
+.vb-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.vb-list li{display:flex;gap:10px;align-items:flex-start;font-size:12.6px;line-height:1.5;color:var(--muted)}
+.vb-list li b{color:var(--ink)}
+.vb-list li svg{flex:none;width:18px;height:18px;margin-top:2px;color:#fff;background:var(--accent);border-radius:50%;padding:3px}
+:root[data-theme="dark"] .vb-list li svg{color:var(--accent-ink)}
+.vb-val{justify-content:flex-start;gap:3px}
+.vb-val b{font-size:13.4px;color:var(--ink)}
+.vb-val small{color:var(--muted);font-size:11.3px;line-height:1.45}
+
+/* vision card keeps the brand gradient */
+.vmb .magic-bento__cell:nth-child(1) .magic-bento__card{--mb-glow-rgb:255,255,255;background:linear-gradient(135deg,var(--g1),var(--g2))}
+.vmb .magic-bento__cell:nth-child(1) .magic-bento__rim{box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.vb-vis h3,.vb-vis .vb-p,.vb-vis .eyebrow{color:rgba(255,255,255,.92)}
+.vb-vis .vb-ico{background:rgba(255,255,255,.18);color:#fff}
+.vb-vis::after{content:"";position:absolute;right:-60px;bottom:-60px;width:220px;height:220px;border-radius:50%;border:28px solid rgba(255,255,255,.08);pointer-events:none}
+.vb-vis::before{content:"";position:absolute;right:40px;top:40px;width:10px;height:10px;border-radius:50%;background:#fff;box-shadow:0 0 0 8px rgba(255,255,255,.15);animation:vpulse 2.4s ease-in-out infinite}
+
+/* smaller laptop, tablet, mobile: let the cards size to their content */
+@media (max-width:1200px){
+  .vmb{grid-auto-rows:minmax(140px,auto)!important}
+  .vmb .magic-bento__cell{grid-row:auto!important}
+}

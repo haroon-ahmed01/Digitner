@@ -17,8 +17,8 @@ export function View({ children, style }) {
 
   useEffect(() => {
     const root = ref.current
-    if (!root || prefersReducedMotion() || !window.matchMedia('(min-width: 1100px)').matches || !('IntersectionObserver' in window)) return
-    const blocks = [...root.children].filter((el) => !el.matches('.hero, .phero, .mhero'))
+    if (!root || prefersReducedMotion() || !('IntersectionObserver' in window)) return
+    const blocks = [...root.children].filter((el) => !el.matches('.hero, .phero, .mhero, .story'))
     const io = new IntersectionObserver(
       (entries) =>
         entries.forEach((e) => {

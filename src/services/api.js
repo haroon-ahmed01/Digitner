@@ -34,3 +34,19 @@ export const contactAPI = {
     return { ok: true };
   },
 };
+
+
+// ─── AI Marketplace waitlist ────────────────────────────────────────
+export const waitlistAPI = {
+  submit: async (payload) => {
+    const response = await APIRequest.request(
+      "POST",
+      ConfigAPIURL.waitlistSubmit,
+      JSON.stringify(payload),
+    );
+    if (!isOk(response)) {
+      throw new Error(response?.data?.message || "Waitlist request failed");
+    }
+    return { ok: true };
+  },
+};
