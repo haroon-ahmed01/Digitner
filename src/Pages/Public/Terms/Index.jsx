@@ -20,7 +20,6 @@ export default function Terms() {
     <View>
       <Seo title="Terms and Conditions" description="The terms that apply when you use Digitner's website, products, services, academy programs and coaching sessions." path="/terms" />
       <PageHero
-        solo
         eyebrow="Legal"
         title={<h1><AText>Terms and </AText><em><AText delay={0.4}>Conditions</AText></em></h1>}
         lede={`${SITE.legalName} · Last updated October 2026`}

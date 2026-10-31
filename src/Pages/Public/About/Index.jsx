@@ -31,7 +31,7 @@ const PARTNERS = [
   ['dentall3', 'DentALL3', 'Your complete dental platform'],
   ['skylax', 'SKYLAX.AI', 'Operational intelligence for interiors'],
 ]
-const STATS = [['2025', 'Founded'], ['50+', 'Customers served'], ['3', 'AI products'], ['4', 'Locations']]
+const STATS = [['2025', 'Founded'], ['100+', 'Customers served'], ['3', 'AI products'], ['4', 'Locations']]
 const LOC_ICON = ['pin', 'pin', 'globe', 'globe']
 
 export default function About() {
@@ -39,13 +39,13 @@ export default function About() {
     <View>
       <Seo
         title="About Us"
-        description="Digitner started in 2025 with one rule: show the client a working product before asking for a contract. 50+ customers across 4 locations."
+        description="Digitner started in 2025 with one rule: show the client a working product before asking for a contract. 100+ customers across 4 locations."
         path="/about"
       />
       <PageHero
         eyebrow="About Us"
         title={<h1><AText>We build first, </AText><em><AText delay={0.5}>then</AText></em> <AText delay={0.7}>we talk.</AText></h1>}
-        lede="Digitner started in 2025 with one rule: show the client a working product before asking for a contract. Since then we've served more than 50 businesses across healthcare, interiors, insurance, logistics, retail and travel."
+        lede="Digitner started in 2025 with one rule: show the client a working product before asking for a contract. Since then we've served more than 100 businesses across healthcare, interiors, insurance, logistics, retail and travel."
         floats={floatsFor('about')}
         art={<RouteOrbit route="about" />}
       />
@@ -69,7 +69,7 @@ export default function About() {
           <Reveal as="figure" className="whoimg">
             <img src={image('team1.webp')} alt="Digitner team collaborating" />
             <img className="inset" src={image('team2.webp')} alt="Team reviewing a project" />
-            <figcaption><b>50+</b> customers served</figcaption>
+            <figcaption><b>100+</b> customers served</figcaption>
           </Reveal>
         </div>
       </section>

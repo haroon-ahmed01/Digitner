@@ -3,3 +3,19 @@
 .logo-orbit .orbit-item-inner{background:#fff;border:1px solid var(--line);box-shadow:0 10px 26px -10px rgba(60,40,160,.35)}
 .logo-orbit .orbit-image{object-fit:contain;padding:14%;box-sizing:border-box}
 @media (max-width:640px){.logo-orbit .orbit-image{padding:10%}}
+/* the Digitner mark (same animation as the hero) sits in the middle of the logo orbit */
+.logo-orbits{position:relative}
+.lo-mark{--s:125px;position:absolute;left:50%;top:43%;transform:translate(-50%,-50%);z-index:0;pointer-events:none;display:grid;place-items:center}
+.lo-mark .big.sm{width:var(--s)}
+.lo-mark .big .ring{border-width:calc(var(--s) * .0667)}
+.logo-orbit{position:relative;z-index:1}
+/* caption under the mark */
+.lo-cap{position:absolute;top:calc(100% + 78px);left:50%;transform:translateX(-50%);width:max-content;max-width:min(360px,38vw);margin:0;text-align:center;font-family:var(--mono);font-size:clamp(10px,.85vw,12px);letter-spacing:.1em;text-transform:uppercase;line-height:1.6;color:var(--muted)}
+.lo-cap b{color:var(--accent);font-weight:500}
+@media (prefers-reduced-motion:no-preference){.lo-cap{animation:locap .9s ease both 1.6s}@keyframes locap{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translateX(-50%)}}}
+/* tablet + phone logo strips: smaller cards and logos that scale with the screen */
+@media (max-width:999px){
+  .logo-orbits .track{gap:clamp(10px,2vw,14px)}
+  .logo-orbits .logo{height:clamp(66px,12vw,86px);min-width:clamp(92px,17vw,120px);padding:clamp(7px,1.4vw,10px) clamp(12px,2.4vw,16px);border-radius:14px}
+  .logo-orbits .logo img{max-height:clamp(42px,7.6vw,56px);max-width:clamp(110px,26vw,170px)}
+}

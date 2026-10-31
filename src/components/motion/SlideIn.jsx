@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react'
 
-/* `at` = how much of the section (as a fraction of its height, capped at one screen) must be visible before it slides in */
-export default function SlideIn({ from = 'right', at = 0.88, className = '', children, ...rest }) {
+/* `at`    = how much of the section (as a fraction of its height, capped at one screen) must be visible before it slides in
+   `early` = start the slide while the section is still below the screen, so it has arrived when you get there */
+export default function SlideIn({ from = 'right', at = 0.88, early = false, className = '', children, ...rest }) {
   const outer = useRef(null)
   const inner = useRef(null)
 
@@ -15,10 +16,10 @@ export default function SlideIn({ from = 'right', at = 0.88, className = '', chi
       if (!e.isIntersecting) { el.classList.remove('in'); return }
       const need = Math.min(e.boundingClientRect.height, window.innerHeight) * at
       if (e.intersectionRect.height >= need) el.classList.add('in')
-    }, { threshold: steps })
+    }, { threshold: steps, rootMargin: early ? '0px 0px 45% 0px' : '0px' })
     io.observe(box)
     return () => io.disconnect()
-  }, [at])
+  }, [at, early])
 
   return (
     <div ref={outer} className="slidein-box" {...rest}>

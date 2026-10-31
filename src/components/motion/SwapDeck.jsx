@@ -3,6 +3,8 @@ import Reveal from '@/components/motion/Reveal'
 import CardSwap, { Card } from '@/components/motion/CardSwap'
 import '@/styles/swapdeck.css'
 
+const STACK = false // true = swapping card stack on tablet/phone, false = normal cards
+
 const useBelow = (px) => {
   const q = `(max-width:${px}px)`
   const [m, setM] = useState(() => typeof window !== 'undefined' && window.matchMedia(q).matches)
@@ -41,7 +43,7 @@ export default function SwapDeck({ items, render, className = '', below = 900, c
   const small = useBelow(below)
   const phone = useBelow(600)
 
-  if (!small || items.length < 3) {
+  if (!STACK || !small || items.length < 3) {
     return <div className={className}>{items.map((it, i) => render(it, i, Reveal))}</div>
   }
   return (

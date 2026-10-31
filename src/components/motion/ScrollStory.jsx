@@ -12,15 +12,15 @@ gsap.registerPlugin(ScrollTrigger)
 
 const WORD = 'DIGITNER'
 const SCENES = [
-  { tag: 'Start', title: '50+ customers across 4 locations. Let’s see where we work.' },
-  { tag: 'Learn', title: 'We learn your business first', text: 'ICP, journeys and goals mapped with 50+ customers across 4 locations.', stat: '50+', label: 'customers', place: 'Vellore', region: 'Tamil Nadu, India', role: 'Head office', at: [79.13, 12.92] },
+  { tag: 'Start', title: '100+ customers across 4 locations. Let’s see where we work.' },
+  { tag: 'Learn', title: 'We learn your business first', text: 'ICP, journeys and goals mapped with 100+ customers across 4 locations.', stat: '100+', label: 'customers', place: 'Vellore', region: 'Tamil Nadu, India', role: 'Head office', at: [79.13, 12.92] },
   { tag: 'Build', title: 'Websites, apps, CRMs and automation', text: 'Seventeen services, plus eight ready Digitner platforms to launch faster.', stat: '17', label: 'services', place: 'Bengaluru', region: 'Karnataka, India', role: 'Branch', at: [77.59, 12.97] },
   { tag: 'Grow', title: 'Sales and marketing that keep growing', text: 'Leads, campaigns and pipeline handled by one team that built your product.', stat: '8', label: 'platforms', place: 'Mexico', region: 'Latin America', role: 'Delivery', at: [-99.13, 19.43] },
   { tag: 'Now with AI', title: 'AI that makes it all work harder', text: 'Veloque AI, BuySei AI, SmileView AI and the AI Marketplace of ready agents.', stat: '3', label: 'AI products', cta: true, place: 'Malaysia', region: 'Southeast Asia', role: 'Delivery', at: [101.69, 3.14] },
 ]
 const LAND = feature(land110, land110.objects.land)
 const GRID = geoGraticule10()
-const ZOOM = 3.5 // zoom on a city: country and city both visible
+const ZOOM = 6 // zoom on a city: country and city both visible
 
 /** Scroll story for the Home page: the section pins, and scrolling moves through 5 scenes while a globe turns to each location. */
 export default function ScrollStory() {

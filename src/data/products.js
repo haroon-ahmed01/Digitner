@@ -16,7 +16,7 @@ export const PRODUCT_DOMAIN = {"dentexa":"Dental","interiorexa":"Interiors & pro
 export const PRODUCT_TYPES = {"leadexa":[["crm","CRM"]],"rewardexa":[["grid","SaaS platform"]]}
 
 /** productId -> 1 when a p_<id>.webp image exists */
-export const PRODUCT_IMAGES = {"dentexa":1,"insurexa":1,"payexa":1,"interiorexa":1}
+export const PRODUCT_IMAGES = {"dentexa":1,"insurexa":1,"payexa":1,"interiorexa":1,"leadexa":1,"eventexa":1,"itravel":1,"rewardexa":1}
 
 /** productId -> 1 when an a_<id>.webp app image exists */
 export const PRODUCT_APP_IMAGES = {"dentexa":1,"payexa":1,"interiorexa":1}

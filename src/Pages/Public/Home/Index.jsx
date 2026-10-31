@@ -1,24 +1,23 @@
+import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import Seo from '@/components/seo/Seo'
 import Icon from '@/components/ui/Icon'
 import HeroDots from '@/components/motion/HeroDots'
 import CounterBand from '@/components/motion/CounterBand'
-import ScrollStory from '@/components/motion/ScrollStory'
 import Reveal from '@/components/motion/Reveal'
 import { useTyper } from '@/components/motion/Typer'
-import HeroPicture from '@/components/art/HeroPicture'
-import { Band, Clip, Head, ProductStack, View } from '@/components/blocks'
+import HeroMark from '@/components/art/HeroMark'
+import { Band, Clip, Head,ProductStack, View } from '@/components/blocks'
 import { PATHS } from '@/constant/routes'
 import { PRODUCTS } from '@/data/products'
 import { LOGO_ROW_1, LOGO_ROW_2 } from '@/data/home'
-import AText from '@/components/motion/AText'
-import { useEffect, useRef } from 'react'
-import OfferCards from '@/components/blocks/OfferCards'
-import LogoOrbit from '@/components/blocks/LogoOrbit'
 import SlideIn from '@/components/motion/SlideIn'
+import LogoOrbit from '@/components/blocks/LogoOrbit'
+import OfferCards from '@/components/blocks/OfferCards'
+import AText from '@/components/motion/AText'
 
 const WORDS = ['websites', 'mobile apps', 'CRMs', 'WhatsApp automation', 'AI agents']
-const STATS = [['50+', 'Customers served'], ['8', 'Industry products'], ['3', 'AI products'], ['4', 'Locations']]
+const STATS = [['100+', 'Customers served'], ['8', 'Industry products'], ['3', 'AI products'], ['4', 'Locations']]
 const STAT_ICONS = ['users', 'grid', 'spark', 'pin']
 const OFFER = [
   { to: PATHS.services, icon: 'code', title: 'Digital Services', text: 'Consulting, websites, e-commerce, WhatsApp automation, CRM and mobile apps, plus sales and marketing support.', go: 'See services' },
@@ -27,7 +26,8 @@ const OFFER = [
 ]
 
 export default function Home() {
-    const heroRef = useRef(null)
+  const heroRef = useRef(null)
+  // replay the hero entrance every time the hero scrolls back into view
   useEffect(() => {
     const el = heroRef.current
     if (!el || !('IntersectionObserver' in window)) return
@@ -35,7 +35,6 @@ export default function Home() {
     io.observe(el)
     return () => io.disconnect()
   }, [])
-
   const typed = useTyper(WORDS, { add: 70, del: 35, hold: 1500, gap: 250, delay: 1200 })
 
   return (
@@ -49,11 +48,13 @@ export default function Home() {
         <HeroDots />
         <div className="wrap">
           <div>
-            <span className="since"><i />50+ customers served across 4 locations</span>
+            <span className="since"><i />100+ customers served across 4 locations</span>
             <h1 style={{ marginTop: 20 }}>
-              <AText>Learn Build Grow</AText>
+              <span className="nw"><AText>Learn</AText><span className="dot">.</span></span>{' '}
+              <span className="nw"><AText delay={0.2}>Build</AText><span className="dot">.</span></span>{' '}
+              <span className="nw"><AText delay={0.4}>Grow</AText><span className="dot">.</span></span>
               <br />
-              <span className="ai"><AText delay={0.6}>Now with AI.</AText></span>
+              <span className="ai nw"><AText delay={0.6}>Now with AI</AText><span className="dot">.</span></span>
             </h1>
             <p className="typer" aria-label="We build websites, mobile apps, CRMs, WhatsApp automation and AI agents.">
               <span aria-hidden="true">We build</span>
@@ -69,13 +70,11 @@ export default function Home() {
             </div>
           </div>
 
-          <HeroPicture name="home" videoName="hero-home.mp4" alt="A person presenting an AI assistant on a monitor" caption={<>Ideas at the <b>core</b>. Technology built around them.</>} />
+          <HeroMark caption={<>Ideas at the <b>core</b>.<br />Technology built around them.</>} />
         </div>
       </div>
 
-      <ScrollStory />
-
-      <CounterBand stats={STATS} icons={STAT_ICONS} images={['stat-customers.webp', 'stat-industry.webp', 'stat-ai.webp', 'stat-locations.webp']} />
+      <CounterBand stats={STATS} icons={STAT_ICONS} />
 
       <section style={{ paddingBottom: 0 }}>
         <Reveal className="reel">
@@ -90,7 +89,7 @@ export default function Home() {
       </section>
 
       <section style={{ paddingBottom: 16 }}>
-        <Head title="Trusted by 50+ businesses" style={{ marginBottom: 24 }}>
+        <Head title="Trusted by 100+ businesses" style={{ marginBottom: 24 }}>
           Clinics, interior studios, insurers, logistics and retail teams run on platforms we built.
         </Head>
         <LogoOrbit row1={LOGO_ROW_1} row2={LOGO_ROW_2} />
@@ -99,12 +98,12 @@ export default function Home() {
       <section>
         <SlideIn from="right">
           <Head title="One partner, from first idea to AI">Pick what you need today. Add more as you grow.</Head>
-          <OfferCards items={OFFER} />
+          <OfferCards items={OFFER} plain />
         </SlideIn>
       </section>
 
       <section style={{ paddingTop: 0 }}>
-        <SlideIn from="left" at={0.25}>
+        <SlideIn from="left" at={0.02} early>
           <div className="head" style={{ marginBottom: 22 }}>
             <h2><AText>Our products</AText></h2>
             <p>Ready Digitner platforms, each running real businesses.</p>

@@ -2,7 +2,7 @@
 
 /** route -> [centre icon, [[chip label, chip icon]], caption] */
 export const ORBIT_CHIPS = {
-  about: ['flag', [['Prototype', 'layers'], ['Build', 'code'], ['Grow', 'growth'], ['Clients', 'users'], ['Global', 'globe'], ['Partners', 'link']], '50+ customers · 4 locations'],
+  about: ['flag', [['Prototype', 'layers'], ['Build', 'code'], ['Grow', 'growth'], ['Clients', 'users'], ['Global', 'globe'], ['Partners', 'link']], '100+ customers · 4 locations'],
   services: ['compass', [['Strategy', 'compass'], ['Apps', 'code'], ['Sales', 'target'], ['Data', 'chart'], ['Cloud', 'layers'], ['Agents', 'bot']], 'Plan it. Build it. Grow it.'],
   products: ['grid', [['DentExa', 'tooth'], ['InsurExa', 'shield'], ['PayExa', 'wallet'], ['InteriorExa', 'sofa'], ['LeadExa', 'target'], ['EventExa', 'ticket']], 'Ready platforms for every industry'],
   ai: ['spark', [['VeloqueAI', 'compass'], ['BuySei AI', 'chart'], ['SmileView AI', 'tooth'], ['Agents', 'bot'], ['Data', 'layers'], ['Marketplace', 'grid']], 'AI built into how you work'],
@@ -17,7 +17,7 @@ export const ORBIT_CHIPS = {
 
 /** route -> {shape, nodes, metric, pct, max?} */
 export const ORBIT_STYLE = {
-  about: { shape: 'squircle', nodes: 8, metric: '50+ clients', pct: 80 },
+  about: { shape: 'squircle', nodes: 8, metric: '100+ clients', pct: 80 },
   services: { shape: 'octagon', nodes: 17, metric: '17 services', pct: 85 },
   products: { shape: 'squircle', nodes: 8, metric: '8 platforms', pct: 90 },
   ai: { shape: 'circle', nodes: 12, metric: '3 AI products', pct: 75 },

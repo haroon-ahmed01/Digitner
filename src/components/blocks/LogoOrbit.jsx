@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { LogoRow } from '@/components/blocks/Media'
+import HeroMark from '@/components/art/HeroMark'
 import OrbitImages from '@/components/motion/OrbitImages'
 import { logo } from '@/utils/media'
 import '@/styles/logoorbit.css'
@@ -55,6 +56,10 @@ export default function LogoOrbit({ row1, row2 = [] }) {
   }
   return (
     <div className="logo-orbits" ref={ref} aria-label="Customer logos">
+      <div className="lo-mark" key={`m${run}`}>
+        <HeroMark bare />
+        <p className="lo-cap">Ideas at the <b>core</b>.<br />Technology built around them.</p>
+      </div>
       <OrbitImages
         key={`${size}-${run}`}
         images={toImages(mixed, cfg.max)}

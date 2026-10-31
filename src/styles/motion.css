@@ -63,7 +63,6 @@ section:has(>.slidein-box){overflow-x:clip}
 }
 
 /* Heroes and sections: slide in from the left / right on every page */
-html{overflow-x:clip}
 @media (prefers-reduced-motion:no-preference){
   .view{--sdist:min(34vw,420px)}
   /* hero: text comes from the left, picture from the right (plays when the page opens) */
@@ -85,3 +84,8 @@ html{overflow-x:clip}
   .view>.sec-hide:nth-child(even):has(:is(.cards,.feats,.flow,.steps,.vals,.partners):not(.offer-cards)>.rv) :is(.sechead,.head){opacity:0;translate:var(--sdist) 0}
   .view>.sec-hide.sec-in:has(:is(.cards,.feats,.flow,.steps,.vals,.partners):not(.offer-cards)>.rv) :is(.sechead,.head){opacity:1;translate:none;transition:translate 1.3s cubic-bezier(.22,.8,.24,1),opacity .9s ease}
 }
+
+/* never let the page scroll sideways (the slide-in blocks start off-screen) */
+html{overflow-x:clip}
+section:has(>.slidein-box){overflow-x:clip}
+body{overflow-x:clip}

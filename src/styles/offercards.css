@@ -43,3 +43,24 @@
 .sw-go{margin-top:auto;display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:13px;color:var(--accent);text-decoration:none;padding-top:8px}
 .sw-go svg{width:16px;height:16px}
 .card-swap-slot:not([data-front]) .sw-go{pointer-events:none}
+
+/* cards without a picture: a soft panel with a big icon */
+.oc-pic.ic,.sw-pic.ic{display:grid;place-items:center;border-radius:18px;background:linear-gradient(145deg,var(--accent-soft),color-mix(in srgb,var(--accent) 24%,var(--surface)))}
+.oc-pic.ic svg,.sw-pic.ic svg{width:clamp(44px,4.4vw,68px);height:auto;aspect-ratio:1;color:var(--accent)}
+.offer-cards.four{--oc-h:clamp(380px,29vw,430px)}
+
+/* text-only version (no picture), bigger type */
+.offer-cards.plain{--oc-h:clamp(250px,19vw,300px)}
+.offer-cards.plain .oc-in{justify-content:center;gap:0;padding:6px 8px}
+.offer-cards.plain .oc-ico{width:48px;height:48px;border-radius:14px}
+.offer-cards.plain .oc-ico svg{width:24px;height:24px}
+.offer-cards.plain .oc-head h3{font-size:clamp(23px,2vw,28px)}
+.offer-cards.plain .oc-body p{font-size:clamp(14.5px,1.1vw,16px);margin-top:12px}
+.offer-cards.plain .oc-go{font-size:clamp(14px,1.05vw,15.5px);margin-top:16px}
+.offer-swap.plain{height:clamp(340px,92vw,400px)}
+.offer-swap.plain .sw{justify-content:center}
+.offer-swap.plain .sw-head h3{font-size:23px}
+.offer-swap.plain .sw-body{flex:none}
+.offer-swap.plain .sw-body p{font-size:15px}
+.offer-swap.plain .sw-go{font-size:15px;margin-top:14px;padding-top:0}
+@media (max-width:900px){.offer-cards.plain{--oc-h:auto}.offer-cards.plain .oc-in{flex-direction:column;align-items:stretch;padding:20px 8px}}

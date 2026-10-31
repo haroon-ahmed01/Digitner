@@ -13,7 +13,7 @@
 .tlo:empty{display:none}
 @media (prefers-reduced-motion:no-preference){.rv.in .tltrack i{animation:growx 1.6s ease both}.rv.in .tls{animation:rise .6s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--d)}.rv.in .tln{animation:bubin2 .6s cubic-bezier(.3,1.5,.5,1) both;animation-delay:calc(var(--d) + .2s)}@keyframes bubin2{from{transform:scale(0)}to{transform:none}}}
 @media (max-width:900px){.tl{grid-template-columns:1fr 1fr}.tltrack{display:none}}
-@media (max-width:520px){.tl{grid-template-columns:1fr}}
+@media (max-width:700px){.tl{grid-template-columns:1fr}}
 /* deliverable tiles */
 .dlv{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 .dlt{position:relative;overflow:hidden;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px;min-height:190px;display:flex;flex-direction:column;gap:10px;transition:transform .25s,border-color .25s}

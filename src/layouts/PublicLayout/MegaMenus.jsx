@@ -39,7 +39,7 @@ export function ServicesMenu({ onGo }) {
           <b>Not sure where to start?</b> Book a free 30-minute discovery call with our consultants.
         </p>
         <div className="stats">
-          <span><b>50+</b>customers</span>
+          <span><b>100+</b>customers</span>
           <span><b>17</b>services</span>
           <span><b>4</b>locations</span>
         </div>
