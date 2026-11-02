@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Icon from '@/components/ui/Icon'
 import { image, logo, video } from '@/utils/media'
 import { LOGO_NAMES } from '@/data/products'
@@ -23,11 +23,26 @@ export function VideoPanel({ label, title, base, player, file, mobile }) {
     mq.addEventListener('change', on)
     return () => mq.removeEventListener('change', on)
   }, [])
+
+  const vref = useRef(null)
+  const [on, setOn] = useState(false)
+  const toggleSound = () => {
+    const v = vref.current
+    if (!v) return
+    v.muted = !v.muted
+    if (!v.muted) v.play().catch(() => {})
+  }
   const src = file && video(narrow && mobile ? mobile : file)
   if (src)
     return (
       <div className={`video real player${narrow && mobile ? ' tall' : ''}`}>
-        <video key={src} autoPlay muted loop playsInline preload="auto" src={src} />
+        <video ref={vref} key={src} autoPlay muted loop playsInline preload="auto" src={src} onVolumeChange={(e) => setOn(!e.currentTarget.muted)} />
+        <button type="button" className="vsound" aria-label={on ? 'Mute video' : 'Turn sound on'} onClick={toggleSound}>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M11 5 6 9H3v6h3l5 4z" />
+            {on ? <path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" /> : <path d="m16 9 5 6m0-6-5 6" />}
+          </svg>
+        </button>
       </div>
     )
   if (base && player)
