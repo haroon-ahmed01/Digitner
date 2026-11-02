@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import Icon from '@/components/ui/Icon'
 import { image, logo, video } from '@/utils/media'
 import { LOGO_NAMES } from '@/data/products'
@@ -13,8 +14,30 @@ export function Clip({ base, className }) {
 }
 
 /** Framed video panel with label + caption. Without `base` it shows the "coming soon" play button. */
-export function VideoPanel({ label, title, base }) {
+export function VideoPanel({ label, title, base, player, file, mobile }) {
   const toast = useToast()
+  const [narrow, setNarrow] = useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width:700px)').matches)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width:700px)')
+    const on = () => setNarrow(mq.matches)
+    mq.addEventListener('change', on)
+    return () => mq.removeEventListener('change', on)
+  }, [])
+  const src = file && video(narrow && mobile ? mobile : file)
+  if (src)
+    return (
+      <div className={`video real player${narrow && mobile ? ' tall' : ''}`}>
+        <video key={src} autoPlay muted loop playsInline preload="auto" src={src} />
+      </div>
+    )
+  if (base && player)
+    return (
+      <div className="video real player">
+        <video controls playsInline preload="metadata" poster={image(`${base}.jpg`)}>
+          <source src={video(`${base}.mp4`)} type="video/mp4" />
+        </video>
+      </div>
+    )
   if (base)
     return (
       <div className="video real">

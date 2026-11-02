@@ -28,6 +28,8 @@ const PAGES = {
     secondary: 'Become a member',
     store: ['globe', 'Use it on', 'The Web App', 'https://play.google.com/store/apps/details?id=com.atlasai.app&hl=en_IN'],
     video: 'Discover, connect and scale with AI',
+    videoFile: 'veloqueAI.mp4',
+    videoMobile: 'veloqueAIMobile.mp4',
     screen: <VeloqueScreen />,
     caseIcon: 'compass',
   },
@@ -110,7 +112,7 @@ function AiProduct({ ai }) {
 
       <section>
         <Reveal style={{ maxWidth: 980, margin: '0 auto' }}>
-          <VideoPanel label={ai.n} title={pg.video} />
+          <VideoPanel label={ai.n} title={pg.video} file={pg.videoFile} mobile={pg.videoMobile} />
         </Reveal>
       </section>
 

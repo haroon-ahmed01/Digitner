@@ -128,3 +128,8 @@
 .partner .tl{height:72px;min-width:170px;padding:0 16px;border-radius:14px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-family:var(--body);font-weight:800;font-size:23.4px}
 .partner b{font-size:15.1px}
 .partner small{display:block;color:var(--muted);font-size:12.2px}
+/* demo video with controls and sound */
+.video.player::before,.video.player::after{display:none}
+.video.player video{background:#000;object-fit:contain}
+.video.player.tall{aspect-ratio:auto;max-width:420px;margin-inline:auto}
+.video.player.tall video{position:static;height:auto;display:block}

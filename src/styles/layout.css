@@ -178,3 +178,5 @@ section{padding-block:58px}
   .dotmark.ob .cin{font-size:clamp(10px,2.6vw,12px)}
   .dotmark.ob .cap{margin-top:calc(clamp(110px,calc((50cqw - 66px) / .78),230px) * .46 + 28px);text-align:center}
 }
+
+@media (hover:none) and (pointer:coarse){.hero h1 .ai,.hero h1 .ai *{background:none!important;-webkit-background-clip:border-box!important;background-clip:border-box!important;-webkit-text-fill-color:var(--accent)!important;color:var(--accent)!important}}

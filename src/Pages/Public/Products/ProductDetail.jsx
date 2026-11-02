@@ -19,6 +19,8 @@ import { iconFor, productTypes } from '@/utils/text'
 import { productFloats, productOrbit } from '@/utils/orbit'
 
 const EMPTY = {}
+// demo videos in src/assets/videos (add a product here when its video is ready)
+const DEMO_VIDEOS = { dentexa: 'dentexa.mp4', interiorexa: 'InteriorExa.mp4' }
 
 const Check = ({ list }) => (
   <ul className="deliver">
@@ -156,7 +158,7 @@ function Product({ p }) {
         </Sec>
         <section style={{ paddingTop: 0 }}>
           <Reveal style={{ maxWidth: 980, margin: '0 auto' }}>
-            <VideoPanel label={`Digitner ${p.n}`} title={`${p.t} in 2 minutes`} />
+            <VideoPanel label={`Digitner ${p.n}`} title={`${p.t} in 2 minutes`} file={DEMO_VIDEOS[p.id]} />
           </Reveal>
         </section>
         <Sec n={N()} title={stories ? 'Success stories' : 'Case study'} desc={c.sample ? 'How a typical business would use it.' : `Businesses running on Digitner ${p.n} today.`}>
