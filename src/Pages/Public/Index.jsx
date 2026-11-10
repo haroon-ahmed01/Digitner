@@ -14,6 +14,12 @@ const ProductDetailPage = React.lazy(() => import("./Products/ProductDetail"));
 const AiSolutionsPage = React.lazy(() => import("./AiSolutions/Index"));
 const AiProductDetailPage = React.lazy(() => import("./AiSolutions/AiProductDetail"));
 const MarketplacePage = React.lazy(() => import("./Marketplace/Index"));
+const AcademyLayout = React.lazy(() => import("./Academy/Layout"));
+const AcademyHome = React.lazy(() => import("./Academy/Home"));
+const AcademyProgrammes = React.lazy(() => import("./Academy/Programmes"));
+const AcademyBlueprint = React.lazy(() => import("./Academy/Blueprint"));
+const AcademyPlaybook = React.lazy(() => import("./Academy/Playbook"));
+const AcademyRegister = React.lazy(() => import("./Academy/Register"));
 const ContactPage = React.lazy(() => import("./Contact/Index"));
 const TermsPage = React.lazy(() => import("./Terms/Index"));
 
@@ -32,6 +38,13 @@ const Index = () => {
             <Route path={PATHS.product()} element={<ProductDetailPage />} />
             <Route path={PATHS.ai} element={<AiSolutionsPage />} />
             <Route path={PATHS.aiProduct()} element={<AiProductDetailPage />} />
+            <Route element={<AcademyLayout />}>
+              <Route path={PATHS.academy} element={<AcademyHome />} />
+              <Route path={PATHS.academyProgrammes} element={<AcademyProgrammes />} />
+              <Route path={PATHS.academyBlueprint} element={<AcademyBlueprint />} />
+              <Route path={PATHS.academyPlaybook} element={<AcademyPlaybook />} />
+              <Route path={PATHS.academyRegister} element={<AcademyRegister />} />
+            </Route>
             <Route path={PATHS.marketplace} element={<MarketplacePage />} />
             <Route path={PATHS.contact} element={<ContactPage />} />
             <Route path={PATHS.terms} element={<TermsPage />} />

@@ -2,7 +2,7 @@
 /* footer */
 .foot{margin-top:56px;margin-inline:calc(-1*var(--gut)) calc(-1*var(--gutr));background:#15132A;color:#F1F0FA}
 .foot>.wrap{padding:50px var(--gutr) calc(25px + env(safe-area-inset-bottom,0px)) var(--gut)}
-.fgrid{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:32px}
+.fgrid{display:grid;grid-template-columns:1.4fr repeat(5,1fr);gap:28px}
 .fgrid>div{min-width:0}
 .fbrand .fl2{display:inline-flex;align-items:flex-start;gap:2px;background:#FFFFFF;border-radius:12px;padding:6px 10px}
 .fbrand img{height:40px;display:block}
@@ -29,6 +29,7 @@
 .gp b{color:#FFFFFF;font-size:13.4px}.gp small{color:rgba(255,255,255,.6);font-size:11.2px}
 .gp em{font-style:normal;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#C9C6FF;border:1px solid rgba(201,198,255,.3);border-radius:999px;padding:2px 8px;margin-top:6px}
 @media (max-width:860px){.gpres{grid-template-columns:1fr;gap:20px}.gpt{grid-template-columns:1fr 1fr;row-gap:22px}.gpt::before{display:none}}
+@media (max-width:1180px){.fgrid{grid-template-columns:repeat(5,1fr)}.fbrand{grid-column:1/-1}}
 @media (max-width:1000px){.fgrid{grid-template-columns:1fr 1fr}.fbrand{grid-column:1/-1}}
 @media (max-width:480px){.fgrid{grid-template-columns:1fr}}
 .flegal{color:#DCDAF0}.flegal:hover{color:#FFFFFF}

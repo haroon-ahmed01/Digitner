@@ -10,6 +10,7 @@ export const MAIN_NAV = [
   { label: 'Digital Services', to: PATHS.services, match: '/services', menu: 'services' },
   { label: 'Products', to: PATHS.products, match: '/products', menu: 'products' },
   { label: 'AI Solutions', to: PATHS.ai, match: '/ai-solutions', menu: 'ai' },
+  { label: 'AI Academy', to: PATHS.academy, match: '/ai-academy' },
   { label: 'AI Marketplace', to: PATHS.marketplace, match: '/ai-marketplace', badge: 'Soon', market: true },
   { label: 'Contact', to: PATHS.contact, match: '/contact' },
 ]
@@ -32,7 +33,17 @@ export const FOOTER_NAV = [
     title: 'AI Solutions',
     links: [
       ...AI_PRODUCTS.map((a) => ({ label: a.n, to: PATHS.aiProduct(a.id) })),
+      { label: 'Digitner AI Academy', to: PATHS.academy },
       { label: 'Digitner AI Marketplace', to: PATHS.marketplace },
+    ],
+  },
+  {
+    title: 'AI Academy',
+    links: [
+      { label: 'All Programmes', to: PATHS.academyProgrammes },
+      { label: 'AI Growth Blueprint', to: PATHS.academyBlueprint },
+      { label: 'AI Business Playbook', to: PATHS.academyPlaybook },
+      { label: 'Register', to: PATHS.academyRegister },
     ],
   },
 ]

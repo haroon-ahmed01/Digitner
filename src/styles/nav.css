@@ -66,3 +66,16 @@ a.ddh::after{content:"→";margin-left:auto;opacity:.6}
 .themebtn:hover{border-color:var(--accent);color:var(--accent);transform:rotate(-12deg)}
 .themebtn svg{width:18px;height:18px}
 @media (max-width:420px){.nav-cta{gap:6px}.themebtn{width:34px;height:34px}.burger{padding:7px 10px}}
+
+/* Laptop widths just above the burger breakpoint: the menu has 8 items (incl. AI Academy), so tighten it a little
+   so "Book a demo" is never pushed off screen. Wider screens and the burger menu are unchanged. */
+@media (min-width:1321px) and (max-width:1420px){
+  .menu-list{gap:0}
+  .ml{padding:9px 8px;font-size:13.2px}
+  .mlw .ml{padding-right:2px}
+  .nav-cta{gap:8px}
+}
+@media (min-width:1321px) and (max-width:1380px){
+  .ws span:not(.count){display:none}
+  .ws{padding-inline:11px}
+}
