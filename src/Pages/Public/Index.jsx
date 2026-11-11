@@ -45,10 +45,12 @@ const Index = () => {
               <Route path={PATHS.academyPlaybook} element={<AcademyPlaybook />} />
               <Route path={PATHS.academyRegister} element={<AcademyRegister />} />
             </Route>
-            <Route path={PATHS.marketplace} element={<MarketplacePage />} />
             <Route path={PATHS.contact} element={<ContactPage />} />
             <Route path={PATHS.terms} element={<TermsPage />} />
           </Route>
+
+          {/* the AI Marketplace has its own header and footer, so it sits outside the shared layout */}
+          <Route path={PATHS.marketplace} element={<MarketplacePage />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Routes>

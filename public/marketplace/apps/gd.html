@@ -1,0 +1,953 @@
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;height:100%;overflow:hidden}</style><title>Global Delight Workspace</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+
+/* Layout: fixed left rail + scrolling work area; each main page opens with a purple "plate" hero, then working content. Dark-first. */
+:root{
+  --bg:#0e0c16;--panel:#16131f;--panel2:#1d1929;--line:#2a253a;--fg:#ece9f7;--muted:#a49ebb;--faint:#6e6886;
+  --brand:#4C3ABE;--accent:#8B7CF0;--accent-fg:#120b2e;--btn:#4F43D4;--btn-fg:#ffffff;--tint:#241d45;
+  --plate-a:#2A1A66;--plate-b:#4F31A1;--plate-fg:#f4f1ff;--plate-muted:#c3b8ef;
+  --ok:#4ade80;--ok-soft:#14301f;--warn:#fbbf24;--warn-soft:#33270f;--bad:#f87171;--bad-soft:#3a1717;
+  --f-d:"Space Grotesk",ui-sans-serif,system-ui,sans-serif;--f-b:Inter,ui-sans-serif,system-ui,sans-serif;--f-m:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --bg:#f7f6fc;--panel:#ffffff;--panel2:#f1eefa;--line:#e2ddf2;--fg:#1a1630;--muted:#655f80;--faint:#9893ad;
+  --accent:#4C3ABE;--accent-fg:#ffffff;--tint:#EEEBFB;--ok:#15803d;--ok-soft:#dcfce7;--warn:#b45309;--warn-soft:#fef3c7;--bad:#b91c1c;--bad-soft:#fee2e2;color-scheme:light}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-b);font-size:14px;line-height:1.5}
+*{box-sizing:border-box}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.app{display:grid;grid-template-columns:256px 1fr;height:100%}
+/* rail */
+.rail{background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0;padding-left:env(safe-area-inset-left,0px)}
+.brand{padding:16px 16px 8px;display:flex;flex-direction:column;gap:4px}
+.brand img{height:28px;width:auto;align-self:flex-start}
+.brand small{font-family:var(--f-m);font-size:10.5px;color:var(--muted);letter-spacing:.04em}
+.logo-dark{display:block}.logo-light{display:none}
+:root[data-theme="light"] .logo-dark{display:none}:root[data-theme="light"] .logo-light{display:block}
+.search{margin:6px 12px 6px;display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:var(--panel2);color:var(--muted);width:calc(100% - 24px);text-align:left}
+.kbd{font-family:var(--f-m);font-size:10px;color:var(--faint);border:1px solid var(--line);border-radius:4px;padding:0 4px;margin-left:auto}
+.nav{overflow-y:auto;flex:1;padding:0 8px 12px}
+.sec{font-family:var(--f-m);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);padding:14px 8px 4px;display:flex;justify-content:space-between}
+.ni{display:flex;align-items:center;gap:9px;width:100%;border:1px solid transparent;border-radius:7px;padding:5px 8px;color:var(--fg)}
+.ni:hover{background:var(--panel2)}
+.ni.on{background:var(--tint);border-color:color-mix(in srgb,var(--accent) 40%,transparent)}
+.ni .code{font-family:var(--f-m);font-size:9.5px;color:var(--muted);border:1px solid var(--line);border-radius:4px;width:24px;text-align:center;flex:none}
+.ni .lbl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+.ni .cnt{font-family:var(--f-m);font-size:10px;color:var(--muted)}
+.ni .badge{font-family:var(--f-m);font-size:10px;background:var(--btn);color:#fff;border-radius:9px;padding:0 6px}
+.bar{height:4px;background:var(--line);border-radius:4px;width:46px;overflow:hidden;display:inline-block}
+.bar i{display:block;height:100%;background:var(--accent)}
+.me{border-top:1px solid var(--line);padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:10px}
+.me .who{min-width:0;flex:1}.me b{display:block;font-size:13px}.me small{color:var(--muted);font-size:11px}
+.av{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:600;font-size:11px;background:var(--btn);color:#fff;flex:none;font-family:var(--f-m)}
+.av.ag{background:var(--tint);color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 35%,var(--line))}
+.av.sm{width:22px;height:22px;font-size:9px}
+.av.lg{width:52px;height:52px;font-size:16px;border-radius:12px}
+.icon-btn{border:1px solid var(--line);background:var(--panel);border-radius:7px;padding:4px 9px;color:var(--muted)}
+/* main */
+.main{display:flex;flex-direction:column;min-width:0;min-height:0}
+.top{display:flex;align-items:center;gap:10px;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px 20px;border-bottom:1px solid var(--line);background:var(--panel)}
+.crumbs{display:flex;gap:6px;color:var(--muted);flex:1;min-width:0;white-space:nowrap;overflow:hidden}
+.crumbs b{color:var(--fg);font-weight:500}
+.menu-btn{display:none}
+.banner{display:flex;gap:10px;align-items:center;padding:7px max(16px,env(safe-area-inset-right,0px)) 7px 20px;background:var(--warn-soft);font-size:12.5px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.banner b{color:var(--warn)}
+.banner button{margin-left:auto}
+.scroll{overflow-y:auto;flex:1;padding:20px max(16px,env(safe-area-inset-right,0px)) 80px 20px}
+.wrap{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+/* plate */
+.plate{position:relative;border-radius:14px;overflow:hidden;color:var(--plate-fg);padding:26px 28px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;
+  background:radial-gradient(90% 120% at 90% 0%,color-mix(in srgb,var(--btn) 70%,transparent) 0,transparent 60%),linear-gradient(150deg,var(--plate-a) 10%,var(--plate-b) 100%)}
+.plate::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.04) 0 1px,transparent 1px 8px);pointer-events:none}
+.plate>*{position:relative;min-width:0}
+.tag{display:inline-flex;gap:8px;align-items:center;font-family:var(--f-m);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(255,255,255,.25);border-radius:5px;padding:3px 8px;color:var(--plate-muted)}
+.tag .i{color:var(--plate-fg)}
+.plate h1{font-family:var(--f-d);font-weight:600;font-size:clamp(25px,3.4vw,36px);line-height:1.1;margin:14px 0 10px;text-wrap:balance;letter-spacing:-.01em}
+.plate h1 span{color:var(--plate-muted);font-weight:500;display:block}
+.plate p{color:var(--plate-muted);max-width:58ch;margin:0 0 16px}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(118px,1fr));border:1px solid rgba(255,255,255,.18);border-radius:10px;overflow:hidden;background:rgba(10,4,30,.35)}
+.stats div{padding:10px 14px;border-right:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12)}
+.stats div:nth-child(2n){border-right:0}.stats div:nth-last-child(-n+2){border-bottom:0}
+.stats b{display:block;font-family:var(--f-d);font-size:26px;font-weight:500;font-variant-numeric:tabular-nums;line-height:1.2}
+.stats small{font-size:11.5px;color:var(--plate-muted)}
+/* buttons */
+.btns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:7px 13px;font-weight:500;display:inline-flex;gap:6px;align-items:center;white-space:nowrap}
+.btn:hover{border-color:var(--accent)}
+.btn.pri{background:var(--btn);color:var(--btn-fg);border-color:var(--btn)}
+.btn.pri:hover{background:var(--brand)}
+.btn.sm{padding:4px 9px;font-size:12.5px}
+.btn.danger{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 50%,var(--line))}
+.plate .btn{background:#fff;color:#1a1630;border-color:#fff}
+.plate .btn.ghost{background:rgba(255,255,255,.1);color:var(--plate-fg);border-color:rgba(255,255,255,.3)}
+.link{color:var(--accent);background:none;border:0;padding:0;font-weight:500}
+/* text */
+.h2{font-family:var(--f-d);font-size:22px;font-weight:600;margin:0;text-wrap:balance}
+.h2 span{color:var(--faint);font-weight:500}
+.sub{color:var(--muted);margin:2px 0 0}
+.eyebrow{font-family:var(--f-m);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.mono{font-family:var(--f-m);font-size:12px;color:var(--muted)}
+.pill{font-family:var(--f-m);font-size:10px;letter-spacing:.04em;text-transform:uppercase;border-radius:5px;padding:2px 7px;border:1px solid var(--line);color:var(--muted);white-space:nowrap;display:inline-block}
+.pill.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.pill.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.pill.bad{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.pill.acc{background:var(--tint);color:var(--accent);border-color:transparent}
+/* blocks */
+.next{border:1px solid color-mix(in srgb,var(--accent) 40%,var(--line));background:var(--panel);border-radius:12px;padding:14px 16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.next .grow{flex:1;min-width:220px}
+.next b{display:block}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;text-align:left;padding:0;min-width:0}
+a.card:hover,button.card:hover{border-color:var(--accent)}
+.strip{height:56px;background:linear-gradient(135deg,var(--plate-a),var(--plate-b));position:relative}
+.strip .av{position:absolute;left:14px;bottom:-15px;width:36px;height:36px;border:2px solid var(--panel);background:var(--tint)}
+.card .body{padding:22px 14px 12px;display:flex;flex-direction:column;gap:4px;flex:1}
+.card h3{margin:0;font-size:15px;font-family:var(--f-d);font-weight:600}
+.card .led{color:var(--muted);font-size:12.5px}
+.nums{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
+.nums div{padding:8px 14px}
+.nums b{font-family:var(--f-d);font-size:18px;font-weight:500;display:block;font-variant-numeric:tabular-nums}
+.nums small{font-family:var(--f-m);font-size:9.5px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em}
+.agent-card{padding:14px;gap:8px}
+.agent-card .ini{font-family:var(--f-d);font-size:30px;color:var(--faint);line-height:1}
+.agent-card .foot{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-top:auto;border-top:1px solid var(--line);padding-top:8px;font-size:12px;color:var(--muted)}
+.list{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden}
+.row{display:flex;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.row:last-child{border-bottom:0}
+.row .grow{flex:1;min-width:200px}
+.row .grow b{display:block;font-weight:500}
+.row .grow small{color:var(--muted)}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+.tabs{display:flex;gap:2px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.tabs button{border:0;background:none;padding:8px 11px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button.on{color:var(--fg);border-color:var(--accent)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--panel);border-radius:6px;padding:4px 9px;font-size:12px;display:inline-flex;gap:6px;align-items:center}
+.chip small{font-family:var(--f-m);color:var(--faint)}
+.chip.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.chip.on small{color:var(--bg);opacity:.7}
+/* room */
+.room{display:grid;grid-template-columns:250px 1fr;gap:16px;align-items:start}
+.chat{display:flex;flex-direction:column;gap:14px;min-width:0}
+.msg{display:flex;gap:10px;align-items:flex-start}
+.msg .bub{min-width:0;flex:1}
+.msg .who{font-weight:600;font-size:13px}.msg .who small{color:var(--faint);font-weight:400;margin-left:6px}
+.msg h2{font-family:var(--f-d);font-weight:600;font-size:24px;margin:2px 0 6px}
+.msg p{margin:0 0 6px;color:var(--muted);max-width:70ch}
+.msg.user .bub{background:var(--tint);border-radius:10px;padding:8px 12px}
+.msg.user p{color:var(--fg)}
+.acts{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;margin-top:6px}
+.act{display:flex;justify-content:space-between;gap:8px;align-items:center;border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:8px 10px;text-align:left}
+.act:hover{border-color:var(--accent)}
+.composer{border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.composer .tb{display:flex;gap:4px;padding:6px 8px;border-bottom:1px solid var(--line);color:var(--muted);font-size:12px}
+.composer .tb span{padding:2px 6px;border-radius:4px}
+.composer form{display:flex;gap:8px;padding:8px}
+.composer textarea{flex:1;border:0;outline:0;resize:none;background:transparent;min-height:44px;min-width:0}
+.kanban{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:10px;overflow-x:auto}
+.col{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px;min-height:120px}
+.task{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:6px;font-size:13px}
+.task .mv{display:flex;justify-content:space-between}
+/* levels */
+.levels{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.lvl{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:12px;text-align:left;display:flex;flex-direction:column;gap:5px;min-width:0}
+.lvl.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.lvl b{font-family:var(--f-d);font-size:30px;font-weight:500;line-height:1;font-variant-numeric:tabular-nums}
+.lvl em{font-style:normal;font-size:11.5px;color:var(--muted)}
+/* tables */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:560px}
+th{font-family:var(--f-m);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);text-align:left;font-weight:500;padding:10px 14px;border-bottom:1px solid var(--line)}
+td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+tr.clk{cursor:pointer}tr.clk:hover td{background:var(--panel2)}
+tr.sel td{background:var(--tint)}
+.who-cell{display:flex;gap:10px;align-items:center}
+.who-cell small{display:block;color:var(--muted);font-size:12px}
+.split{display:grid;grid-template-columns:1fr 300px;gap:14px;align-items:start}
+/* forms */
+.step{display:flex;gap:12px;align-items:flex-start;padding:14px;border-bottom:1px solid var(--line)}
+.step:last-child{border-bottom:0}
+.step .n{font-family:var(--f-m);font-size:11px;color:var(--faint);width:22px;padding-top:2px}
+.step .grow{flex:1;min-width:0}
+.step p{margin:2px 0 0;color:var(--muted)}
+.check{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--line);background:var(--panel);display:grid;place-items:center;flex:none;padding:0;font-size:12px}
+.check.on{background:var(--btn);border-color:var(--btn);color:#fff}
+.toggle{width:36px;height:20px;border-radius:20px;border:0;background:var(--line);position:relative;flex:none;padding:0}
+.toggle::after{content:"";position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:left .15s}
+.toggle.on{background:var(--btn)}.toggle.on::after{left:19px}
+.skills{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.skill{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.skill .hd{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.skill p{margin:0;color:var(--muted);font-size:12.5px}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1}
+.field label{font-size:12px;color:var(--muted)}
+.field input,.field select,.field textarea{border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:7px 10px;min-width:0;width:100%}
+.form-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.form{display:flex;flex-direction:column;gap:14px}
+.savebar{position:sticky;bottom:-80px;margin-top:6px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.savebar span{flex:1;color:var(--muted);font-size:12.5px;min-width:160px}
+details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--panel2)}
+details summary{cursor:pointer;font-weight:500}
+details ol{margin:10px 0 4px;padding-left:20px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.opt{border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;gap:10px;align-items:flex-start;background:var(--panel);text-align:left;min-width:0}
+.opt.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.opt p{margin:2px 0 0;color:var(--muted)}
+/* overlays */
+.overlay{position:fixed;inset:0;background:rgba(5,3,12,.55);z-index:40;display:flex;align-items:flex-start;justify-content:center;padding:calc(10vh + env(safe-area-inset-top,0px)) 16px 16px}
+.modal{background:var(--panel);border:1px solid var(--line);border-radius:14px;width:min(560px,100%);max-height:80vh;overflow:auto;display:flex;flex-direction:column}
+.modal .mh{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.modal .mh h3{margin:0;font-family:var(--f-d);font-size:18px}
+.modal .mb{padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.modal .mf{padding:12px 18px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.pal input{border:0;border-bottom:1px solid var(--line);background:transparent;padding:14px 18px;font-size:16px;outline:0;width:100%}
+.pal .res{max-height:50vh;overflow:auto;padding:6px}
+.pal .res button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;border:0;background:none;padding:8px 12px;border-radius:7px}
+.pal .res button.on,.pal .res button:hover{background:var(--tint)}
+.drawer{position:fixed;right:0;top:0;bottom:0;width:min(380px,100%);background:var(--panel);border-left:1px solid var(--line);z-index:35;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-right:env(safe-area-inset-right,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.drawer .dh{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.drawer .db{flex:1;overflow:auto;padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+.drawer form{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--line)}
+.drawer input{flex:1;border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:8px 10px;min-width:0}
+.ask{position:fixed;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:30;display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:30px;padding:6px 14px 6px 6px;box-shadow:0 6px 24px rgba(0,0,0,.25);font-weight:500}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:9px 16px;border-radius:9px;font-size:13px;z-index:50;max-width:calc(100% - 32px)}
+.i{flex:none;display:inline-block;vertical-align:-3px}
+.ni .i{color:var(--muted)}.ni.on .i{color:var(--accent)}
+.h2 .i{color:var(--accent);margin-right:8px;vertical-align:-2px}
+.opt>.i{color:var(--accent);margin-top:2px}
+.strip .ti{position:absolute;right:12px;top:12px;color:rgba(255,255,255,.75)}
+.banner .i{color:var(--warn)}
+.scrim{display:none}
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .rail{position:fixed;inset:0 auto 0 0;width:276px;z-index:20;transform:translateX(-100%);transition:transform .2s;padding-top:env(safe-area-inset-top,0px)}
+  .app.open .rail{transform:none}
+  .app.open .scrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:15}
+  .menu-btn{display:inline-flex}
+  .top,.banner,.scroll{padding-left:max(16px,env(safe-area-inset-left,0px))}
+  .plate{grid-template-columns:1fr;padding:20px}
+  .room,.split{grid-template-columns:1fr}
+  .levels{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.ws-switch{margin:4px 12px 8px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;display:flex;gap:10px;align-items:center;background:var(--panel2)}
+.ws-switch .av{border-radius:8px;background:#0f766e}
+.ws-switch b{display:block;font-size:13px}.ws-switch small{color:var(--muted);font-size:11px}
+.stepper{display:flex;gap:6px;flex-wrap:wrap}
+.stp{display:flex;gap:8px;align-items:center;border:1px solid var(--line);background:var(--panel);border-radius:30px;padding:5px 12px 5px 5px;font-size:13px}
+.stp i{font-style:normal;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-m);font-size:11px;background:var(--panel2);color:var(--muted)}
+.stp.done i{background:var(--ok-soft);color:var(--ok)}
+.stp.on{border-color:var(--accent)}.stp.on i{background:var(--btn);color:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.kv{display:grid;grid-template-columns:140px 1fr;gap:6px 14px;font-size:13.5px}
+.kv dt{color:var(--muted)}.kv dd{margin:0}
+/* email mock: fixed light look, it is a picture of an inbox */
+.mail{background:#ffffff;color:#1d2433;border-radius:10px;overflow:hidden;border:1px solid var(--line);font-size:13px}
+.mail .mhd{padding:10px 14px;border-bottom:1px solid #e6e8ee;background:#f7f8fa}
+.mail .mhd b{display:block}.mail .mhd small{color:#6b7280}
+.mail .hero{height:120px;background:linear-gradient(160deg,#0f766e,#134e4a 60%,#1e3a2f);color:#ecfdf5;display:flex;align-items:flex-end;padding:12px 14px;font-family:var(--f-d);font-size:20px;font-weight:600}
+.mail .mb{padding:14px;display:flex;flex-direction:column;gap:10px}
+.mail .price{border:1px dashed #0f766e;border-radius:8px;padding:10px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.mail .cta{align-self:flex-start;background:#0f766e;color:#fff;border-radius:6px;padding:8px 14px;font-weight:600}
+.mail .ft{font-size:11px;color:#6b7280;border-top:1px solid #e6e8ee;padding:10px 14px}
+.var{background:#fff7d6;color:#7a5b00;border-radius:4px;padding:0 4px;font-family:var(--f-m);font-size:11.5px}
+/* whatsapp mock: fixed device look */
+.phone{background:#0b141a;border-radius:18px;padding:12px;max-width:340px;border:1px solid var(--line)}
+.phone .ph{color:#e9edef;font-size:12.5px;display:flex;gap:8px;align-items:center;padding:2px 4px 10px}
+.phone .ph .av{background:#0f766e;color:#fff;border:0}
+.wa{background:#005c4b;color:#e9edef;border-radius:10px 10px 10px 2px;overflow:hidden;font-size:13px}
+.wa .img{height:110px;background:linear-gradient(160deg,#0f766e,#134e4a 60%,#1e3a2f)}
+.wa .tx{padding:8px 10px;white-space:pre-line}
+.wa .btn2{border-top:1px solid rgba(255,255,255,.12);padding:8px;text-align:center;color:#53bdeb;font-weight:500}
+.wa .var{background:rgba(255,255,255,.18);color:#fff}
+.funnel{display:flex;flex-direction:column;gap:8px}
+.fr{display:grid;grid-template-columns:150px 1fr 110px;gap:10px;align-items:center;font-size:13px}
+.fr .b{height:22px;border-radius:5px;background:var(--btn);min-width:2px}
+.fr .b.wa{background:#0f9f8a}
+.fr span:last-child{font-family:var(--f-m);font-variant-numeric:tabular-nums;text-align:right}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:640px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.spec{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.spec .panel ul{margin:6px 0 0;padding-left:18px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+@media (max-width:900px){.two{grid-template-columns:1fr}.fr{grid-template-columns:110px 1fr 90px}.kv{grid-template-columns:1fr}}
+.fxr{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}.fxr .panel{padding:12px 14px}.fxr b{font-family:var(--f-m);font-size:17px;font-weight:500}.qline{display:grid;grid-template-columns:minmax(0,2fr) 92px 120px 120px;gap:8px;align-items:center}.qline input,.qline select{width:100%;min-width:0;border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:6px 8px}.qline .r{text-align:right}@media (max-width:560px){.qline{grid-template-columns:1fr 1fr}.qline .lbl{grid-column:1/-1}}.qt{display:flex;justify-content:space-between;gap:12px;font-size:13.5px}.qt.tot{border-top:1px solid var(--line);padding-top:8px;font-family:var(--f-d);font-size:20px;font-weight:600}.loss{color:var(--bad)}.gain{color:var(--ok)}tr.best td{background:var(--ok-soft)}
+
+.actbtn{margin-left:auto;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:5px 12px;font-size:13px;font-weight:600;color:var(--fg);cursor:pointer}
+.actbtn b{min-width:20px;height:20px;border-radius:10px;background:var(--btn);color:#fff;font-size:11px;display:grid;place-items:center;padding:0 5px}
+.actbtn.pulse{animation:apulse 1.2s ease 2}
+@keyframes apulse{50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--btn) 35%,transparent)}}
+.fresh{animation:fresh 2.4s ease both}
+@keyframes fresh{0%{background:color-mix(in srgb,var(--btn) 30%,transparent)}100%{background:transparent}}
+.donel{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.donel .row{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13.5px}
+.donel .row .grow{flex:1;min-width:0}.donel small{color:var(--muted);display:block}
+.ndot{width:8px;height:8px;border-radius:50%;background:var(--btn);display:inline-block;flex:none}
+.tflow{display:flex;flex-direction:column;gap:12px}.tfh{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.tsteps{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.tst{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:30px;padding:5px 12px 5px 5px;font-size:12.5px;color:var(--muted);background:var(--panel)}
+.tst i{font-style:normal;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-m);font-size:11px;background:var(--panel2)}
+.tst.done{color:var(--fg)}.tst.done i{background:var(--ok-soft);color:var(--ok)}
+.tst.next{border-color:var(--btn);color:var(--fg)}.tst.next i{background:var(--btn);color:#fff;animation:apulse 1.6s infinite}
+.tst.here{box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 50%,transparent)}
+.tln{width:14px;height:2px;background:var(--line)}
+.tnext{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-top:1px dashed var(--line);padding-top:10px;font-size:14px}
+.xflow{display:flex;flex-direction:column;margin-top:10px}.xr{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.xr .grow{flex:1;min-width:0}.xr small{display:block;color:var(--muted)}.xi{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:var(--tint);color:var(--accent);flex:none}
+.xa{align-self:center;color:var(--faint);line-height:1;padding:3px 0}
+.kvx{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:10px 0 0}.kvx dt{color:var(--faint);font-family:var(--f-m);font-size:12px}.kvx dd{margin:0}
+.ul{margin:6px 0 0;padding-left:18px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+.lgwrap{min-height:70vh;display:grid;place-items:center}.lg{width:min(420px,100%);display:flex;flex-direction:column;gap:12px;padding:24px}
+.lgb{display:flex;gap:12px;align-items:center}.lgb small{display:block;color:var(--muted)}
+.ccard{margin-top:14px;border-radius:16px;padding:18px;color:#fff;background:linear-gradient(135deg,#0f766e,#2A1A66);display:flex;flex-direction:column;gap:6px;aspect-ratio:1.6;max-width:320px;justify-content:space-between;box-shadow:0 20px 40px -20px rgba(15,118,110,.6)}
+.ccard b{font-family:var(--f-d);font-size:22px}.ccard .mono{color:#c9f2ec;font-size:11px}
+.trow{outline:2px solid color-mix(in srgb,var(--accent) 55%,transparent);outline-offset:-2px}
+html.custmode #actbtn,html.custmode .ask{display:none}
+
+/* ---- mobile / tablet polish (added for the Digitner site) ---- */
+@media (max-width:900px){
+  body{font-size:15px}
+  .top .pill.acc,.top .tagl{white-space:nowrap}
+  .app.open .rail{box-shadow:0 0 40px rgba(0,0,0,.45)}
+  .scroll,.main{-webkit-overflow-scrolling:touch}
+}
+@media (max-width:640px){
+  .top .pill.acc{display:none}
+  .top{gap:8px}
+  table{display:block;overflow-x:auto;max-width:100%}
+  .panel,.plate{overflow-wrap:anywhere}
+}
+
+/* ---- filter dock: floating filter button + bottom sheet (tablet / phone) ---- */
+.fd-chip,.fd-fab,.fd-tip,.fd-scrim,.fd-sheet{display:none}
+@media (max-width:900px){
+  [data-fd]{display:none!important}
+  .fd-chip{display:inline-flex;align-items:center;gap:8px;max-width:100%;margin:0 0 12px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--fg);font-size:13px;font-weight:600;line-height:1.2;text-align:left}
+  .fd-chip small{font-weight:500;color:var(--muted);font-size:12px}
+  .fd-chip svg{width:15px;height:15px;flex:none;color:var(--accent)}
+  .fd-fab{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:30;width:50px;height:50px;border-radius:50%;border:0;padding:0;display:grid;place-items:center;background:var(--btn,#4F43D4);color:var(--btn-fg,#fff);box-shadow:0 12px 28px -8px rgba(40,26,120,.6),0 0 0 1px rgba(255,255,255,.12) inset;cursor:pointer;transition:transform .2s,opacity .2s}
+  .fd-fab[hidden],.fd-tip[hidden]{display:none}
+  .fd-fab:not([hidden]){display:grid}
+  .fd-fab:active{transform:scale(.94)}
+  .fd-fab svg{width:22px;height:22px}
+  .fd-fab.gone{opacity:0;pointer-events:none}
+  .fd-tip{position:fixed;right:calc(max(18px,env(safe-area-inset-right,0px)) + 62px);bottom:calc(98px + env(safe-area-inset-bottom,0px));z-index:30;padding:8px 12px;border-radius:10px;background:var(--fg);color:var(--bg);font-size:13px;font-weight:600;line-height:1;white-space:nowrap;box-shadow:0 10px 24px -10px rgba(0,0,0,.5);opacity:0;transform:translateX(6px);transition:opacity .25s,transform .25s;pointer-events:none}
+  .fd-tip:not([hidden]){display:block}
+  .fd-tip::after{content:"";position:absolute;right:-5px;top:50%;margin-top:-5px;width:10px;height:10px;background:inherit;transform:rotate(45deg);border-radius:2px}
+  .fd-tip.on,.fd-fab:hover+.fd-tip,.fd-fab:focus-visible+.fd-tip{opacity:1;transform:none}
+  .fd-scrim{display:block;position:fixed;inset:0;z-index:70;background:rgba(8,6,20,.55);opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
+  .fd-scrim.open{opacity:1;visibility:visible}
+  .fd-sheet{display:flex;flex-direction:column;position:fixed;left:0;right:0;bottom:0;z-index:71;max-height:min(78vh,640px);width:100%;max-width:560px;margin:0 auto;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-bottom:0;border-radius:22px 22px 0 0;box-shadow:0 -20px 50px -20px rgba(0,0,0,.55);padding-bottom:env(safe-area-inset-bottom,0px);transform:translateY(105%);visibility:hidden;transition:transform .28s cubic-bezier(.2,.8,.2,1),visibility .28s}
+  .fd-sheet.open{transform:none;visibility:visible}
+  .fd-grip{width:40px;height:4px;border-radius:4px;background:var(--line);margin:10px auto 2px;flex:none}
+  .fd-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 18px 10px;flex:none}
+  .fd-head b{font-family:var(--f-d,inherit);font-size:17px}
+  .fd-x{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--panel2,var(--panel));color:var(--fg);display:grid;place-items:center;cursor:pointer}
+  .fd-x svg{width:16px;height:16px}
+  .fd-body{overflow-y:auto;padding:0 12px 16px;-webkit-overflow-scrolling:touch}
+  .fd-gt{font-family:var(--f-m,monospace);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--faint,var(--muted));padding:12px 8px 6px}
+  .fd-opt{display:flex;align-items:center;gap:12px;width:100%;min-height:48px;padding:10px 12px;margin:2px 0;border:1px solid transparent;border-radius:14px;background:none;color:var(--fg);font-size:15px;font-weight:500;text-align:left;cursor:pointer}
+  .fd-opt:hover{background:var(--panel2,var(--tint))}
+  .fd-opt.on{background:var(--tint);border-color:var(--accent);color:var(--accent);font-weight:600}
+  .fd-n{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);font-size:12px;font-family:var(--f-m,monospace)}
+  .fd-n:empty{display:none}
+  .fd-opt.on .fd-n{background:var(--accent);border-color:var(--accent);color:var(--accent-fg,#fff)}
+  .fd-opt.done .fd-n{border-color:var(--ok,#16a34a);color:var(--ok,#16a34a)}
+  .fd-t{flex:1;min-width:0;overflow-wrap:anywhere}
+  .fd-note{flex:none;font-size:11px;font-family:var(--f-m,monospace);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 8px}
+  .app.open~.fd-fab,body.fd-menu .fd-fab{opacity:0;pointer-events:none}
+}
+@media (prefers-reduced-motion:reduce){.fd-sheet,.fd-scrim,.fd-fab,.fd-tip{transition:none!important}}
+</style>
+
+<div class="app" id="app">
+  <aside class="rail">
+    <div class="brand"><img class="logo-dark" src="data:image/png;base64,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" alt="Digitner"><img class="logo-light" src="data:image/png;base64,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" alt="Digitner"><small>AI Marketplace · Beta</small></div>
+    <div class="ws-switch"><span class="av sm">GD</span><div><b>Global Delight</b><small>Vacations &amp; Tours · sample data</small></div></div>
+    <nav class="nav" id="nav"></nav>
+    <div class="me"><div class="av">KR</div><div class="who"><b>Karthik Raman</b><small>Sales &amp; marketing head · sample</small></div><button class="icon-btn" data-a="theme" aria-label="Switch theme"><span data-i="moon"></span></button></div>
+  </aside>
+  <div class="scrim" data-a="closeMenu"></div>
+  <main class="main">
+    <div class="top"><button class="icon-btn menu-btn" data-a="openMenu" aria-label="Open menu"><span data-i="menu"></span></button><div class="crumbs" id="crumbs"></div><button class="actbtn" data-a="activity" id="actbtn" aria-label="Activity">Activity <b id="actn">0</b></button><span class="pill acc">Sample workspace</span></div>
+    <div class="scroll" id="scroll"><div class="wrap" id="view"></div></div>
+  </main>
+</div>
+<button class="ask" data-a="go" data-v="agent"><span class="av sm ag">VO</span>Ask VOYA</button>
+<div id="layer"></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const inr=n=>"₹"+Math.round(n).toLocaleString("en-IN");
+const num=n=>Math.round(n).toLocaleString("en-IN");
+const pc=(a,b)=>b?(a/b*100).toFixed(1)+"%":"–";
+const now=()=>new Date().toTimeString().slice(0,5);
+const V$=s=>s.replace(/\{\{(\w+)\}\}/g,'<span class="var">{{$1}}</span>');
+
+const IC={home:"M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z",inbox:"M22 12h-6l-2 3h-4l-2-3H2 M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z",checkCircle:"M9 12l2 2 4-4 M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0",users:"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0 M22 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75",user:"M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2 M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0",bot:"M12 8V4H8 M4 8h16v12H4z M2 14h2 M20 14h2 M15 13v2 M9 13v2",sparkles:"M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9l4.2-1.4z M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z",book:"M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5",store:"M3 9l1.5-5h15L21 9 M3 9v11h18V9 M3 9h18 M9 20v-6h6v6",activity:"M22 12h-4l-3 9L9 3l-3 9H2",shield:"M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z M9 12l2 2 4-4",calendar:"M3 5h18v16H3z M16 3v4 M8 3v4 M3 10h18",card:"M2 5h20v14H2z M2 10h20",gear:"M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z",search:"M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z M21 21l-4.3-4.3",check:"M20 6 9 17l-5-5",x:"M18 6 6 18 M6 6l12 12",send:"M22 2 11 13 M22 2l-7 20-4-9-9-4z",plus:"M12 5v14 M5 12h14",mail:"M2 4h20v16H2z M22 6l-10 7L2 6",chat:"M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.6A8.5 8.5 0 1 1 21 11.5z",megaphone:"M3 11v3l13 5V6L3 11z M16 8a4 4 0 0 1 0 8 M7 15.5V20h3v-3",layout:"M3 3h18v18H3z M3 9h18 M9 21V9",zap:"M13 2 3 14h9l-1 8 10-12h-9z",target:"M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12z M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z",plug:"M12 22v-5 M9 8V2 M15 8V2 M18 8v5a6 6 0 0 1-12 0V8z",power:"M12 2v10 M18.4 6.6a9 9 0 1 1-12.8 0",clock:"M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M12 6v6l4 2",chart:"M3 3v18h18 M7 16v-4 M12 16V8 M17 16v-7",edit:"M12 20h9 M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z",undo:"M9 14 4 9l5-5 M4 9h11a5 5 0 0 1 0 10h-1",moon:"M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z",menu:"M3 6h18 M3 12h18 M3 18h18",file:"M14 2H6v20h12V8z M14 2v6h6 M8 13h8 M8 17h5",star:"M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.2L5.8 21 7 14.2 2 9.3l6.9-1z",briefcase:"M3 7h18v13H3z M8 7V4h8v3",globe:"M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M2 12h20 M12 2a15 15 0 0 1 0 20 M12 2a15 15 0 0 0 0 20",share:"M18 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z M6 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z M18 22a3 3 0 1 0 0-6 3 3 0 0 0 0 6z M8.6 13.5l6.8 4 M15.4 6.5l-6.8 4",trending:"M22 7 13.5 15.5 8.5 10.5 2 17 M16 7h6v6",pen:"M12 20h9 M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z",volume:"M11 5 6 9H2v6h4l5 4z M15.5 8.5a5 5 0 0 1 0 7",headphones:"M3 18v-6a9 9 0 0 1 18 0v6 M21 19a2 2 0 0 1-2 2h-1v-6h3z M3 19a2 2 0 0 0 2 2h1v-6H3z",upload:"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M17 8l-5-5-5 5 M12 3v12",pause:"M8 5v14 M16 5v14",list:"M8 6h13 M8 12h13 M8 18h13 M3 6h.01 M3 12h.01 M3 18h.01",rupee:"M6 3h12 M6 8h12 M6 13l8.5 8 M6 13h3a5 5 0 0 0 0-10",camera:"M3 7h4l2-3h6l2 3h4v13H3z M12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z",arrow:"M5 12h14 M12 5l7 7-7 7",dot:"M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2z",layers:"M12 2 2 7l10 5 10-5z M2 17l10 5 10-5 M2 12l10 5 10-5"};
+const I=(n,s=16)=>`<svg class="i" viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${IC[n]||IC.dot}"/></svg>`;
+let PI="home";
+function hydrate(){document.querySelectorAll("[data-i]").forEach(e=>{if(!e.firstChild)e.innerHTML=I(e.dataset.i,+(e.dataset.s||16))})}
+
+const FNAV={home:"home",inbox:"inbox",agent:"bot",campaign:"megaphone",templates:"layout",automations:"zap",audience:"target",fx:"rupee",fxpay:"briefcase",fxquote:"file",fxtrav:"globe",channels:"plug"};
+const SI=["file","layout","target","shield","check","clock","chart"];
+/* ---------------- sample data (illustrative, not real customer records) ---------------- */
+const SEGMENTS=[
+ {id:"europe",n:"Europe & UK past travellers",d:"Europe or UK tour · last 3 years",c:1480,em:1436,wa:1102},
+ {id:"honey",n:"Honeymooners",d:"Married < 12 months",c:412,em:398,wa:351},
+ {id:"family",n:"Families with kids",d:"Travelled abroad with a child",c:1960,em:1884,wa:1390},
+ {id:"corp",n:"Corporate & MICE groups",d:"Groups of 15+ · incentive trips",c:168,em:168,wa:74},
+ {id:"partner",n:"Partner agents (B2B)",d:"Resell our tours",c:86,em:86,wa:79},
+ {id:"dormant",n:"Dormant 18+ months",d:"No activity · 18 months",c:3820,em:3540,wa:2110}];
+const SUPPRESS=[["Unsubscribed from email",231],["Opted out of WhatsApp promotions",344],["Travelling in the next 30 days",118],["Contacted twice this week (frequency cap)",62]];
+const CONTACTS=[
+ ["Rohit & Neha Mehta","Bengaluru","Families with kids","Enquiry: Swiss Alps · Nov 2026",3800,"Email + WhatsApp"],
+ ["Aditya Kapoor","Mumbai","Europe & UK past travellers","Best of Europe · Jun 2025",9200,"Email + WhatsApp"],
+ ["Lakshmi Venkatesh","Chennai","Honeymooners","Enquiry: Italy · Oct 2026",500,"Email + WhatsApp"],
+ ["Farhan Sheikh","Hyderabad","Europe & UK past travellers","London–Scotland · Aug 2024",7400,"Email"],
+ ["Pooja Agarwal","Kolkata","Families with kids","Singapore–Malaysia · Dec 2025",4100,"WhatsApp"],
+ ["Infosphere Tech","Pune","Corporate & MICE groups","Dubai incentive · Feb 2026",26800,"Email"],
+ ["Ritu Saxena","Delhi","Honeymooners","Enquiry: Bali · Nov 2026",0,"Email + WhatsApp"],
+ ["Skyways Travel Hub","Kochi","Partner agents (B2B)","18 bookings in 2026",22400,"Email + WhatsApp"],
+ ["Manoj Pillai","Coimbatore","Dormant 18+ months","Thailand · Mar 2024",2900,"Email"],
+ ["Sunita & Raj Bhatia","Ahmedabad","Families with kids","Dubai · Jan 2026",5600,"Email + WhatsApp"]];
+const RATE=[["Paris–Swiss Alps 7N/8D · Escorted","₹1,49,999","12%"],["Best of Europe 10N/11D · 5 countries","₹2,24,999","15%"],["London–Scotland Highlands 8N/9D","₹1,89,999","10%"],["Italy Honeymoon 7N/8D · Premium","₹2,49,999","12%"]];
+const LIBRARY=[
+ {n:"Europe Summer early-bird",ch:"Email + WhatsApp",st:"Draft",used:"—",perf:"—",cur:1},
+ {n:"Festive offer · Dubai Shopping Festival",ch:"Email + WhatsApp",st:"Approved",used:"Oct 2026",perf:"42.7% open · 8.3% click"},
+ {n:"Enquiry follow-up · 48h no reply",ch:"WhatsApp",st:"Approved",used:"Daily",perf:"36% reply"},
+ {n:"Forex card reminder · 10 days to departure",ch:"Email + WhatsApp",st:"Approved",used:"Per booking",perf:"41% load a card"},
+ {n:"Post-trip review + miles",ch:"Email + WhatsApp",st:"Approved",used:"Daily",perf:"19% review rate"},
+ {n:"Miles expiring in 30 days",ch:"Email",st:"Approved",used:"Weekly",perf:"11% redeem"},
+ {n:"Visa appointment reminder",ch:"Email + WhatsApp",st:"Approved",used:"Per booking",perf:"94% docs on time"},
+ {n:"Partner agent commission update",ch:"Email",st:"Needs review",used:"Sep 2026",perf:"58% open"}];
+const AUTOS=[
+ {n:"Enquiry not answered in 48 hours",tr:"New for 48h",ac:"WhatsApp follow-up",on:true,runs:236},
+ {n:"Departure in 10 days",tr:"10 days to departure",ac:"Forex card reminder with today's rate",on:true,runs:84},
+ {n:"Trip completed",tr:"Trip ends",ac:"Review ask + 500 miles",on:true,runs:162},
+ {n:"Miles expiring soon",tr:"30 days to expiry",ac:"Email: 3 tours to redeem",on:true,runs:88},
+ {n:"Quote opened, no booking",tr:"Quote viewed, no payment in 5 days",ac:"Email: 72-hour price and rate lock",on:false,runs:0},
+ {n:"Visa documents pending",tr:"45 days to departure",ac:"Schengen document checklist",on:true,runs:52}];
+
+const BRIEF={name:"Europe Summer early-bird",goal:"Fill May–August 2027 Europe departures early",offer:"Up to 15% off escorted Europe tours, from ₹1,49,999 per person (twin sharing), euro rate locked at booking",bookBy:"15 December 2026",travel:"1 May – 31 August 2027",segs:["europe","honey","family"],ch:["email","whatsapp"],tone:"Warm, specific, no hype. Lead with the itinerary, then the locked rate."};
+const TPL={
+ emailA:{subject:"{{first_name}}, Europe in summer, euro rate locked · up to 15% off",pre:"Book by 15 Dec for May–Aug 2027. From ₹1,49,999."},
+ emailB:{subject:"Early-bird: Paris + Swiss Alps from ₹1,49,999",pre:"Summer 2027 at 2026 prices. Book by 15 Dec."},
+ body:["Hi {{first_name}},","Summer is when Europe stays up late: long evenings in Paris, the Jungfrau clear above the clouds, and lake towns lit past ten.","Book by 15 December and travel any time from May to August 2027 at up to 15% off. We lock your euro rate the day you book, so the price doesn't move."],
+ highlights:["Eiffel Tower summit and a Seine dinner cruise","Jungfraujoch by cogwheel train, two nights in Interlaken","Indian dinners on tour, Schengen visa help and insurance included"],
+ points:"You have {{points}} Delight Miles. Use them on this trip.",
+ wa:{name:"europe_summer_eb_2027",cat:"Marketing",lang:"English",body:"Hi {{1}} ✈️\nEurope's long summer evenings are back.\nBook by {{3}} and travel May–Aug 2027 at up to 15% off, with your euro rate locked. Tours from {{2}} per person.\n\nYou have {{4}} Delight Miles to use.",btns:["View tours","Talk to an expert","Stop promotions"],vars:["first_name","from_price","book_by","points"]},
+ partner:{subject:"Europe Summer 2027: 10% commission on early-bird bookings",body:"Partner rate sheet attached. Early-bird prices and locked euro rates hold for bookings confirmed by 15 Dec."}};
+const CHECKS=[
+ ["Unsubscribe + address in footer","ok"],
+ ["₹1,49,999 matches rate sheet","ok"],
+ ["\"Up to 15%\" backed by a tour","ok"],
+ ["\"Euro rate locked\" matches FX desk policy","ok"],
+ ["WhatsApp: opted-in only","ok"],
+ ["WhatsApp: 296 / 1,024 chars","ok"],
+ ["UTM tags on all links","ok"],
+ ["Max 2 promos per week","ok"],
+ ["Meta template approval","meta"]];
+
+/* ---------------- state ---------------- */
+const S={step:0,generated:false,abWinner:null,segs:new Set(BRIEF.segs),metaApproved:false,approved:false,scheduled:false,sent:false,tab:"Today",
+ inbox:[{id:1,t:"Partner agent commission update needs review",k:"Template",at:"Mon 16:20"}],
+ ledger:[{t:"Mon 18:10",w:"Results Reader",x:"Diwali offer report: 44.1% open, 14 bookings, ₹23.5 lakh"},{t:"Mon 09:00",w:"Automation",x:"Birthday wishes sent to 6 travellers"}],
+ autos:AUTOS.map(a=>({...a})),sched:{email:"Tue 17 Nov · 10:30 IST",wa:"Wed 18 Nov · 11:00 IST",ab:true},nextId:2};
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const th=store.get("gd-theme");if(th)document.documentElement.dataset.theme=th;
+
+/* ---------------- derived numbers ---------------- */
+function reach(){const sel=SEGMENTS.filter(s=>S.segs.has(s.id));const overlap=sel.length>1?Math.round(sel.reduce((a,s)=>a+s.c,0)*0.056):0;
+ const sup=Math.round(sel.reduce((a,s)=>a+s.c,0)*0.06);
+ const total=sel.reduce((a,s)=>a+s.c,0)-overlap;
+ const em=Math.max(0,sel.reduce((a,s)=>a+s.em,0)-overlap-Math.round(sup*.55));
+ const wa=Math.max(0,sel.reduce((a,s)=>a+s.wa,0)-Math.round(overlap*.7)-Math.round(sup*.45));
+ return{total,overlap,sup,em,wa}}
+function results(){const r=reach();const del=Math.round(r.em*.982),open=Math.round(del*.452),click=Math.round(del*.097),uns=Math.round(del*.0036);
+ const wdel=Math.round(r.wa*.976),read=Math.round(wdel*.823),btn=Math.round(wdel*.132),expert=Math.round(wdel*.059),stop=Math.round(wdel*.009);
+ const enq=Math.round((click+btn)*.32),quotes=Math.round(enq*.62),book=Math.round(quotes*.31),rev=book*168000;
+ return{r,del,open,click,uns,wdel,read,btn,expert,stop,enq,quotes,book,rev,credits:Math.round((r.em+r.wa)*.11)}}
+
+/* ---------------- helpers ---------------- */
+function toast(m){const t=$("#toast");t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>t.hidden=true,2400)}
+function plate(o){return `<section class="plate"><div><span class="tag">${I(PI,13)}${o.tag}</span><h1>${o.h}<span>${o.h2||""}</span></h1><div class="btns">${o.b||""}</div></div>${o.s?`<div class="stats">${o.s.map(([n,l])=>`<div><b>${n}</b><small>${l}</small></div>`).join("")}</div>`:""}</section>`}
+const STEPS=["Brief","Templates","Audience","Checks","Approve","Schedule","Results"];
+const stepDone=i=>[true,S.generated,S.segs.size>0&&S.step>2,S.metaApproved,S.approved,S.scheduled,S.sent][i];
+function stepper(){return `<div class="stepper">${STEPS.map((s,i)=>`<button class="stp${i===S.step?" on":stepDone(i)&&i<S.step?" done":""}" data-a="step" data-v="${i}"><i>${stepDone(i)&&i<S.step?"✓":i+1}</i>${I(SI[i],14)}${s}</button>`).join("")}</div>`}
+function emailMock(variant){const v=TPL["email"+variant];return `<div class="mail"><div class="mhd"><b>${V$(esc(v.subject))}</b><small>Global Delight &lt;tours@globaldelight.example&gt; · ${esc(v.pre)}</small></div><div class="hero">Europe Summer, 2027</div><div class="mb">${TPL.body.map(p=>`<div>${V$(esc(p))}</div>`).join("")}<ul style="margin:0;padding-left:18px">${TPL.highlights.map(h=>`<li>${esc(h)}</li>`).join("")}</ul><div class="price"><div><b>Paris–Swiss Alps 7N/8D</b><br><small>Escorted · twin sharing · May–Aug 2027</small></div><div style="text-align:right"><b style="font-size:18px">₹1,49,999</b><br><small>per person, was ₹1,70,450</small></div></div><div>${V$(esc(TPL.points))}</div><span class="cta">See the itinerary</span></div><div class="ft">Global Delight · sample address line · <u>Unsubscribe</u> · You get this because you travelled with us.</div></div>`}
+function waMock(){const w=TPL.wa;let b=esc(w.body).replace(/\{\{(\d)\}\}/g,(m,d)=>`<span class="var">{{${d}}}</span>`);return `<div class="phone"><div class="ph"><span class="av sm">GD</span><div><b>Global Delight</b><br><small style="opacity:.7">Business account</small></div></div><div class="wa"><div class="img"></div><div class="tx">${b}</div>${w.btns.map(x=>`<div class="btn2">${x}</div>`).join("")}</div></div>`}
+function modal(title,body,foot){$("#layer").innerHTML=`<div class="overlay" data-a="closeLayer"><div class="modal" role="dialog" aria-label="${esc(title)}"><div class="mh"><h3>${title}</h3><button class="icon-btn" data-a="closeLayer" aria-label="Close">✕</button></div><div class="mb">${body}</div>${foot?`<div class="mf">${foot}</div>`:""}</div></div>`}
+function close(){$("#layer").innerHTML=""}
+function log(w,x){S.ledger.unshift({t:"Today "+now(),w,x})}
+
+/* ---------------- views ---------------- */
+const V={};
+V.home=()=>{const r=reach(),res=results();return{c:["Home"],h:plate({tag:"Global Delight · Campaigns team",h:"Good morning, Karthik.",h2:S.sent?"Europe Summer is live.":"Europe Summer is half built.",p:"Brief in. Campaign out. You approve.",b:`<a class="btn" href="#campaign">${I("arrow")}${S.sent?"See results":"Continue"}</a><a class="btn ghost" href="#agent">${I("bot")}VOYA</a>`,s:[[num(r.total),"Travellers in audience"],[S.inbox.length,"Waiting on you"],[S.autos.filter(a=>a.on).length,"Automations on"],[S.sent?inr(res.rev):"₹23.5L","Last campaign revenue"]]})+
+ `<div class="panel" style="display:flex;flex-direction:column;gap:12px"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><div><span class="eyebrow">Active campaign</span><h2 class="h2">${I("megaphone",18)}${BRIEF.name}</h2><p class="sub">Up to 15% off · from ₹1,49,999 · book by 15 Dec</p></div><a class="btn pri" href="#campaign" style="align-self:flex-start">${I("arrow")}Open</a></div>${stepper()}</div>`+
+ fxHomePanel()+`<div><h2 class="h2">${I("inbox",18)}Waiting on you <span>${S.inbox.length}</span></h2></div>${inboxList()}`+
+ `<div><h2 class="h2">${I("users",18)}Your teams</h2></div><div class="grid3">${[["Campaigns","VOYA","Campaigns",7],["FX desk","RUPA","Forex",5],["Sales desk","KAIRA","Enquiries",6],["Loyalty","RIVA","Delight Miles",4],["Reviews","VANI","Reviews",4]].map(([n,l,r,c])=>`<a class="card" href="${{Campaigns:"#agent","FX desk":"#fx"}[n]||"#home"}" ${["Campaigns","FX desk"].includes(n)?"":`data-a="toast" data-v="This sample opens Campaigns and FX desk"`}><div class="strip"><span class="ti">${I({Campaigns:"megaphone","FX desk":"rupee","Sales desk":"briefcase",Loyalty:"star",Reviews:"chat"}[n],18)}</span><span class="av ag">${l.slice(0,2)}</span></div><div class="body"><h3>${n}</h3><span class="led">${I("bot",13)} ${l}</span></div><div class="nums"><div><b>1</b><small>People</small></div><div><b>${c}</b><small>Agents</small></div><div><b>${n==="Campaigns"?S.ledger.length:n==="FX desk"?S.fx.runs:0}</b><small>Runs</small></div></div></a>`).join("")}</div>`}};
+function inboxList(){return S.inbox.length?`<div class="list">${S.inbox.map(i=>`<div class="row"><span class="av ag">${i.av||"VO"}</span><div class="grow"><b>${esc(i.t)}</b><small>${i.by||"VOYA"} · ${i.at}</small></div><span class="pill warn">${i.k}</span><div class="btns">${i.go?`<a class="btn sm" href="#${i.go}">Open</a>`:""}<button class="btn sm pri" data-a="approveItem" data-v="${i.id}">${I("check")}Approve</button></div></div>`).join("")}</div>`:`<div class="list"><div class="empty">Nothing waits for you.</div></div>`}
+V.inbox=()=>({c:["Inbox"],h:plate({tag:"Inbox",h:"Everything waiting on a human.",h2:"Oldest first.",p:"",s:[[S.inbox.length,"Waiting"],[S.ledger.length,"Logged"]]})+inboxList()+`<div><h2 class="h2">${I("list",18)}Log</h2></div><div class="tbl-wrap"><table><thead><tr><th>When</th><th>Who</th><th>What happened</th></tr></thead><tbody>${S.ledger.map(l=>`<tr><td class="mono">${l.t}</td><td>${l.w}</td><td>${esc(l.x)}</td></tr>`).join("")}</tbody></table></div>`});
+
+V.campaign=()=>{const r=reach(),res=results();let body="";
+ const nav=(back,next,label,dis)=>`<div class="btns" style="justify-content:space-between">${back?`<button class="btn" data-a="step" data-v="${S.step-1}">${I("undo")}Back</button>`:"<span></span>"}${next?`<button class="btn pri" data-a="${next}" ${dis?"disabled style='opacity:.5'":""}>${label}${I("arrow")}</button>`:""}</div>`;
+ if(S.step===0)body=`<div class="two"><div class="panel"><span class="eyebrow">${I("file",13)} Brief</span><dl class="kv"><dt>Campaign</dt><dd>${BRIEF.name}</dd><dt>Offer</dt><dd>${BRIEF.offer}</dd><dt>Book by</dt><dd>${BRIEF.bookBy}</dd><dt>Travel window</dt><dd>${BRIEF.travel}</dd><dt>Channels</dt><dd>Email and WhatsApp</dd></dl></div>
+  <div class="panel"><span class="eyebrow">VOYA reads</span><div class="list" style="margin-top:8px">${[["Rate sheet","4 tours · 10–15% off","rupee"],["Brand kit","Logo · colours · tone","star"],["Past results","Diwali: +6 pts with name","chart"],["CRM","11,240 travellers","users"]].map(([a,b,ic])=>`<div class="row">${I(ic,18)}<div class="grow"><b>${a}</b><small>${b}</small></div><span class="pill ok">Read</span></div>`).join("")}</div>
+  <div class="tbl-wrap" style="margin-top:10px"><table><thead><tr><th>Package</th><th>From</th><th>Max off</th></tr></thead><tbody>${RATE.map(x=>`<tr><td>${x[0]}</td><td class="mono">${x[1]}</td><td class="mono">${x[2]}</td></tr>`).join("")}</tbody></table></div></div></div>`+nav(0,"generate",S.generated?"Templates":"Generate templates");
+ else if(S.step===1)body=`<div class="tabs">${["Email A","Email B","WhatsApp","Partner email"].map(x=>`<button class="${(S.tplTab||"Email A")===x?"on":""}" data-a="tplTab" data-v="${x}">${I(x==="WhatsApp"?"chat":x==="Partner email"?"briefcase":"mail",14)} ${x}</button>`).join("")}</div>`+
+  ((S.tplTab||"Email A")==="WhatsApp"?`<div class="two">${waMock()}<div class="panel"><dl class="kv"><dt>Template name</dt><dd class="mono">${TPL.wa.name}</dd><dt>Category</dt><dd>${TPL.wa.cat}</dd><dt>Language</dt><dd>${TPL.wa.lang}</dd><dt>Header</dt><dd>Image · Lauterbrunnen valley at dusk</dd><dt>Variables</dt><dd>${TPL.wa.vars.map((v,i)=>`{{${i+1}}} = ${v}`).join("<br>")}</dd><dt>Buttons</dt><dd>${TPL.wa.btns.join(" · ")}</dd><dt>Meta status</dt><dd>${S.metaApproved?`<span class="pill ok">Approved</span>`:`<span class="pill warn">Not submitted</span>`}</dd></dl></div></div>`:
+  (S.tplTab==="Partner email")?`<div class="two"><div class="mail"><div class="mhd"><b>${esc(TPL.partner.subject)}</b><small>To 86 partner agents</small></div><div class="mb"><div>Hi {{agency_name}} team,</div><div>${esc(TPL.partner.body)}</div><div class="price"><div><b>Your commission</b></div><b>10% on all Europe 2027 tours</b></div><span class="cta">Download the partner rate sheet</span></div><div class="ft">Global Delight partner desk</div></div><div class="panel"><span class="pill acc">B2B · commission-first</span></div></div>`:
+  `<div class="two">${emailMock((S.tplTab||"Email A").slice(-1))}<div class="panel" style="display:flex;flex-direction:column;gap:10px"><span class="pill acc" style="align-self:flex-start">${(S.tplTab||"Email A")==="Email A"?"Name-first subject":"Price-first subject"}</span><b>Merge fields</b><div class="chips">${["first_name","points","from_price","book_by","last_trip"].map(v=>`<span class="chip mono">{{${v}}}</span>`).join("")}</div><b>A/B test</b><span class="mono">A 10% · B 10% → winner 80% after 4h</span><button class="btn sm" data-a="editTpl">${I("edit")}Edit copy</button></div></div>`)+nav(1,"next","Audience");
+ else if(S.step===2)body=`<div class="two"><div class="list">${SEGMENTS.map(s=>`<div class="row"><button class="check${S.segs.has(s.id)?" on":""}" data-a="seg" data-v="${s.id}" aria-label="Include ${s.n}">${S.segs.has(s.id)?"✓":""}</button><div class="grow"><b>${s.n}</b><small>${s.d}</small></div><span class="mono">${num(s.c)}</span></div>`).join("")}</div>
+  <div class="panel" style="display:flex;flex-direction:column;gap:10px"><span class="eyebrow">${I("target",13)} Reach</span><div class="funnel">${[["Selected",r.total+r.overlap],["After removing overlap",r.total],["Email-reachable",r.em],["WhatsApp opted in",r.wa]].map(([l,v],i)=>`<div class="fr"><span>${l}</span><div class="b${i===3?" wa":""}" style="width:${Math.max(1,v/(r.total+r.overlap||1)*100)}%"></div><span>${num(v)}</span></div>`).join("")}</div><b>Removed</b><div class="list">${SUPPRESS.map(([a,b])=>`<div class="row" style="padding:8px 12px"><div class="grow"><small>${a}</small></div><span class="mono">${b}</span></div>`).join("")}</div>${S.segs.has("dormant")?`<span class="pill warn">Over 5,000 · asks first</span>`:""}</div></div>`+nav(1,"next","Run checks",!S.segs.size);
+ else if(S.step===3)body=`<div class="list">${CHECKS.map(([c,k])=>`<div class="row"><span class="check${k==="ok"||S.metaApproved?" on":""}">${k==="ok"||S.metaApproved?"✓":"!"}</span><div class="grow"><b>${c}</b></div>${k==="meta"?(S.metaApproved?`<span class="pill ok">Approved</span>`:`<button class="btn sm pri" data-a="submitMeta">${I("send")}Submit to Meta</button>`):`<span class="pill ok">Pass</span>`}</div>`).join("")}</div>`+nav(1,"next","Send for approval",!S.metaApproved);
+ else if(S.step===4)body=`<div class="panel" style="display:flex;flex-direction:column;gap:12px"><span class="eyebrow">${I("check",13)} Approve</span><h2 class="h2">${S.approved?"Approved by Karthik.":"VOYA is holding this for your yes."}</h2><dl class="kv"><dt>Audience</dt><dd>${num(r.em)} by email · ${num(r.wa)} on WhatsApp</dd><dt>Templates</dt><dd>Email A/B, WhatsApp, Partner email</dd><dt>Cost</dt><dd>${num(res.credits)} credits + Meta fees</dd><dt>Checks</dt><dd>${CHECKS.length} of ${CHECKS.length} passed</dd></dl>${S.approved?`<span class="pill ok">Approved ${S.approvedAt}</span>`:`<div class="btns"><button class="btn" data-a="sendBackCampaign">${I("undo")}Send back</button><button class="btn pri" data-a="approveCampaign">${I("check")}Approve</button></div>`}</div>`+nav(1,"next","Schedule",!S.approved);
+ else if(S.step===5)body=`<div class="two"><div class="panel form"><div class="field"><label for="sc-e">Email send</label><select id="sc-e" data-c="sched" data-k="email">${["Tue 17 Nov · 10:30 IST","Tue 17 Nov · 19:00 IST","Thu 19 Nov · 10:30 IST"].map(x=>`<option ${S.sched.email===x?"selected":""}>${x}</option>`).join("")}</select></div><div class="field"><label for="sc-w">WhatsApp send</label><select id="sc-w" data-c="sched" data-k="wa">${["Wed 18 Nov · 11:00 IST","Wed 18 Nov · 18:30 IST","Fri 20 Nov · 11:00 IST"].map(x=>`<option ${S.sched.wa===x?"selected":""}>${x}</option>`).join("")}</select></div><div style="display:flex;gap:10px;align-items:center"><button class="toggle${S.sched.ab?" on":""}" data-a="ab" aria-label="A/B test"></button><span>A/B test subjects</span></div><div class="chips"><span class="chip">Quiet 21:00–09:00</span><span class="chip">1,000/hr WhatsApp</span></div></div>
+  <div class="panel"><span class="eyebrow">${I("clock",13)} Timeline</span><div class="list" style="margin-top:8px">${[[S.sched.email,"Email A and B to "+num(Math.round(r.em*.2))+" (20%)"],["+4 hours","Winner to "+num(Math.round(r.em*.8))],[S.sched.wa,"WhatsApp to "+num(r.wa)],["+48 hours","Follow-up to clickers"],["+7 days","Report to Karthik"]].map(([a,b])=>`<div class="row" style="padding:9px 12px"><span class="mono" style="width:150px">${a}</span><div class="grow"><small>${b}</small></div></div>`).join("")}</div></div></div>`+nav(1,"schedule",S.scheduled?"Results":"Schedule and send");
+ else body=S.sent?`<div class="kpis">${[[num(res.r.em+res.r.wa),"Messages sent","send"],[pc(res.open,res.del),"Email open rate","mail"],[pc(res.read,res.wdel),"WhatsApp read rate","chat"],[num(res.enq),"Enquiries","inbox"],[num(res.book),"Bookings","check"],[inr(res.rev),"Revenue booked","rupee"]].map(([a,b,ic])=>`<div class="panel"><span style="color:var(--accent);display:block;margin-bottom:6px">${I(ic,18)}</span><b style="font-family:var(--f-d);font-size:26px;font-weight:500">${a}</b><div class="sub">${b}</div></div>`).join("")}</div>
+  <div class="two"><div class="panel"><span class="eyebrow">${I("mail",13)} Email</span><div class="funnel" style="margin-top:8px">${[["Sent",res.r.em],["Delivered",res.del],["Opened",res.open],["Clicked",res.click],["Unsubscribed",res.uns]].map(([l,v])=>`<div class="fr"><span>${l}</span><div class="b" style="width:${Math.max(.5,v/res.r.em*100)}%"></div><span>${num(v)}</span></div>`).join("")}</div><span class="pill ok">B won · 47.8% vs 41.9%</span></div>
+  <div class="panel"><span class="eyebrow">${I("chat",13)} WhatsApp</span><div class="funnel" style="margin-top:8px">${[["Sent",res.r.wa],["Delivered",res.wdel],["Read",res.read],["Tapped a button",res.btn],["Talk to an expert",res.expert],["Stop promotions",res.stop]].map(([l,v])=>`<div class="fr"><span>${l}</span><div class="b wa" style="width:${Math.max(.5,v/res.r.wa*100)}%"></div><span>${num(v)}</span></div>`).join("")}</div></div></div>
+  <div class="panel"><span class="eyebrow">${I("chart",13)} Message → booking</span><div class="funnel" style="margin-top:8px">${[["Clicks + taps",res.click+res.btn],["Enquiries",res.enq],["Quotes sent",res.quotes],["Bookings",res.book]].map(([l,v])=>`<div class="fr"><span>${l}</span><div class="b" style="width:${v/(res.click+res.btn)*100}%"></div><span>${num(v)}</span></div>`).join("")}</div><div class="chips"><span class="chip">Avg booking ${inr(168000)}</span><span class="chip">${num(res.credits)} credits</span><span class="chip">${num(res.book*1200)} points to earn</span></div></div>
+  <div class="panel"><b>${I("sparkles",16)} Next</b><div class="list" style="margin-top:8px">${[["Follow up "+num(Math.max(0,res.click-res.enq))+" clickers"],["Price-first subject for Dubai winter"],["Luxury version for Honeymooners"]].map(([a])=>`<div class="row"><div class="grow"><b>${a}</b></div><button class="btn sm" data-a="toast" data-v="Drafted and added to Templates">${I("sparkles")}Draft it</button></div>`).join("")}</div></div>`:`<div class="empty panel">Results appear after the campaign is sent.</div>`;
+ return{c:["Campaigns",BRIEF.name],h:plate({tag:`Campaign · step ${S.step+1} of 7`,h:BRIEF.name,h2:["Start from the brief.","Four templates, ready to read.","Pick who gets it.","Checked before anyone sees it.","Waiting for your yes.","Pick when it goes.","What it brought in."][S.step],p:"",s:[[num(r.total),"Travellers"],[num(r.em),"Email"],[num(r.wa),"WhatsApp"],[S.sent?num(res.book)+" bookings":S.approved?"Approved":"Draft","Status"]]})+stepper()+body}};
+
+V.templates=()=>({c:["Campaigns","Templates"],h:plate({tag:"Template library",h:"Templates",h2:"Written once, reused.",p:"",b:`<a class="btn" href="#campaign">${I("plus")}New campaign</a>`,s:[[LIBRARY.length,"Templates"],[LIBRARY.filter(l=>l.st==="Approved").length,"Approved"],[LIBRARY.filter(l=>l.ch.includes("WhatsApp")).length,"With WhatsApp"],[1,"Needs review"]]})+
+ `<div class="tbl-wrap"><table><thead><tr><th>Template</th><th>Channels</th><th>Status</th><th>Last used</th><th>Performance</th></tr></thead><tbody>${LIBRARY.map(l=>`<tr class="clk" data-a="${l.cur?"go":"toast"}" data-v="${l.cur?"campaign":"Opens the template editor"}"><td>${l.n}</td><td>${l.ch.includes("Email")?I("mail",15):""} ${l.ch.includes("WhatsApp")?I("chat",15):""}</td><td><span class="pill ${l.st==="Approved"?"ok":l.st==="Draft"?"acc":"warn"}">${l.cur&&S.approved?"Approved":l.st}</span></td><td class="mono">${l.used}</td><td class="mono">${l.perf}</td></tr>`).join("")}</tbody></table></div>`});
+V.automations=()=>({c:["Campaigns","Automations"],h:plate({tag:"Automations",h:"Automations",h2:"Send on the right trigger.",p:"",s:[[S.autos.filter(a=>a.on).length,"On"],[S.autos.reduce((a,x)=>a+x.runs,0),"Runs this month"]]})+
+ `<div class="list">${S.autos.map((a,i)=>`<div class="row">${I("zap",18)}<div class="grow"><b>${a.n}</b><small>${a.tr} → ${a.ac}</small></div><span class="mono">${a.runs} runs</span><button class="toggle${a.on?" on":""}" data-a="auto" data-v="${i}" aria-label="${a.n} on or off"></button></div>`).join("")}</div>`});
+V.audience=()=>({c:["Campaigns","Audience"],h:plate({tag:"Audience",h:"11,240 travellers,",h2:"grouped the way you sell.",p:"",s:[[SEGMENTS.length,"Segments"],[SUPPRESS.reduce((a,x)=>a+x[1],0),"Suppressed"]]})+
+ `<div class="grid3">${SEGMENTS.map(s=>`<div class="panel"><b>${I("target",16)} ${s.n}</b><div class="sub">${s.d}</div><div class="btns" style="margin-top:8px"><span class="pill">${num(s.c)} people</span><span class="pill">${num(s.em)} email</span><span class="pill ok">${num(s.wa)} WhatsApp</span></div></div>`).join("")}</div>`+
+ `<div><h2 class="h2">${I("user",18)}Sample contacts <span>illustrative</span></h2></div><div class="tbl-wrap"><table><thead><tr><th>Traveller</th><th>City</th><th>Segment</th><th>Last trip</th><th>Delight Miles</th><th>Opted in</th></tr></thead><tbody>${CONTACTS.map(c=>`<tr><td>${c[0]}</td><td>${c[1]}</td><td>${c[2]}</td><td>${c[3]}</td><td class="mono">${num(c[4])}</td><td>${c[5]}</td></tr>`).join("")}</tbody></table></div>`});
+V.agent=()=>{const tab=S.tab;let body="";
+ if(tab==="Today")body=plate({tag:"VOYA · today",h:S.inbox.length?`I hold ${S.inbox.length} thing${S.inbox.length>1?"s":""} for you.`:"Nothing waits for your yes.",h2:S.sent?"Europe Summer is out.":"Europe Summer is next.",p:"Brief → templates → audience → checks → your yes → send.",b:`<a class="btn" href="#campaign">${I("megaphone")}Campaign</a><button class="btn ghost" data-a="newBrief">${I("plus")}New brief</button>`,s:[[S.inbox.length,"Need you"],[LIBRARY.length,"Templates"],[S.autos.filter(a=>a.on).length,"Automations on"],[`${S.sent?num(results().credits):0} / 8,000`,"Credits today"]]})+
+  `<div><h2 class="h2">${I("sparkles",18)}VOYA suggests</h2></div><div class="grid3">${[["Finish Europe Summer","Step "+(S.step+1)+" of 7","#campaign"],["Fix partner commission","10% → 12%","#inbox"],["Turn on price-lock follow-up","~1 in 8 quotes recovered","#automations"]].map(([a,b,c],i)=>`<div class="panel" style="display:flex;flex-direction:column;gap:6px"><span class="mono">0${i+1}</span><b>${a}</b><span class="sub">${b}</span><div><a class="btn sm" href="${c}">${I("arrow")}Open</a></div></div>`).join("")}</div>`;
+ else if(tab==="Agent spec")body=`<div class="panel"><dl class="kv"><dt>Name</dt><dd>VOYA</dd><dt>Role</dt><dd>Campaign template automation lead</dd><dt>Team</dt><dd>Campaigns (Global Delight)</dd><dt>Level</dt><dd>L4 Represent</dd><dt>Daily credit cap</dt><dd>8,000</dd><dt>Listing</dt><dd>Digitner Campaign Studio · 150 credits/mo</dd></dl></div>
+  <div class="spec">${[["Does it now",["Draft templates","A/B subjects","Build segments","Run checks","Report results"]],["Asks you first",["Any send","Meta submission","Discount > 20%","Audience > 5,000","New automation"]],["Reads",["CRM","Rate sheet","Brand kit","Points balances","Past results"]],["Tools",["Email (SES / Gmail)","WhatsApp Cloud API","Image library","UTM builder"]],["Specialists on the team",["Copy Writer","WhatsApp Formatter","Segment Builder","Offer Checker","Compliance Check","Send Scheduler","Results Reader"]],["Guardrails",["2 promos / week","Quiet 21:00–09:00","Opt-in only","Unsubscribe always","Rate-sheet prices"]]].map(([h,l],i)=>`<div class="panel"><b>${I(["zap","shield","book","plug","users","power"][i],16)} ${h}</b><ul>${l.map(x=>`<li>${x}</li>`).join("")}</ul></div>`).join("")}</div>
+  <div class="panel"><b>${I("sparkles",16)} Skills</b><div class="chips" style="margin-top:8px">${["Campaign brief from one goal","Email template with merge fields","WhatsApp marketing template","A/B subject test","Segment from CRM rules","Price claim check","Frequency cap","Results report","Follow-up to clickers"].map(s=>`<span class="chip">${s}</span>`).join("")}</div></div>`;
+ else if(tab==="Results")body=`<div class="tbl-wrap"><table><thead><tr><th>Campaign</th><th>Sent</th><th>Open</th><th>Bookings</th><th>Revenue</th></tr></thead><tbody>${S.sent?`<tr><td>${BRIEF.name}</td><td class="mono">${num(results().r.em+results().r.wa)}</td><td class="mono">${pc(results().open,results().del)}</td><td class="mono">${results().book}</td><td class="mono">${inr(results().rev)}</td></tr>`:""}<tr><td>Festive offer · Diwali</td><td class="mono">5,912</td><td class="mono">44.1%</td><td class="mono">14</td><td class="mono">₹23,52,000</td></tr><tr><td>Dubai Shopping Festival</td><td class="mono">4,380</td><td class="mono">39.6%</td><td class="mono">22</td><td class="mono">₹9,68,000</td></tr><tr><td>Bali for families</td><td class="mono">6,204</td><td class="mono">41.3%</td><td class="mono">36</td><td class="mono">₹21,24,000</td></tr></tbody></table></div>`;
+ else body=`<div class="panel form"><div class="form-row"><div class="field"><label for="v-l">Autonomy level</label><select id="v-l"><option>L4 Represent · drafts; sends after approval</option><option>L3 Operate · sends approved automations alone</option><option>L2 Assist · drafts only when asked</option></select></div><div class="field"><label for="v-c">Daily credit cap</label><input id="v-c" type="number" value="8000"></div></div><div class="form-row"><div class="field"><label for="v-d">Max discount without asking</label><input id="v-d" value="20%"></div><div class="field"><label for="v-a">Max audience without asking</label><input id="v-a" value="5,000"></div></div><div><button class="btn pri" data-a="toast" data-v="VOYA settings saved">${I("check")}Save</button></div></div>`;
+ return{c:["Agents","VOYA"],h:`<div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap"><span class="av ag lg">VO</span><div style="flex:1;min-width:200px"><h2 class="h2">VOYA <span>Campaign template automation lead</span></h2><div class="sub"><span class="pill ok">● Working · ${S.inbox.length?S.inbox.length+" needs you":"nothing needs you"}</span> <span class="pill">L4 Represent</span> Campaigns team</div></div><button class="btn sm" data-a="toast" data-v="Guides open at launch">${I("book")}Guide</button></div><div class="tabs">${["Today","Agent spec","Results","Settings"].map(x=>`<button class="${x===tab?"on":""}" data-a="agTab" data-v="${x}">${x}</button>`).join("")}</div>`+body}};
+V["channels"]=()=>({c:["Admin","Channels"],h:plate({tag:"Admin · channels",h:"Channels",h2:"Where messages go out.",p:"",s:[["Verified","Email domain"],["Tier 1","WhatsApp limit"]]})+
+ `<div class="list">${[["Email · tours@globaldelight.example","SES · SPF + DKIM","Connected","mail"],["WhatsApp Business","1,000 conversations/day","Connected","chat"],["Global Delight CRM","Nightly sync","Connected","users"],["Google Analytics","UTM attribution","Connected","chart"],["FX rates feed","currency-api, Frankfurter, ExchangeRate-API · open sources, daily","Connected","rupee"],["Forex card partner","Card loads and reloads · sample","Connected","card"],["Instagram","Campaign posts","Not connected","camera"]].map(([a,b,c,ic])=>`<div class="row">${I(ic,18)}<div class="grow"><b>${a}</b><small>${b}</small></div>${c==="Connected"?`<span class="pill ok">Connected</span>`:`<button class="btn sm pri" data-a="toast" data-v="Instagram connected">${I("plug")}Connect</button>`}</div>`).join("")}</div>`});
+
+/* ---------------- FX desk · RUPA (sample rates, INR per unit; illustrative) ---------------- */
+// Snapshot used when live sources are unreachable: fawazahmed0 currency-api, 9 Nov 2026 (7-day change vs 2 Nov)
+const FX={EUR:{r:104.76,w:-1.25,n:"Euro"},CHF:{r:114.46,w:-0.67,n:"Swiss franc"},GBP:{r:125.59,w:-1.2,n:"British pound"},USD:{r:93.87,w:-1.04,n:"US dollar"},
+ AED:{r:25.56,w:-1.04,n:"UAE dirham"},SGD:{r:73.28,w:-1.22,n:"Singapore dollar"},THB:{r:2.8046,w:-0.11,n:"Thai baht"},IDR:{r:0.0052,w:-0.74,n:"Indonesian rupiah"}};
+const FXSRC={mode:"snapshot",name:"currency-api snapshot",date:"2026-11-09",attr:false};
+const fxGet=async u=>{const c=new AbortController(),t=setTimeout(()=>c.abort(),6000);try{const r=await fetch(u,{signal:c.signal});if(!r.ok)throw new Error(r.status);return await r.json()}finally{clearTimeout(t)}};
+async function fxLive(){const codes=Object.keys(FX),q=codes.join(",");
+ const ca=async base=>{const j=await fxGet(base("latest"));let o=null;try{const d=new Date(j.date);d.setDate(d.getDate()-7);o=await fxGet(base(d.toISOString().slice(0,10)))}catch(e){}
+  return{name:"currency-api",date:j.date,get:c=>j.inr[c.toLowerCase()],old:c=>o&&o.inr[c.toLowerCase()]}};
+ const tries=[
+  ()=>ca(v=>`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@${v}/v1/currencies/inr.json`),
+  ()=>ca(v=>`https://${v}.currency-api.pages.dev/v1/currencies/inr.json`),
+  async()=>{const j=await fxGet(`https://api.frankfurter.dev/v1/latest?base=INR&symbols=${q}`);return{name:"Frankfurter",date:j.date,get:c=>j.rates[c]}},
+  async()=>{const j=await fxGet("https://open.er-api.com/v6/latest/INR");if(j.result!=="success")throw 0;return{name:"ExchangeRate-API",date:new Date(j.time_last_update_unix*1000).toISOString().slice(0,10),get:c=>j.rates[c],attr:true}}];
+ for(const t of tries){try{const r=await t();let n=0;
+   codes.forEach(c=>{const v=r.get(c);if(!v)return;const nr=1/v;const ov=r.old&&r.old(c);FX[c].w=ov?(nr-1/ov)/(1/ov)*100:FX[c].w;FX[c].r=nr;n++});
+   if(n){Object.assign(FXSRC,{mode:"live",name:r.name,date:r.date,attr:!!r.attr});rerender();return}}catch(e){}}}
+function fxSrcChip(){return `<span class="pill ${FXSRC.mode==="live"?"ok":"warn"}">${FXSRC.mode==="live"?"Live":"Snapshot"} · ${FXSRC.name} · ${FXSRC.date}</span>${FXSRC.attr?` <a class="mono" href="https://www.exchangerate-api.com" target="_blank" rel="noopener">Rates By Exchange Rate API</a>`:""}`}
+const fr=c=>c==="INR"?1:FX[c].r;
+const rt=v=>"₹"+(v<1?v.toFixed(4):v.toFixed(2));
+const fwd=(c,days)=>FX[c].r*(1+0.0042*days/30); // indicative forward premium
+const PROV=[{n:"Forex card (prepaid)",m:1.25},{n:"Multi-currency account",m:0.55,fee:250},{n:"Money changer (cash)",m:2.4},{n:"Bank debit/credit card",m:3.5*1.18},{n:"Airport counter",m:6.5}];
+const DEST=[{n:"Paris, France",c:"EUR",d:220,cash:.1},{n:"Interlaken, Switzerland",c:"CHF",d:230,cash:.1},{n:"London, UK",c:"GBP",d:160,cash:.05},{n:"Dubai, UAE",c:"AED",d:520,cash:.15},
+ {n:"Singapore",c:"SGD",d:180,cash:.1},{n:"Bangkok, Thailand",c:"THB",d:3400,cash:.35},{n:"Bali, Indonesia",c:"IDR",d:1400000,cash:.4},{n:"New York, USA",c:"USD",d:250,cash:.05}];
+S.fx={runs:23,cards:0,
+ pay:[
+  {id:"p1",tour:"Paris–Swiss Alps · 32 pax · dep 12 Dec",sup:"Alpine Coach & Hotels AG",c:"EUR",a:86400,days:18,due:"28 Nov",booked:102.90,st:"open"},
+  {id:"p2",tour:"Dubai Shopping Festival · 18 pax · dep 8 Dec",sup:"Desert Rose DMC",c:"AED",a:142000,days:22,due:"2 Dec",booked:25.30,st:"locked",lock:25.42},
+  {id:"p3",tour:"Bali honeymoon batch · 12 couples · dep 24 Nov",sup:"Ubud Villas Collective",c:"USD",a:12600,days:10,due:"20 Nov",booked:92.80,st:"open"},
+  {id:"p4",tour:"London–Scotland · 26 pax · dep 3 Jan",sup:"Highland Rail & Stays Ltd",c:"GBP",a:21800,days:35,due:"15 Dec",booked:126.40,st:"open"},
+  {id:"p5",tour:"Swiss rail add-on · 32 pax · dep 12 Dec",sup:"SBB Group Desk",c:"CHF",a:18400,days:18,due:"28 Nov",booked:112.60,st:"open"},
+  {id:"p6",tour:"Singapore–Malaysia family · 40 pax · dep 20 Dec",sup:"Lion City Holidays",c:"SGD",a:18900,days:25,due:"5 Dec",booked:72.40,st:"locked",lock:72.70}],
+ alerts:[{c:"EUR",t:103.50,ch:"Email"},{c:"USD",t:93.20,ch:"WhatsApp"},{c:"CHF",t:115.00,ch:"Email"}],
+ q:{name:"Paris–Swiss Alps 7N/8D · Mehta family",pax:4,buf:2,lock:48,margin:12,gst:"yes",lines:[
+  {l:"Hotels · 4N Paris, 3N Interlaken",c:"EUR",a:6200},{l:"Swiss Travel Pass + Jungfraujoch",c:"CHF",a:3100},{l:"Coach, tour manager, Indian dinners",c:"EUR",a:2650},
+  {l:"Flights BLR–CDG / ZRH–BLR",c:"INR",a:312000},{l:"Schengen visa + travel insurance",c:"INR",a:38000}]},
+ t:{dest:0,days:8,pax:4,style:1,amt:200000,cur:"EUR"}};
+
+function payImpact(p){const r=p.st==="open"?FX[p.c].r:p.lock;return{rate:r,inr:p.a*r,diff:p.a*(r-p.booked)}}
+function fxOpen(){return S.fx.pay.filter(p=>p.st==="open")}
+function fxOpenCount(){return S.inbox.filter(i=>i.fx).length}
+function fxPending(id){return S.inbox.some(i=>i.fx&&i.fx.id===id)}
+function fxSuggest(p){if(p.st!=="open")return null;if(p.days<=10)return"pay";if(payImpact(p).diff>0||FX[p.c].w>0)return"lock";return"watch"}
+function fxApply(f){const p=S.fx.pay.find(x=>x.id===f.id);if(!p)return;p.lock=f.rate;p.st=f.act==="lock"?"locked":"paid";S.fx.runs++;
+ log("RUPA",`${f.act==="lock"?"Booked forward":"Paid supplier"}: ${p.c} ${num(p.a)} at ${rt(f.rate)} for ${p.tour.split(" · ")[0]}`)}
+function fxAsk(id,act){const p=S.fx.pay.find(x=>x.id===id);if(fxPending(id)){location.hash="inbox";return}
+ const rate=act==="lock"?fwd(p.c,p.days):FX[p.c].r*1.002;
+ S.inbox.push({id:S.nextId++,t:`${act==="lock"?"Lock":"Pay"} ${p.c} ${num(p.a)} at ${rt(rate)} · ${p.sup}${act==="lock"?` (forward, ${p.days} days)`:""}`,k:act==="lock"?"FX lock":"FX payment",at:"Today "+now(),go:"fxpay",av:"RU",by:"RUPA",fx:{id,act,rate}});
+ log("RUPA",`Asked Karthik to ${act} ${p.c} ${num(p.a)} for ${p.sup}`);rerender();toast("Added to Inbox for your approval")}
+
+function fxHomePanel(){const o=fxOpen(),exp=o.reduce((a,p)=>a+payImpact(p).inr,0),diff=o.reduce((a,p)=>a+payImpact(p).diff,0);
+ return `<div class="panel" style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center"><div><span class="eyebrow">FX desk · RUPA</span><h2 class="h2">${I("rupee",18)}${inr(exp)} in open supplier payments</h2><p class="sub">${o.length} unhedged · <span class="${diff>0?"loss":"gain"}">${diff>0?"costs "+inr(diff)+" more":"saves "+inr(-diff)}</span> than costed if paid today</p></div><a class="btn pri" href="#fx" style="align-self:flex-start">${I("arrow")}Open FX desk</a></div>`}
+
+function fxMover(){const [k,v]=Object.entries(FX).sort((a,b)=>Math.abs(b[1].w)-Math.abs(a[1].w))[0];return `${k} ${v.w>=0?"up":"down"} ${Math.abs(v.w).toFixed(1)}% in 7 days.`}
+function rateStrip(){return `<div class="fxr">${Object.entries(FX).map(([k,v])=>`<div class="panel"><span class="mono">${k}/INR</span><div><b>${rt(v.r)}</b></div><span class="pill ${v.w>0.4?"warn":v.w<0?"ok":""}">${v.w>0?"+":""}${v.w.toFixed(1)}% · 7d</span></div>`).join("")}</div>`}
+
+V.fx=()=>{const o=fxOpen(),exp=o.reduce((a,p)=>a+payImpact(p).inr,0),diff=o.reduce((a,p)=>a+payImpact(p).diff,0),
+ lockedShare=S.fx.pay.filter(p=>p.st!=="open").reduce((a,p)=>a+payImpact(p).inr,0)/S.fx.pay.reduce((a,p)=>a+payImpact(p).inr,0)*100;
+ const sug=S.fx.pay.map(p=>[p,fxSuggest(p)]).filter(x=>x[1]&&x[1]!=="watch");
+ return{c:["FX desk","RUPA"],h:plate({tag:"FX desk · RUPA",h:`${inr(exp)} unhedged.`,h2:fxMover(),p:"",b:`<a class="btn" href="#fxpay">${I("arrow")}Supplier payments</a><a class="btn ghost" href="#fxquote">${I("file")}Price a quote</a>`,
+  s:[[inr(exp),"Open payables"],[`<span class="${diff>0?"":""}">${diff>0?"−":"+"}${inr(Math.abs(diff))}</span>`,"vs costed rates"],[lockedShare.toFixed(0)+"%","Locked or paid"],[S.fx.alerts.length,"Rate alerts"]]})+
+ `<div><h2 class="h2">${I("trending",18)}Rates now <span>INR per unit</span></h2>${fxSrcChip()}</div>${rateStrip()}`+
+ `<div><h2 class="h2">${I("sparkles",18)}RUPA suggests</h2></div>`+(sug.length?`<div class="list">${sug.map(([p,s])=>{const im=payImpact(p);return `<div class="row"><span class="av ag">RU</span><div class="grow"><b>${s==="pay"?"Pay":"Lock"} ${p.c} ${num(p.a)} · ${esc(p.sup)}</b><small>${esc(p.tour)} · due ${p.due} · ${s==="pay"?"due in "+p.days+" days, no time to hedge":"over costing, forward at "+rt(fwd(p.c,p.days))} · <span class="${im.diff>0?"loss":"gain"}">${im.diff>0?"costs "+inr(im.diff)+" more":"saves "+inr(-im.diff)}</span> than costed</small></div>${fxPending(p.id)?`<span class="pill warn">Waiting on you</span>`:`<button class="btn sm pri" data-a="fxAsk" data-v="${p.id}:${s}">${I(s==="pay"?"send":"shield")}${s==="pay"?"Pay now":"Lock rate"}</button>`}</div>`}).join("")}</div>`:`<div class="list"><div class="empty">Nothing to act on. All payables are locked or paid.</div></div>`)+
+ `<div class="two"><div class="panel" style="display:flex;flex-direction:column;gap:10px"><span class="eyebrow">${I("clock",13)} Rate alerts</span>
+  <div class="list">${S.fx.alerts.map((a,i)=>{const g=(FX[a.c].r-a.t)/FX[a.c].r*100;return `<div class="row" style="padding:9px 12px"><div class="grow"><b>${a.c} at or below ${rt(a.t)}</b><small>${a.ch} · now ${rt(FX[a.c].r)}</small></div><span class="pill ${g<=0?"ok":g<0.6?"warn":""}">${g<=0?"Hit":g.toFixed(2)+"% away"}</span><button class="btn sm" data-a="fxDelAlert" data-v="${i}">${I("x")}</button></div>`}).join("")}</div>
+  <div class="form-row"><div class="field"><label for="fxa-c">Currency</label><select id="fxa-c">${Object.keys(FX).map(k=>`<option>${k}</option>`).join("")}</select></div><div class="field"><label for="fxa-t">At or below (₹)</label><input id="fxa-t" type="number" step="0.01" value="${(FX.EUR.r*.99).toFixed(2)}"></div><button class="btn pri" data-a="fxAddAlert">${I("plus")}Add</button></div></div>
+ <div class="panel"><span class="eyebrow">${I("bot",13)} How RUPA works</span><div class="spec" style="margin-top:8px">${[["Does it now",["Reprices quotes on every rate move","Flags payables over budget","Forex card reminders","Rate alerts"]],["Asks you first",["Any supplier payment","Forward bookings","Buffer above 3%","Quote below costed margin"]],["Reads",["Supplier invoices","Booking costings","Rates feed","Traveller PANs for TCS"]]].map(([h,l])=>`<div><b>${h}</b><ul>${l.map(x=>`<li>${x}</li>`).join("")}</ul></div>`).join("")}</div><div class="chips" style="margin-top:10px"><span class="chip">Listing · Digitner FX Travel</span><span class="chip">L4 Represent</span><span class="chip">${S.fx.runs} runs this month</span></div></div></div>`+fxSources()}};
+
+V.fxpay=()=>{const rows=S.fx.pay;const tot=rows.reduce((a,p)=>a+payImpact(p).diff,0);
+ return{c:["FX desk","Supplier payments"],h:plate({tag:"FX desk · supplier payments",h:"Supplier payments",h2:"Costed in rupees, paid in their currency.",p:"",s:[[rows.length,"Payables"],[fxOpen().length,"Unhedged"],[(tot>0?"−":"+")+inr(Math.abs(tot)),"Net vs costing"],[fxOpenCount(),"Waiting on you"]]})+
+ `<div class="tbl-wrap"><table><thead><tr><th>Tour</th><th>Supplier</th><th>Amount</th><th>Due</th><th>Costed at</th><th>Rate now</th><th>Impact</th><th>Status</th><th></th></tr></thead><tbody>${rows.map(p=>{const im=payImpact(p),s=fxSuggest(p);
+  return `<tr><td>${esc(p.tour)}</td><td>${esc(p.sup)}</td><td class="mono">${p.c} ${num(p.a)}</td><td class="mono">${p.due}</td><td class="mono">${rt(p.booked)}</td><td class="mono">${rt(im.rate)}</td><td class="mono ${im.diff>0?"loss":"gain"}">${im.diff>0?"−":"+"}${inr(Math.abs(im.diff))}</td>
+  <td><span class="pill ${p.st==="open"?"warn":"ok"}">${p.st==="open"?"Open":p.st==="locked"?"Locked":"Paid"}</span></td>
+  <td>${p.st!=="open"?"":fxPending(p.id)?`<a class="btn sm" href="#inbox">In Inbox</a>`:`<div class="btns" style="flex-wrap:nowrap"><button class="btn sm${s==="lock"?" pri":""}" data-a="fxAsk" data-v="${p.id}:lock">Lock</button><button class="btn sm${s==="pay"?" pri":""}" data-a="fxAsk" data-v="${p.id}:pay">Pay</button></div>`}</td></tr>`}).join("")}</tbody></table></div>
+ <p class="sub">Impact is the rupee cost now against the rate used in the costing. Negative means it costs more than quoted. Forward rates are indicative; RUPA gets a live forward quote from the bank before you approve.</p>`}};
+
+function quoteCalc(){const q=S.fx.q,b=q.buf/100;let cost=0,fxp=0;const lines=q.lines.map(x=>{const v=x.a*fr(x.c)*(x.c==="INR"?1:1+b);cost+=v;if(x.c!=="INR")fxp+=v;return v});
+ const margin=cost*q.margin/100,gst=q.gst==="yes"?(cost+margin)*.05:0,base=cost+margin+gst,tcs=base*.02;
+ return{lines,cost,fxp,margin,gst,base,tcs,total:base+tcs}}
+V.fxquote=()=>{const q=S.fx.q,c=quoteCalc(),until=new Date(Date.now()+q.lock*3600e3).toLocaleString("en-IN",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
+ const curSel=(v,i)=>`<select id="fxl-c${i}" data-fx="line" data-i="${i}" data-k="c" aria-label="Currency">${["INR",...Object.keys(FX)].map(k=>`<option${k===v?" selected":""}>${k}</option>`).join("")}</select>`;
+ return{c:["FX desk","Quote pricing"],h:plate({tag:"FX desk · quote pricing",h:"Price it in rupees.",h2:"RUPA reprices when rates move.",p:"",s:[[inr(c.total),"Quote total"],[inr(c.total/q.pax),"Per traveller"],[q.lock+"h","Rate lock"],[inr(c.tcs),"TCS collected"]]})+
+ `<div class="panel form"><div class="form-row"><div class="field" style="flex:2"><label for="fxq-n">Quote for</label><input id="fxq-n" data-fx="q" data-k="name" value="${esc(q.name)}"></div><div class="field"><label for="fxq-p">Travellers</label><input id="fxq-p" type="number" min="1" data-fx="q" data-k="pax" value="${q.pax}"></div><div class="field"><label for="fxq-b">FX buffer %</label><input id="fxq-b" type="number" step="0.5" min="0" data-fx="q" data-k="buf" value="${q.buf}"></div><div class="field"><label for="fxq-m">Margin %</label><input id="fxq-m" type="number" min="0" data-fx="q" data-k="margin" value="${q.margin}"></div><div class="field"><label for="fxq-l">Rate lock</label><select id="fxq-l" data-fx="q" data-k="lock">${[24,48,72].map(h=>`<option value="${h}"${q.lock==h?" selected":""}>${h} hours</option>`).join("")}</select></div></div>
+ <div style="display:flex;flex-direction:column;gap:8px"><div class="qline mono"><span class="lbl">Cost line</span><span>Currency</span><span>Amount</span><span class="r">In ₹</span></div>${q.lines.map((x,i)=>`<div class="qline"><input class="lbl" id="fxl-l${i}" data-fx="line" data-i="${i}" data-k="l" value="${esc(x.l)}" aria-label="Cost line">${curSel(x.c,i)}<input id="fxl-a${i}" type="number" data-fx="line" data-i="${i}" data-k="a" value="${x.a}" aria-label="Amount"><span class="mono r">${inr(c.lines[i])}</span></div>`).join("")}
+ <div><button class="btn sm" data-a="fxAddLine">${I("plus")}Add cost line</button></div></div></div>
+ <div class="two"><div class="panel" style="display:flex;flex-direction:column;gap:8px"><span class="eyebrow">${I("file",13)} Quote · ${esc(q.name)}</span>
+  <div class="qt"><span>Land + air cost (incl. ${q.buf}% buffer on ${inr(c.fxp)} foreign spend)</span><span class="mono">${inr(c.cost)}</span></div>
+  <div class="qt"><span>Margin ${q.margin}%</span><span class="mono">${inr(c.margin)}</span></div>
+  <div class="qt"><span>GST 5% on package</span><span class="mono">${inr(c.gst)}</span></div>
+  <div class="qt"><span>TCS 2% on overseas package · ${q.pax} PAN${q.pax>1?"s":""}</span><span class="mono">${inr(c.tcs)}</span></div>
+  <div class="qt tot"><span>Total</span><span>${inr(c.total)}</span></div>
+  <div class="qt"><small class="sub">Rates locked until ${until}</small><small class="sub">${inr(c.total/q.pax)} per traveller</small></div>
+  <div class="btns"><button class="btn pri" data-a="fxSendQuote">${I("send")}Send quote</button><button class="btn" data-a="fxCard">${I("card")}Add forex card · ${inr(q.pax*45000)}</button></div></div>
+ <div class="panel"><span class="eyebrow">${I("shield",13)} Checks</span><div class="list" style="margin-top:8px">${[["Buffer within policy (max 3%)",q.buf<=3],["Margin at or above 10%",q.margin>=10],["TCS 2% flat on overseas tour packages (from 1 Apr 2026)",true],["All foreign lines on today's rate",true]].map(([a,ok])=>`<div class="row" style="padding:9px 12px"><div class="grow"><small>${a}</small></div><span class="pill ${ok?"ok":"warn"}">${ok?"Pass":"Asks first"}</span></div>`).join("")}</div><p class="sub" style="margin-top:8px">TCS is 2% of the package from the first rupee since 1 April 2026, no ₹10 lakh threshold. Travellers adjust it against their income tax.</p></div></div>`}};
+
+V.fxtrav=()=>{const t=S.fx.t,d=DEST[t.dest],st=[0.7,1,1.8][t.style],local=d.d*st*t.days*t.pax*1.1,inrV=local*FX[d.c].r*1.0125,cash=Math.round(d.cash*100),card=90-cash;
+ const amt=t.amt,mid=FX[t.cur].r,rows=PROV.map(p=>{const eff=mid*(1+p.m/100),get=Math.max(0,amt-(p.fee||0))/eff;return{...p,eff,get,lost:amt-get*mid}}).sort((a,b)=>b.get-a.get);
+ const lf=v=>v>=1000?num(v):v.toFixed(2);
+ return{c:["FX desk","Traveller forex"],h:plate({tag:"FX desk · traveller forex",h:"What to carry, and where to buy it.",h2:"Sent to every traveller 10 days before departure.",p:"",s:[[d.c+" "+lf(local),"Forex for this trip"],[inr(inrV),"In rupees"],[S.fx.cards,"Cards added today"],["41%","Load a card after the reminder"]]})+
+ `<div class="two"><div class="panel form"><span class="eyebrow">${I("globe",13)} Trip</span><div class="form-row"><div class="field"><label for="fxt-d">Destination</label><select id="fxt-d" data-fx="t" data-k="dest">${DEST.map((x,i)=>`<option value="${i}"${i==t.dest?" selected":""}>${x.n}</option>`).join("")}</select></div><div class="field"><label for="fxt-n">Days</label><input id="fxt-n" type="number" min="1" data-fx="t" data-k="days" value="${t.days}"></div><div class="field"><label for="fxt-p">Travellers</label><input id="fxt-p" type="number" min="1" data-fx="t" data-k="pax" value="${t.pax}"></div><div class="field"><label for="fxt-s">Style</label><select id="fxt-s" data-fx="t" data-k="style">${["Budget","Comfort","Premium"].map((x,i)=>`<option value="${i}"${i==t.style?" selected":""}>${x}</option>`).join("")}</select></div></div>
+  <div class="funnel">${[["Forex card",card],["Cash",cash],["Backup card",10]].map(([l,v],i)=>`<div class="fr"><span>${l} ${v}%</span><div class="b${i===1?" wa":""}" style="width:${v}%"></div><span>${inr(inrV*v/100)}</span></div>`).join("")}</div>
+  <p class="sub">${d.cash>=.3?"Cash-heavy destination: street food, taxis and small shops.":"Cards work almost everywhere; keep a little cash for tips and transit."} Includes a 10% buffer.</p>
+  <div class="btns"><button class="btn pri" data-a="fxCard">${I("card")}Add forex card to booking</button><button class="btn" data-a="toast" data-v="Reminder scheduled 10 days before departure">${I("clock")}Schedule reminder</button></div></div>
+ <div class="panel form"><span class="eyebrow">${I("rupee",13)} Compare where to buy</span><div class="form-row"><div class="field"><label for="fxc-a">Amount (₹)</label><input id="fxc-a" type="number" step="1000" data-fx="t" data-k="amt" value="${amt}"></div><div class="field"><label for="fxc-c">Currency</label><select id="fxc-c" data-fx="t" data-k="cur">${Object.keys(FX).map(k=>`<option${k===t.cur?" selected":""}>${k}</option>`).join("")}</select></div></div>
+  <div class="tbl-wrap"><table><thead><tr><th>Provider</th><th>Markup</th><th>You get</th><th>Lost</th></tr></thead><tbody>${rows.map((r,i)=>`<tr class="${i?"":"best"}"><td>${r.n}${r.fee?`<br><small class="sub">+ ₹${r.fee} fee</small>`:""}</td><td class="mono">${r.m.toFixed(2)}%</td><td class="mono">${t.cur} ${lf(r.get)}</td><td class="mono ${i?"loss":""}">${inr(r.lost)}</td></tr>`).join("")}</tbody></table></div>
+  <p class="sub">Bank card markup includes 18% GST on the markup. Typical markups for the demo.</p></div></div>`}};
+
+function fxChange(el){const k=el.dataset.k,v=el.type==="number"||["pax","lock","dest","style"].includes(k)?+el.value:el.value;
+ if(el.dataset.fx==="q")S.fx.q[k]=v;else if(el.dataset.fx==="line")S.fx.q.lines[+el.dataset.i][k]=k==="a"?+el.value:el.value;else S.fx.t[k]=v;rerender()}
+
+const FXSOURCES=[
+ ["Rates (primary)","fawazahmed0 currency-api · open source, free, no key, daily","https://github.com/fawazahmed0/exchange-api"],
+ ["Rates (fallback)","Frankfurter · open source, ECB and central-bank reference rates","https://frankfurter.dev/"],
+ ["Rates (fallback)","ExchangeRate-API open access · daily, attribution required","https://www.exchangerate-api.com/docs/free"],
+ ["India benchmark","FBIL reference rate for USD/INR, EUR, GBP, JPY (RBI)","https://rbi.org.in/Scripts/BS_DisplayReferenceRate.aspx"],
+ ["TCS rule","Flat 2% on overseas tour packages from 1 Apr 2026","https://www.bookmyforex.com/blog/new-tcs-on-foreign-travel-what-you-need-to-know"]];
+function fxSources(){return `<div class="panel"><span class="eyebrow">${I("book",13)} Sources</span><div class="list" style="margin-top:8px">${FXSOURCES.map(([a,b,u])=>`<a class="row" style="padding:9px 12px" href="${u}" target="_blank" rel="noopener"><div class="grow"><b>${a}</b><small>${b}</small></div>${I("share",14)}</a>`).join("")}</div><p class="sub" style="margin-top:8px">Card and counter markups, forward premiums, payables and travellers are sample data.</p></div>`}
+/* ---------------- nav + router ---------------- */
+function renderNav(cur){const ni=(h,l,x="")=>`<a class="ni${cur===h?" on":""}" href="#${h}">${I(FNAV[h],15)}<span class="lbl">${l}</span>${x}</a>`;
+ $("#nav").innerHTML=ni("home","Home")+ni("inbox","Inbox",S.inbox.length?`<span class="badge">${S.inbox.length}</span>`:"")+
+ `<div class="sec"><span>01 Campaigns team</span></div>`+ni("agent","VOYA · Campaign lead")+ni("campaign","Europe Summer",`<span class="pill ${S.sent?"ok":"acc"}" style="font-size:9px">${S.sent?"Live":"Draft"}</span>`)+ni("templates","Templates")+ni("automations","Automations")+ni("audience","Audience")+
+ `<div class="sec"><span>02 FX desk</span></div>`+ni("fx","RUPA · FX lead",fxOpenCount()?`<span class="badge">${fxOpenCount()}</span>`:"")+ni("fxpay","Supplier payments")+ni("fxquote","Quote pricing")+ni("fxtrav","Traveller forex")+`<div class="sec"><span>03 Admin</span></div>`+ni("channels","Channels")}
+function render(){const h=location.hash.slice(1)||"home";PI=FNAV[h]||"home";const r=(V[h]||V.home)();
+ $("#crumbs").innerHTML=["Global Delight",...r.c].map((c,i,a)=>i===a.length-1?`<b>${esc(c)}</b>`:`<span>${esc(c)}</span><span aria-hidden="true">/</span>`).join("");
+ $("#view").innerHTML=r.h;renderNav(V[h]?h:"home");hydrate();$("#app").classList.remove("open")}
+function rerender(){const y=$("#scroll").scrollTop;render();$("#scroll").scrollTop=y}
+addEventListener("hashchange",()=>{render();$("#scroll").scrollTop=0});
+
+/* ---------------- actions ---------------- */
+const A={
+ step(v){S.step=+v;rerender()},
+ next(){S.step=Math.min(6,S.step+1);rerender();$("#scroll").scrollTop=0},
+ generate(){if(!S.generated){S.generated=true;log("VOYA","Drafted 4 templates for Europe Summer early-bird (Email A/B, WhatsApp, Partner)");toast("4 templates drafted")}S.step=1;rerender();$("#scroll").scrollTop=0},
+ tplTab(v){S.tplTab=v;rerender()},
+ editTpl(){const v=TPL["email"+(S.tplTab||"Email A").slice(-1)];modal("Edit email copy",`<div class="field"><label for="et-s">Subject</label><input id="et-s" value="${esc(v.subject)}"></div><div class="field"><label for="et-p">Preheader</label><input id="et-p" value="${esc(v.pre)}"></div>`,`<button class="btn" data-a="closeLayer">Cancel</button><button class="btn pri" data-a="saveTpl">Save</button>`)},
+ saveTpl(){const v=TPL["email"+(S.tplTab||"Email A").slice(-1)];v.subject=$("#et-s").value;v.pre=$("#et-p").value;close();rerender();toast("Copy saved; checks will re-run")},
+ seg(v){S.segs.has(v)?S.segs.delete(v):S.segs.add(v);rerender()},
+ submitMeta(){toast("Submitted to Meta for review…");log("VOYA","Submitted WhatsApp template europe_summer_eb_2027 (approved by Karthik)");setTimeout(()=>{S.metaApproved=true;log("Meta","WhatsApp template europe_summer_eb_2027 approved");rerender();toast("Meta approved the WhatsApp template")},1200)},
+ approveCampaign(){S.approved=true;S.approvedAt="Today "+now();log("Karthik Raman","Approved Europe Summer early-bird");rerender();toast("Campaign approved")},
+ sendBackCampaign(){modal("Send back to VOYA",`<div class="field"><label for="sb">Note</label><textarea id="sb" rows="3">Make the Jungfrau the hero image.</textarea></div>`,`<button class="btn" data-a="closeLayer">Cancel</button><button class="btn pri" data-a="doSendBack">Send back</button>`)},
+ doSendBack(){log("Karthik Raman","Sent back: "+$("#sb").value);close();S.step=1;rerender();toast("VOYA is revising the templates")},
+ ab(){S.sched.ab=!S.sched.ab;rerender()},
+ schedule(){if(!S.scheduled){S.scheduled=true;S.sent=true;const r=results();log("Send Scheduler",`Sent ${num(r.r.em)} emails and ${num(r.r.wa)} WhatsApp messages`);log("Results Reader",`7-day report: ${r.book} bookings, ${inr(r.rev)}`);toast("Sent · 7-day results simulated")}S.step=6;rerender();$("#scroll").scrollTop=0},
+ approveItem(v){const i=S.inbox.findIndex(x=>x.id==v);const it=S.inbox.splice(i,1)[0];log("Karthik Raman","Approved: "+it.t);if(it.fx)fxApply(it.fx);rerender();toast("Approved")},
+ auto(v){const a=S.autos[+v];if(!a.on&&a.n.startsWith("Quote")){S.inbox.push({id:S.nextId++,t:"Turn on automation: "+a.n,k:"Automation",at:"Today "+now(),go:"automations"});rerender();toast("New automations ask first · added to Inbox");return}a.on=!a.on;rerender()},
+ agTab(v){S.tab=v;rerender()},
+ newBrief(){modal("New campaign brief",`<div class="field"><label for="nb">Describe the campaign in one line</label><textarea id="nb" rows="3" placeholder="e.g. Dubai winter for families, 12% off, book by 20 Dec"></textarea></div><p class="sub">VOYA drafts the templates, audience and checks from this.</p>`,`<button class="btn" data-a="closeLayer">Cancel</button><button class="btn pri" data-a="doBrief">${I("sparkles")}Draft it</button>`)},
+ doBrief(){const x=$("#nb").value.trim();if(!x)return;close();LIBRARY.unshift({n:x,ch:"Email + WhatsApp",st:"Draft",used:"—",perf:"—"});log("VOYA","Drafted templates from brief: "+x);location.hash="templates";toast("Draft added to Templates")},
+ toast(v){toast(v)},go(v){location.hash=v},
+ theme(){const r=document.documentElement;r.dataset.theme=r.dataset.theme==="light"?"dark":"light";store.set("gd-theme",r.dataset.theme)},
+ openMenu(){$("#app").classList.add("open")},closeMenu(){$("#app").classList.remove("open")},
+ closeLayer(){close()}};
+document.addEventListener("click",e=>{const el=e.target.closest("[data-a]");if(!el||!A[el.dataset.a])return;
+ if(el.dataset.a==="closeLayer"&&el.classList.contains("overlay")&&e.target!==el)return;
+ if(el.tagName!=="A")e.preventDefault();if(el.disabled)return;A[el.dataset.a](el.dataset.v,el)});
+document.addEventListener("change",e=>{const el=e.target;if(el.dataset.c==="sched"){S.sched[el.dataset.k]=el.value;rerender()}if(el.dataset.fx)fxChange(el)});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")close()});
+A.fxAsk=v=>{const[id,act]=v.split(":");fxAsk(id,act)};
+A.fxAddAlert=()=>{const c=$("#fxa-c").value,t=+$("#fxa-t").value;if(!t)return;S.fx.alerts.unshift({c,t,ch:"Email"});log("RUPA",`Watching ${c} for ${rt(t)} or better`);rerender();toast("Rate alert added")};
+A.fxDelAlert=v=>{S.fx.alerts.splice(+v,1);rerender()};
+A.fxAddLine=()=>{S.fx.q.lines.push({l:"New cost line",c:"EUR",a:0});rerender()};
+A.fxSendQuote=()=>{const c=quoteCalc();S.fx.runs++;log("RUPA",`Quote sent: ${S.fx.q.name} · ${inr(c.total)} · rate locked ${S.fx.q.lock}h`);rerender();toast("Quote sent with a "+S.fx.q.lock+"-hour rate lock")};
+A.fxCard=()=>{S.fx.cards++;S.fx.runs++;log("RUPA","Forex card added to booking · partner commission 0.4%");rerender();toast("Forex card added to the booking")};
+
+/* ---- end-to-end visibility: activity, done lists, persistence ---- */
+S.fx.done=S.fx.done||[];
+const KEY="gd-state-v1";
+(function load(){try{const d=JSON.parse(store.get(KEY)||"null");if(!d)return;["ledger","inbox","step","generated","approved","scheduled","sent","metaApproved","abWinner"].forEach(k=>{if(k in d)S[k]=d[k]});
+ ["done","cards","runs","alerts"].forEach(k=>{if(d.fx&&k in d.fx)S.fx[k]=d.fx[k]});if(d.pay&&S.fx.pay)d.pay.forEach(p=>{const x=S.fx.pay.find(y=>y.id===p.id);if(x){x.st=p.st;x.lock=p.lock}});if(d.autos&&S.autos)d.autos.forEach((on,i)=>{if(S.autos[i])S.autos[i].on=on})}catch(e){}})();
+function save(){try{store.set(KEY,JSON.stringify({ledger:S.ledger.slice(0,80),inbox:S.inbox,step:S.step,generated:S.generated,approved:S.approved,scheduled:S.scheduled,sent:S.sent,metaApproved:S.metaApproved,abWinner:S.abWinner,
+ fx:{done:S.fx.done,cards:S.fx.cards,runs:S.fx.runs,alerts:S.fx.alerts},pay:(S.fx.pay||[]).map(p=>({id:p.id,st:p.st,lock:p.lock})),autos:(S.autos||[]).map(a=>a.on)}))}catch(e){}}
+const _log=log;log=function(w,x){_log(w,x);S.ledger[0].fresh=true;S.unseen=(S.unseen||0)+1;const b=$("#actbtn");if(b){b.classList.remove("pulse");void b.offsetWidth;b.classList.add("pulse")}};
+function actList(n){const L=n?S.ledger.slice(0,n):S.ledger;return `<div class="donel">${L.map(l=>`<div class="row${l.fresh?" fresh":""}">${l.fresh?`<span class="ndot"></span>`:""}<span class="av ag" style="flex:none">${(l.w||"").slice(0,2).toUpperCase()}</span><div class="grow"><b>${esc(l.x)}</b><small>${l.w} · ${l.t}</small></div></div>`).join("")}</div>`}
+function doneList(){const D=S.fx.done;if(!D.length)return "";return `<div class="donel"><span class="eyebrow">${I("check",13)} Done on this desk</span>${D.slice(0,6).map((d,i)=>`<div class="row${i===0&&d.fresh?" fresh":""}">${I(d.k==="quote"?"send":"card",16)}<div class="grow"><b>${esc(d.t)}</b><small>${esc(d.s)} · ${d.at}</small></div><span class="pill ok">${d.k==="quote"?"Sent":"Added"}</span></div>`).join("")}</div>`}
+function injectAfter(h,marker,html){const i=h.indexOf(marker);if(i<0||!html)return h;const j=h.indexOf("</div>",i);return j<0?h:h.slice(0,j+6)+html+h.slice(j+6)}
+A.fxSendQuote=()=>{const c=quoteCalc(),q=S.fx.q;S.fx.runs++;S.fx.done.forEach(d=>d.fresh=false);S.fx.done.unshift({k:"quote",t:`Quote sent: ${q.name}`,s:`${inr(c.total)} · ${q.pax} travellers · rate locked ${q.lock}h`,at:"Today "+now(),fresh:true});
+ log("RUPA",`Quote sent: ${q.name} · ${inr(c.total)} · rate locked ${q.lock}h`);rerender();toast("Quote sent · see it below and in Activity")};
+A.fxCard=()=>{const q=S.fx.q,h=location.hash.slice(1);const dd=h==="fxtrav"&&S.fx.t&&DEST[S.fx.t.dest];const forTrip=dd?`${dd.n} trip · ${S.fx.t.pax} travellers`:q.name;const amt=dd?"":" · "+inr(q.pax*45000);S.fx.cards++;S.fx.runs++;S.fx.done.forEach(d=>d.fresh=false);
+ S.fx.done.unshift({k:"card",t:`Forex card added: ${forTrip}`,s:`Partner commission 0.4%${amt}`,at:"Today "+now(),fresh:true});log("RUPA",`Forex card added to booking: ${forTrip}${amt} · partner commission 0.4%`);rerender();toast("Forex card added · see it below and in Activity")};
+A.activity=()=>{S.unseen=0;modal("Activity",`<p class="sub" style="margin:0 0 6px">Everything you and the agents did in this workspace, newest first.</p>${actList()}`,`<button class="btn" data-a="resetDemo">${I("undo")}Reset demo</button><a class="btn pri" href="#inbox" data-a="closeLayer">Open Inbox log</a>`);S.ledger.forEach(l=>l.fresh=false);save();updAct()};
+A.resetDemo=()=>{try{localStorage.removeItem(KEY)}catch(e){}location.reload()};
+function updAct(){const n=$("#actn");if(n)n.textContent=S.unseen||S.ledger.filter(l=>String(l.t).startsWith("Today")).length}
+const _render=render;render=function(){_render();const h=location.hash.slice(1)||"home",v=$("#view");
+ if(h==="home"){const p=v.querySelector(".plate");if(p)p.insertAdjacentHTML("afterend",`<div class="panel"><div style="display:flex;justify-content:space-between;align-items:center"><span class="eyebrow">${I("list",13)} Recent activity</span><button class="btn sm" data-a="activity">See all</button></div>${actList(4)}</div>`)}
+ if(h==="fxquote"||h==="fxtrav"){const btn=v.querySelector(h==="fxquote"?'[data-a="fxSendQuote"]':'[data-a="fxCard"]');const box=btn&&btn.closest(".btns");if(box&&S.fx.done.length)box.insertAdjacentHTML("afterend",doneList());
+  if(h==="fxquote"&&S.fx.done.some(d=>d.k==="quote")){const b=v.querySelector('[data-a="fxSendQuote"]');if(b)b.lastChild.textContent="Send again"}}
+ hydrate&&hydrate();updAct();save()};
+/* ---- trip flow (RUPA ↔ supplier payments ↔ quote ↔ traveller forex) + customer portal ---- */
+IC.card=IC.card||"M2 5h20v14H2z M2 10h20";IC.user=IC.user||"M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2 M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0";IC.lock=IC.lock||"M5 11h14v10H5z M8 11V7a4 4 0 0 1 8 0v4";IC.logout="M9 21H5V3h4 M16 17l5-5-5-5 M21 12H9";IC.plane="M2 16l20-6-20-6 3 6z M5 10h7";
+const CU={name:"Rohit Mehta",first:"Rohit",av:"RM",email:"rohit.mehta@example.com",phone:"+91 98450 ••214",city:"Whitefield, Bengaluru",job:"Product manager at a software company",age:41,
+ trav:[["Rohit Mehta","41","Lead traveller"],["Neha Mehta","38","Spouse"],["Aarav Mehta","12","Child"],["Myra Mehta","8","Child"]],
+ goals:["First Europe trip with the kids: Paris and the Swiss Alps","Know the full rupee cost before paying","No surprises on the card abroad"],
+ worries:["The rupee falling before departure","Hidden card and cash fees","How much cash to carry for four"],
+ habits:["Books 6–8 weeks ahead","Compares 3 agents on WhatsApp","Pays by UPI or netbanking","Reads every line of the quote"],
+ docs:[["Passports (4)","On file · valid to 2031"],["PAN","On file · used for TCS"],["LRS declaration (A2)","Signed"],["Schengen visas","Appointment 18 Nov"]]};
+const TKEY=KEY+"-trip";
+S.trip={accepted:false,paid:0,card:null,prof:{email:CU.email,phone:CU.phone,city:CU.city,meal:"Vegetarian",ch:"WhatsApp",seat:"Window"}};S.cust=false;S.otp=false;S.cfx={eur:1800,chf:600};
+function tripRowsAdd(){if(S.fx.pay.some(p=>p.trip))return;const b=1+S.fx.q.buf/100;
+ S.fx.pay.unshift({id:"t1",trip:1,tour:"Mehta family · Paris–Swiss Alps · 4 pax · dep 12 Dec",sup:"Paris & Interlaken hotels + coach",c:"EUR",a:8850,days:18,due:"28 Nov",booked:FX.EUR.r*b,st:"open"},
+  {id:"t2",trip:1,tour:"Mehta family · Paris–Swiss Alps · 4 pax · dep 12 Dec",sup:"Swiss Travel Pass + Jungfraujoch",c:"CHF",a:3100,days:18,due:"28 Nov",booked:FX.CHF.r*b,st:"open"})}
+(function tload(){try{const d=JSON.parse(store.get(TKEY)||"null");if(!d)return;Object.assign(S.trip,d.trip||{});S.cust=!!d.cust;if(d.nextId)S.nextId=Math.max(S.nextId,d.nextId);if(d.cfx)S.cfx=d.cfx;
+ if(S.trip.accepted){tripRowsAdd();(d.rows||[]).forEach(r=>{const x=S.fx.pay.find(p=>p.id===r.id);if(x){x.st=r.st;x.lock=r.lock}})}}catch(e){}})();
+const _save=save;save=function(){_save();try{store.set(TKEY,JSON.stringify({trip:S.trip,cust:S.cust,nextId:S.nextId,cfx:S.cfx,rows:S.fx.pay.filter(p=>p.trip).map(p=>({id:p.id,st:p.st,lock:p.lock}))}))}catch(e){}};
+const _reset=A.resetDemo;A.resetDemo=()=>{try{localStorage.removeItem(TKEY)}catch(e){}_reset()};
+const tRows=()=>S.fx.pay.filter(p=>p.trip);
+function tState(){const sent=S.fx.done.some(d=>d.k==="quote"),acc=S.trip.accepted,sup=acc&&tRows().length>0&&tRows().every(p=>p.st!=="open"),fx=!!S.trip.card;
+ return{sent,acc,sup,fx,steps:[["Quote priced","file","fxquote",true,"Quote ready"],["Quote sent","send","fxquote",sent,"Quote received"],["Accepted & paid","user","me",acc,"You accepted & paid"],["Suppliers locked","lock","fxpay",sup,"Hotels & passes booked in EUR/CHF"],["Forex card loaded","card","fxtrav",fx,"Forex card loaded"],["Ready to fly","plane","fx",sup&&fx,"Ready to fly"]]}}
+function tNext(cust){const t=tState();
+ if(!t.sent)return cust?["Karthik is finishing your quote. You'll get it on WhatsApp.",null,null]:["Send the quote to Rohit.","Go to Quote pricing","#fxquote"];
+ if(!t.acc)return cust?["Your quote is ready. Check it and accept to lock the rate.","Review my quote","#mequote"]:["Waiting for Rohit to accept and pay.","Open Rohit's portal","#login"];
+ if(!t.sup)return cust?["Payment received. We're booking your hotels and passes in EUR and CHF.",null,null]:[`RUPA asked to lock ${tRows().filter(p=>p.st==="open").map(p=>p.c+" "+num(p.a)).join(" + ")}. Approve in Inbox.`,"Open Inbox","#inbox"];
+ if(!t.fx)return cust?["Load your forex card so you're not paying airport rates.","Load my forex card","#mefx"]:["Add Rohit's forex card, or he can load it himself.","Traveller forex","#fxtrav"];
+ return cust?["All set. Have a wonderful trip!",null,null]:["Trip GD-2611 is ready to fly.",null,null]}
+function tStrip(cur,cust){const t=tState(),ni=t.steps.findIndex(s=>!s[3]),nx=tNext(cust);
+ return `<div class="panel tflow"><div class="tfh"><span class="eyebrow">${I("plane",13)} Trip GD-2611 · Mehta family · Paris–Swiss Alps 7N/8D</span>${cust?"":`<a class="btn sm" href="#cust">${I("user")}Rohit Mehta</a>`}</div>
+ <div class="tsteps">${t.steps.map((s,i)=>{const st=s[3]?"done":i===ni?"next":"";const href=cust?(i>=2&&i!==3?(i===4?"#mefx":i===2?"#mequote":"#me"):"#mequote"):"#"+s[2];return `<a class="tst ${st}${!cust&&s[2]===cur?" here":""}" href="${href}"><i>${s[3]?"✓":i+1}</i>${I(s[1],14)}<span>${cust?s[4]:s[0]}</span></a>`}).join('<span class="tln"></span>')}</div>
+ <div class="tnext"><span class="ndot"></span><b>${nx[0]}</b>${nx[1]?`<a class="btn sm pri" href="${nx[2]}">${nx[1]}${I("arrow")}</a>`:""}</div></div>`}
+/* staff: persona page */
+V.cust=()=>{const c=quoteCalc(),t=tState();return{c:["Customers",CU.name],h:plate({tag:"Customer persona · sample",h:`${CU.name}, ${CU.age}.`,h2:"Family of four. First Europe trip.",p:"",b:`<a class="btn" href="#login">${I("user")}Open his portal</a><a class="btn ghost" href="#fxquote">${I("file")}His quote</a>`,s:[[inr(c.total),"Quote"],["4","Travellers"],["12 Dec","Departs"],[t.acc?"Paid":"Not paid","Status"]]})+tStrip("cust")+
+ `<div class="two"><div class="panel"><span class="eyebrow">${I("user",13)} Who he is</span><dl class="kvx"><dt>Lives</dt><dd>${CU.city}</dd><dt>Works</dt><dd>${CU.job}</dd><dt>Prefers</dt><dd>${esc(S.trip.prof.ch)} · ${esc(S.trip.prof.meal)} meals</dd><dt>Travellers</dt><dd>${CU.trav.map(x=>x[0].split(" ")[0]+" ("+x[1]+")").join(", ")}</dd></dl>
+ <span class="eyebrow" style="margin-top:12px;display:block">${I("target",13)} Wants</span><ul class="ul">${CU.goals.map(g=>`<li>${g}</li>`).join("")}</ul><span class="eyebrow" style="margin-top:8px;display:block">${I("shield",13)} Worries</span><ul class="ul">${CU.worries.map(g=>`<li>${g}</li>`).join("")}</ul><span class="eyebrow" style="margin-top:8px;display:block">${I("clock",13)} How he buys</span><ul class="ul">${CU.habits.map(g=>`<li>${g}</li>`).join("")}</ul></div>
+ <div class="panel">${xchg(false)}</div></div>`}};
+/* exchange explainer, live numbers */
+function xchg(cust){const c=quoteCalc(),q=S.fx.q,b=q.buf/100,eurL=q.lines.filter(l=>l.c==="EUR").reduce((a,l)=>a+l.a,0),chfL=q.lines.filter(l=>l.c==="CHF").reduce((a,l)=>a+l.a,0);
+ const r1=tRows().find(p=>p.c==="EUR"),r2=tRows().find(p=>p.c==="CHF"),card=S.trip.card;
+ const st=(r)=>!r?"After payment":r.st==="open"?"Waiting to lock":(r.st==="locked"?"Locked at ":"Paid at ")+rt(r.lock);
+ const rows=[["rupee",cust?"You pay in rupees":"Rohit pays in rupees",`${inr(c.total)} incl. GST and TCS · rate locked ${q.lock}h`,S.trip.accepted?"Paid":"Pending"],
+  ["lock","EUR hotels & coach",`EUR ${num(eurL)} × ${rt(FX.EUR.r*(1+b))} quoted (incl. ${q.buf}% buffer)`,st(r1)],
+  ["lock","CHF rail & Jungfraujoch",`CHF ${num(chfL)} × ${rt(FX.CHF.r*(1+b))} quoted`,st(r2)],
+  ["card",cust?"Your forex card":"Rohit's forex card",card?`EUR ${num(card.eur)} + CHF ${num(card.chf)} for ${inr(card.inr)}`:"EUR and CHF at card rate (mid + 1.25%)",card?"Loaded":"Not loaded"],
+  ["globe","Spends abroad",`€4.50 coffee in Paris ≈ ${inr(4.5*FX.EUR.r*1.0125)} · CHF 25 lunch in Interlaken ≈ ${inr(25*FX.CHF.r*1.0125)}`,"No extra fee"]];
+ return `<span class="eyebrow">${I("trending",13)} How the exchange happens</span><div class="xflow">${rows.map(([ic,a,b2,s],i)=>`<div class="xr"><span class="xi">${I(ic,16)}</span><div class="grow"><b>${a}</b><small>${b2}</small></div><span class="pill ${/Paid|Locked|Loaded|No extra/.test(s)?"ok":""}">${s}</span></div>${i<rows.length-1?'<span class="xa">↓</span>':""}`).join("")}</div>`}
+/* customer pages */
+V.login=()=>({c:["Traveller login"],h:`<div class="lgwrap"><div class="panel lg"><div class="lgb"><span class="av" style="background:#0f766e;color:#fff;border:0">GD</span><div><b>Global Delight</b><small>Traveller login · My trip</small></div></div>
+ <div class="field"><label for="lg-e">Email or mobile</label><input id="lg-e" value="${CU.email}"></div>${S.otp?`<div class="field"><label for="lg-o">OTP sent to ${CU.phone}</label><input id="lg-o" value="4826" inputmode="numeric"></div><button class="btn pri" data-a="custLogin">${I("check")}Verify and log in</button>`:`<button class="btn pri" data-a="custOtp">${I("send")}Send OTP</button>`}
+ <small class="sub">Sample login for the demo. Customer: ${CU.name}.</small><a class="sub" href="#home" style="text-decoration:underline">Back to staff workspace</a></div></div>`});
+const meGuard=()=>{if(!S.cust){location.hash="login";return true}return false};
+V.me=()=>{if(meGuard())return V.login();const c=quoteCalc(),t=tState();return{c:["My trip"],h:plate({tag:"My trip · GD-2611",h:`Hi ${CU.first}.`,h2:"Paris & the Swiss Alps, 12 Dec.",p:"",b:`<a class="btn" href="#mequote">${I("file")}My quote</a><a class="btn ghost" href="#mefx">${I("card")}Forex card</a>`,s:[["4","Travellers"],["7N/8D","Paris · Interlaken"],[inr(c.total),"Trip total"],[t.acc?"Paid":"Not paid","Payment"]]})+tStrip("me",true)+`<div class="panel">${xchg(true)}</div>`}};
+V.mequote=()=>{if(meGuard())return V.login();const c=quoteCalc(),q=S.fx.q,t=tState(),b=q.buf/100;
+ if(!t.sent)return{c:["My quote"],h:plate({tag:"My quote",h:"Your quote is on its way.",h2:"Karthik is pricing it now.",p:"",s:[["4","Travellers"],["12 Dec","Departs"]]})+tStrip("me",true)};
+ const lines=q.lines.map(l=>[l.l,l.c==="INR"?"":`${l.c} ${num(l.a)} × ${rt(FX[l.c].r*(1+b))}`,l.a*fr(l.c)*(l.c==="INR"?1:1+b)]);
+ return{c:["My quote"],h:plate({tag:"My quote · "+esc(q.name),h:inr(c.total),h2:t.acc?"Paid. Thank you!":`Rate locked for ${q.lock} hours.`,p:"",s:[[inr(c.total/q.pax),"Per traveller"],[q.lock+"h","Rate lock"],[inr(c.tcs),"TCS (claim in ITR)"]]})+tStrip("me",true)+
+ `<div class="panel"><div class="tbl-wrap"><table><thead><tr><th>What</th><th>Exchange</th><th style="text-align:right">In ₹</th></tr></thead><tbody>${lines.map(l=>`<tr><td>${esc(l[0])}</td><td class="mono">${l[1]||"Paid in ₹"}</td><td class="mono" style="text-align:right">${inr(l[2])}</td></tr>`).join("")}
+ <tr><td>Service, GST and TCS</td><td class="mono">GST 5% · TCS 2%</td><td class="mono" style="text-align:right">${inr(c.total-lines.reduce((a,l)=>a+l[2],0))}</td></tr><tr><td><b>Total</b></td><td></td><td class="mono" style="text-align:right"><b>${inr(c.total)}</b></td></tr></tbody></table></div>
+ <div class="btns" style="margin-top:12px">${t.acc?`<span class="pill ok">Paid ${inr(S.trip.paid)} · receipt sent on ${esc(S.trip.prof.ch)}</span>`:`<button class="btn pri" data-a="custAccept">${I("check")}Accept & pay ${inr(c.total)}</button><button class="btn" data-a="custAsk">${I("chat")}Ask a question</button>`}</div></div>`}};
+V.mefx=()=>{if(meGuard())return V.login();const e=S.cfx.eur,ch=S.cfx.chf,card=S.trip.card;const cost=(m,fee=0)=>e*FX.EUR.r*(1+m/100)+ch*FX.CHF.r*(1+m/100)+fee;
+ const cmp=PROV.map(p=>[p.n,cost(p.m,p.fee||0)]).sort((a,b)=>a[1]-b[1]);const mine=cost(1.25);
+ return{c:["Forex card"],h:plate({tag:"My forex card",h:card?`EUR ${num(card.eur)} + CHF ${num(card.chf)}`:"Load before you fly.",h2:card?"Loaded and ready.":"Better than airport rates.",p:"",s:[[rt(FX.EUR.r),"EUR today"],[rt(FX.CHF.r),"CHF today"],[card?inr(card.inr):inr(mine),card?"Paid":"You'd pay"]]})+tStrip("me",true)+
+ `<div class="two"><div class="panel form"><span class="eyebrow">${I("card",13)} How much to load</span>
+ <div class="field"><label for="cfx-e">EUR for Paris · ${num(e)}</label><input id="cfx-e" type="range" min="200" max="5000" step="100" value="${e}" data-cfx="eur"></div>
+ <div class="field"><label for="cfx-c">CHF for Switzerland · ${num(ch)}</label><input id="cfx-c" type="range" min="0" max="3000" step="100" value="${ch}" data-cfx="chf"></div>
+ <small class="sub">For 4 travellers, 8 days: RUPA suggests about EUR 1,800 and CHF 600 on top of what's prepaid. Keep ~10% as cash.</small>
+ <div class="btns">${card?`<span class="pill ok">Loaded ${inr(card.inr)}</span><button class="btn" data-a="custLoad">${I("plus")}Top up to these amounts</button>`:`<button class="btn pri" data-a="custLoad">${I("card")}Load card · ${inr(mine)}</button>`}</div></div>
+ <div class="panel"><span class="eyebrow">${I("rupee",13)} Same money, different routes</span><div class="list" style="margin-top:8px">${cmp.map(([n,v])=>`<div class="row" style="padding:8px 12px"><div class="grow"><b>${n}</b><small>${v===mine?"Global Delight forex card":v>mine?"+"+inr(v-mine)+" vs the card":inr(mine-v)+" less · needs a bank account"}</small></div><span class="mono">${inr(v)}</span></div>`).join("")}</div>
+ <div class="ccard"><span class="mono">GLOBAL DELIGHT · FOREX</span><b>${card?`€${num(card.eur)}  ·  CHF ${num(card.chf)}`:"€0 · CHF 0"}</b><span>ROHIT MEHTA</span></div></div></div>`}};
+V.meprofile=()=>{if(meGuard())return V.login();const p=S.trip.prof;return{c:["My profile"],h:plate({tag:"My profile",h:CU.name,h2:p.city,p:"",s:[["4","Travellers"],["1","Trip"],[p.ch,"Updates on"]]})+
+ `<div class="two"><div class="panel form"><span class="eyebrow">${I("user",13)} Contact</span>
+ <div class="field"><label for="mp-e">Email</label><input id="mp-e" value="${esc(p.email)}"></div><div class="field"><label for="mp-p">Mobile</label><input id="mp-p" value="${esc(p.phone)}"></div><div class="field"><label for="mp-c">City</label><input id="mp-c" value="${esc(p.city)}"></div>
+ <div class="form-row"><div class="field"><label for="mp-ch">Send updates on</label><select id="mp-ch">${["WhatsApp","Email","SMS"].map(x=>`<option${x===p.ch?" selected":""}>${x}</option>`).join("")}</select></div><div class="field"><label for="mp-m">Meals</label><select id="mp-m">${["Vegetarian","Non-vegetarian","Jain","Vegan"].map(x=>`<option${x===p.meal?" selected":""}>${x}</option>`).join("")}</select></div><div class="field"><label for="mp-s">Seat</label><select id="mp-s">${["Window","Aisle","Any"].map(x=>`<option${x===p.seat?" selected":""}>${x}</option>`).join("")}</select></div></div>
+ <div class="btns"><button class="btn pri" data-a="custSave">${I("check")}Save changes</button></div></div>
+ <div class="panel"><span class="eyebrow">${I("users",13)} Travellers</span><div class="list" style="margin-top:8px">${CU.trav.map(t=>`<div class="row" style="padding:8px 12px"><span class="av sm">${t[0].split(" ").map(x=>x[0]).join("")}</span><div class="grow"><b>${t[0]}</b><small>${t[2]} · ${t[1]} yrs</small></div></div>`).join("")}</div>
+ <span class="eyebrow" style="margin-top:12px;display:block">${I("file",13)} Documents</span><div class="list" style="margin-top:8px">${CU.docs.map(d=>`<div class="row" style="padding:8px 12px"><div class="grow"><b>${d[0]}</b><small>${d[1]}</small></div><span class="pill ok">OK</span></div>`).join("")}</div></div></div>`}};
+/* customer actions */
+const clog=(x)=>log("Rohit Mehta (customer)",x);
+A.custOtp=()=>{S.otp=true;rerender()};
+A.custLogin=()=>{S.cust=true;S.otp=false;clog("Logged in to My trip");location.hash="me";render();toast("Welcome, Rohit")};
+A.custLogout=()=>{S.cust=false;clog("Logged out");location.hash="cust";render()};
+A.custAccept=()=>{const c=quoteCalc();modal("Pay "+inr(c.total),`<p class="sub">Pay in rupees. We lock your EUR and CHF costs the moment payment lands.</p><div class="list">${[["UPI","Instant · any UPI app"],["Netbanking","HDFC, ICICI, SBI and more"],["Card","Credit or debit card"]].map(([a,b],i)=>`<label class="row" style="padding:10px 12px;cursor:pointer"><input type="radio" name="pm" ${i===0?"checked":""}><div class="grow"><b>${a}</b><small>${b}</small></div></label>`).join("")}</div>`,`<button class="btn" data-a="closeLayer">Cancel</button><button class="btn pri" data-a="custPay">${I("check")}Pay ${inr(c.total)}</button>`)};
+A.custPay=()=>{const c=quoteCalc();close();S.trip.accepted=true;S.trip.paid=c.total;tripRowsAdd();clog(`Accepted the quote and paid ${inr(c.total)} by UPI`);
+ S.inbox.push({id:S.nextId++,t:`Rohit Mehta paid ${inr(c.total)} · Paris–Swiss Alps 7N/8D`,k:"Booking",at:"Today "+now(),go:"cust",av:"RM",by:"Customer"});
+ fxAsk("t1","lock");fxAsk("t2","lock");location.hash="me";render();toast("Paid · Global Delight is locking your EUR and CHF")};
+A.custAsk=()=>{S.inbox.push({id:S.nextId++,t:"Rohit Mehta asked: Can we add one more night in Interlaken?",k:"Question",at:"Today "+now(),go:"cust",av:"RM",by:"Customer"});clog("Asked: Can we add one more night in Interlaken?");rerender();toast("Sent to Karthik")};
+A.custLoad=()=>{const e=S.cfx.eur,ch=S.cfx.chf,inrV=(e*FX.EUR.r+ch*FX.CHF.r)*1.0125;S.trip.card={eur:e,chf:ch,inr:inrV,by:"Rohit"};S.fx.cards++;S.fx.runs++;
+ S.fx.done.forEach(d=>d.fresh=false);S.fx.done.unshift({k:"card",t:"Forex card loaded by Rohit: Mehta family",s:`EUR ${num(e)} + CHF ${num(ch)} · ${inr(inrV)}`,at:"Today "+now(),fresh:true});clog(`Loaded forex card: EUR ${num(e)} + CHF ${num(ch)} for ${inr(inrV)}`);rerender();toast("Card loaded")};
+A.custSave=()=>{const p=S.trip.prof,ch=[];[["email","#mp-e"],["phone","#mp-p"],["city","#mp-c"],["ch","#mp-ch"],["meal","#mp-m"],["seat","#mp-s"]].forEach(([k,s])=>{const v=$(s).value;if(v!==p[k]){ch.push(k);p[k]=v}});
+ if(ch.length)clog("Updated profile: "+ch.join(", "));rerender();toast(ch.length?"Saved · Global Delight can see the update":"No changes")};
+document.addEventListener("input",e=>{const k=e.target.dataset.cfx;if(!k)return;S.cfx[k]=+e.target.value;const id=e.target.id;rerender();const n=$("#"+id);n&&n.focus()});
+/* staff card on this trip */
+const _card=A.fxCard;A.fxCard=()=>{const q=S.fx.q;if(!S.trip.card){const inrV=q.pax*45000,eur=Math.round(inrV*.75/(FX.EUR.r*1.0125)/100)*100,chf=Math.round(inrV*.25/(FX.CHF.r*1.0125)/100)*100;S.trip.card={eur,chf,inr:inrV,by:"Karthik"}}_card()};
+/* nav + render */
+const ME=["login","me","mequote","mefx","meprofile"];
+const _rn=renderNav;renderNav=function(cur){const h=location.hash.slice(1)||"home";
+ if(ME.includes(h)){const ni=(k,l,ic)=>`<a class="ni${h===k?" on":""}" href="#${k}">${I(ic,15)}<span class="lbl">${l}</span></a>`;
+  $("#nav").innerHTML=`<div class="sec"><span>Traveller</span></div>`+(S.cust?ni("me","My trip","plane")+ni("mequote","My quote","file")+ni("mefx","Forex card","card")+ni("meprofile","My profile","user")+`<a class="ni" href="#" data-a="custLogout">${I("logout",15)}<span class="lbl">Log out</span></a>`:ni("login","Log in","user"))+`<div class="sec"><span>Staff</span></div><a class="ni" href="#home">${I("home",15)}<span class="lbl">Back to workspace</span></a>`;return}
+ _rn(cur);$("#nav").insertAdjacentHTML("beforeend",`<div class="sec"><span>04 Customers</span></div><a class="ni${h==="cust"?" on":""}" href="#cust">${I("user",15)}<span class="lbl">Rohit Mehta · persona</span></a><a class="ni" href="#login">${I("lock",15)}<span class="lbl">Customer portal</span></a>`)};
+FNAV.cust="user";FNAV.login="user";FNAV.me="plane";FNAV.mequote="file";FNAV.mefx="card";FNAV.meprofile="user";
+const _r2=render;render=function(){const h=location.hash.slice(1)||"home",cm=ME.includes(h);document.documentElement.classList.toggle("custmode",cm);
+ const me=$(".rail .me");if(me){me.querySelector(".av").textContent=cm&&S.cust?CU.av:"KR";me.querySelector(".who b").textContent=cm&&S.cust?CU.name:"Karthik Raman";me.querySelector(".who small").textContent=cm&&S.cust?"Traveller · sample":"Sales & marketing head · sample"}
+ _r2();const v=$("#view");if(["fx","fxpay","fxquote","fxtrav"].includes(h)){const p=v.querySelector(".plate");if(p)p.insertAdjacentHTML("afterend",tStrip(h,false))}
+ if(h==="fxpay")v.querySelectorAll("tr,.row").forEach(r=>{if(r.textContent.includes("Mehta family"))r.classList.add("trow")});hydrate()};
+
+render();fxLive();
+</script>
+<script>(function(){
+if(window.__fdDock)return;window.__fdDock=1;
+var mq=matchMedia("(max-width:900px)");
+var SEL=".stepper,.tabs,#teambar";
+var ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>';
+var X='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+var CARET='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function opts(g){
+  if(g.classList.contains("stepper"))return[].slice.call(g.querySelectorAll(".stp"));
+  if(g.id==="teambar")return[].slice.call(g.querySelectorAll(".tp")).filter(function(x){return!x.classList.contains("add")});
+  return[].slice.call(g.querySelectorAll("button"));
+}
+function kind(g){
+  if(g.classList.contains("stepper"))return{k:"step",title:"Steps",tip:"Switch steps",o:0};
+  if(g.id==="teambar")return{k:"jump",title:"Jump to",tip:"Quick switch",o:3};
+  var b=g.querySelector("button"),a=b&&b.getAttribute("data-a");
+  if(a==="tplTab")return{k:"tpl",title:"Template",tip:"Switch template",o:2};
+  return{k:"view",title:"View",tip:"Change view",o:1};
+}
+function label(b){var c=b.cloneNode(true);[].forEach.call(c.querySelectorAll("i,svg,.i,.pill,.tag,.av,.badge,.dot"),function(x){x.remove()});return(c.textContent||"").replace(/\s+/g," ").trim()}
+function note(b){var n=b.querySelector(".pill,.tag");return n?(n.textContent||"").trim():""}
+function isOn(b){return b.classList.contains("on")||b.getAttribute("aria-selected")==="true"||b.getAttribute("aria-current")==="page"}
+function live(){return[].slice.call(document.querySelectorAll(SEL)).filter(function(g){return!g.closest(".fd-sheet")&&opts(g).length>1}).sort(function(a,b){return kind(a).o-kind(b).o})}
+var fab,tip,scrim,sheet,body,lastFocus,obs,busy=false,tipTimer;
+function build(){
+  if(fab)return;
+  fab=document.createElement("button");fab.className="fd-fab";fab.type="button";fab.hidden=true;fab.setAttribute("aria-haspopup","dialog");fab.innerHTML=ICON;
+  tip=document.createElement("div");tip.className="fd-tip";tip.hidden=true;tip.setAttribute("role","status");
+  scrim=document.createElement("div");scrim.className="fd-scrim";
+  sheet=document.createElement("section");sheet.className="fd-sheet";sheet.setAttribute("role","dialog");sheet.setAttribute("aria-modal","true");sheet.setAttribute("aria-label","Filters");
+  sheet.innerHTML='<div class="fd-grip"></div><div class="fd-head"><b>Filters</b><button class="fd-x" type="button" aria-label="Close">'+X+'</button></div><div class="fd-body"></div>';
+  body=sheet.querySelector(".fd-body");
+  document.body.appendChild(fab);document.body.appendChild(tip);document.body.appendChild(scrim);document.body.appendChild(sheet);
+  fab.addEventListener("click",function(){openSheet()});
+  scrim.addEventListener("click",closeSheet);
+  sheet.querySelector(".fd-x").addEventListener("click",closeSheet);
+  addEventListener("keydown",function(e){if(e.key==="Escape"&&sheet.classList.contains("open"))closeSheet()});
+  body.addEventListener("click",function(e){
+    var o=e.target.closest(".fd-opt");if(!o)return;
+    var gs=live(),g=gs[+o.getAttribute("data-g")],bs=g&&opts(g),t=bs&&bs[+o.getAttribute("data-b")];
+    closeSheet();if(t)setTimeout(function(){t.click();setTimeout(sync,60)},120);
+  });
+  var mm=function(){sync()};mq.addEventListener?mq.addEventListener("change",mm):mq.addListener(mm);
+}
+function fill(){
+  var gs=live(),h="";
+  gs.forEach(function(g,gi){
+    var kd=kind(g);h+='<div class="fd-gt">'+kd.title+'</div>';
+    opts(g).forEach(function(b,bi){
+      var on=isOn(b),done=b.classList.contains("done"),nt=note(b),num=kd.k==="step"?(done?"✓":bi+1):(on?"✓":"");
+      h+='<button type="button" class="fd-opt'+(on?" on":"")+(done?" done":"")+'" data-g="'+gi+'" data-b="'+bi+'"'+(on?' aria-current="true"':"")+'>'+(num!==""?'<span class="fd-n">'+num+'</span>':'<span class="fd-n"></span>')+'<span class="fd-t">'+esc(label(b))+'</span>'+(nt?'<span class="fd-note">'+esc(nt)+'</span>':"")+'</button>';
+    });
+  });
+  body.innerHTML=h;
+}
+function openSheet(){
+  fill();lastFocus=document.activeElement;
+  tip.classList.remove("on");
+  scrim.classList.add("open");sheet.classList.add("open");
+  var a=body.querySelector(".fd-opt.on")||body.querySelector(".fd-opt");
+  if(a){a.focus({preventScroll:true});a.scrollIntoView({block:"center"})}
+}
+function closeSheet(){
+  scrim.classList.remove("open");sheet.classList.remove("open");
+  if(lastFocus&&lastFocus.focus)try{lastFocus.focus({preventScroll:true})}catch(e){}
+}
+function seenKey(k){return"dl-fd-seen-"+k}
+function maybeTip(k,text){
+  var seen=false;try{seen=localStorage.getItem(seenKey(k))==="1"}catch(e){}
+  tip.textContent=text;tip.setAttribute("data-k",k);
+  if(seen||tip.getAttribute("data-shown")===k)return;
+  tip.setAttribute("data-shown",k);
+  try{localStorage.setItem(seenKey(k),"1")}catch(e){}
+  clearTimeout(tipTimer);
+  setTimeout(function(){tip.classList.add("on");tipTimer=setTimeout(function(){tip.classList.remove("on")},5000)},500);
+}
+function chipText(g){
+  var kd=kind(g),bs=opts(g),i=0;bs.forEach(function(b,n){if(isOn(b))i=n});
+  var l=label(bs[i]||bs[0]);
+  return kd.k==="step"?'<span>Step '+(i+1)+' of '+bs.length+'</span> <small>'+esc(l)+'</small>':'<span>'+esc(kd.title)+'</span> <small>'+esc(l)+'</small>';
+}
+function sync(){
+  if(busy)return;busy=true;obs&&obs.disconnect();
+  try{
+    build();
+    var on=mq.matches,gs=on?live():[];
+    [].forEach.call(document.querySelectorAll(".fd-chip"),function(c){var n=c.nextElementSibling;if(!on||!n||!n.hasAttribute("data-fd"))c.remove()});
+    [].forEach.call(document.querySelectorAll("[data-fd]"),function(g){if(!on)g.removeAttribute("data-fd")});
+    gs.forEach(function(g){
+      g.setAttribute("data-fd","1");
+      if(g.id==="teambar")return;
+      var c=g.previousElementSibling;
+      if(!c||!c.classList||!c.classList.contains("fd-chip")){
+        c=document.createElement("button");c.type="button";c.className="fd-chip";
+        c.addEventListener("click",function(){openSheet()});
+        g.parentNode.insertBefore(c,g);
+      }
+      var h=chipText(g)+CARET;if(c.innerHTML!==h)c.innerHTML=h;
+    });
+    var show=on&&gs.length>0;
+    fab.hidden=!show;
+    fab.setAttribute("aria-label",show?kind(gs[0]).tip+" (filters)":"Filters");
+    var app=document.querySelector(".app");document.body.classList.toggle("fd-menu",!!(app&&app.classList.contains("open")));
+    if(show){tip.hidden=false;maybeTip(kind(gs[0]).k,kind(gs[0]).tip)}else{tip.hidden=true}
+    if(!show&&sheet.classList.contains("open"))closeSheet();
+  }finally{busy=false;watch()}
+}
+var raf=0;
+function watch(){
+  if(!obs){obs=new MutationObserver(function(){cancelAnimationFrame(raf);raf=requestAnimationFrame(sync)})}
+  obs.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:["class","aria-selected","aria-current"]});
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",sync);else sync();
+addEventListener("hashchange",function(){setTimeout(sync,80)});
+})();
+</script>

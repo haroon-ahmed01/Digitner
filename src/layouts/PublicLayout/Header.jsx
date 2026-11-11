@@ -94,7 +94,6 @@ export default function Header() {
         </ul>
 
         <div className="nav-cta">
-          <ThemeToggle />
           <button className="btn ghost sm ws" type="button" aria-label="Open workspace" onClick={() => setOpen(true)}>
             {MARKET}
             <span>Workspace</span>
@@ -106,6 +105,7 @@ export default function Header() {
           <button className="burger" type="button" aria-expanded={menuOpen} aria-controls="menu" onClick={() => setMenuOpen((o) => !o)}>
             Menu
           </button>
+          <ThemeToggle />
         </div>
       </div>
     </header>
